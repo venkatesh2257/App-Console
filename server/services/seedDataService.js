@@ -7,85 +7,37 @@ async function seedDatabaseIfEmpty() {
       return;
     }
 
-    console.log('🌱 Initializing clean enterprise app projects (Zero dummy crashes/installs)...');
+    console.log('🌱 Initializing clean production database with 1962 VAS App (Zero dummy data)...');
 
-    // Register Official Government & Enterprise Applications (Clean slate)
-    const apps = [
-      {
-        app_id: 'in.gov.telangana.vas1962',
-        app_name: '1962 Mobile Veterinary Unit',
-        category: 'Government',
-        platform: 'Android',
-        api_key: 'app_key_vas1962_a98f12c409e3',
-        icon_color: '#00F59B',
-        desc: 'Official Livestock Health & Field Operations Mobile Application',
-        version: '1.1.0',
-        min_version: '1.1.0',
-        build: 2,
-        force_update: 1,
-        download_url: 'http://139.167.190.26/portal/1962_v1.1.0.apk',
-        release_notes: '• Production Release v1.1.0\n• Live GPS Tracking & Route Mapping\n• Enhanced offline sync'
-      },
-      {
-        app_id: 'in.gov.attendance.erc',
-        app_name: 'ERC Biometric Attendance',
-        category: 'Government',
-        platform: 'Android',
-        api_key: 'app_key_erc_att_b78a99d231e4',
-        icon_color: '#7952FF',
-        desc: 'Facial & Fingerprint Staff Attendance System',
-        version: '1.0.0',
-        min_version: '1.0.0',
-        build: 1,
-        force_update: 0,
-        download_url: 'http://139.167.190.26/portal/erc_attendance.apk',
-        release_notes: '• Initial Production Build'
-      },
-      {
-        app_id: 'in.gov.emergency.108',
-        app_name: '108 Emergency Medical Response',
-        category: 'Emergency',
-        platform: 'Cross-Platform',
-        api_key: 'app_key_emri108_c34e88f550a1',
-        icon_color: '#FF4757',
-        desc: 'Real-time Emergency Dispatch & Ambulance Navigation',
-        version: '1.0.0',
-        min_version: '1.0.0',
-        build: 1,
-        force_update: 0,
-        download_url: 'http://139.167.190.26/portal/108_response.apk',
-        release_notes: '• Initial Emergency Dispatch Release'
-      }
-    ];
+    // 1. Register only the real 1962 VAS App
+    const res = await query.run(
+      `INSERT INTO projects (app_id, app_name, category, platform, api_key, icon_color, description, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
+      [
+        'in.gov.telangana.vas1962',
+        '1962 Mobile Veterinary Unit',
+        'Government',
+        'Android',
+        'app_key_vas1962_a98f12c409e3',
+        '#00F59B',
+        'Official Livestock Health & Field Operations Mobile Application'
+      ]
+    );
+    const projId = res.lastID;
 
-    for (const app of apps) {
-      const res = await query.run(
-        `INSERT INTO projects (app_id, app_name, category, platform, api_key, icon_color, description, is_active)
-         VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
-        [app.app_id, app.app_name, app.category, app.platform, app.api_key, app.icon_color, app.desc]
-      );
-      const projId = res.lastID;
+    // 2. Set Version 1.1.0 as the active baseline release with force update enabled
+    await query.run(
+      `INSERT INTO app_versions (project_id, version_name, build_number, min_supported_version, is_force_update, title, release_notes, download_url, is_active)
+       VALUES (?, '1.1.0', 2, '1.1.0', 1, '1962 MVU Production Release v1.1.0', '• Live GPS Tracking & Trip Mapping\n• Enhanced offline biometric sync\n• Performance optimizations', 'http://139.167.190.26/portal/1962_v1.1.0.apk', 1)`,
+      [projId]
+    );
 
-      // Register official baseline version for each app
-      await query.run(
-        `INSERT INTO app_versions (project_id, version_name, build_number, min_supported_version, is_force_update, title, release_notes, download_url, is_active)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`,
-        [
-          projId,
-          app.version,
-          app.build,
-          app.min_version,
-          app.force_update,
-          `${app.app_name} Release`,
-          app.release_notes,
-          app.download_url
-        ]
-      );
-    }
-
-    console.log('✅ Real app projects registered with clean tables (0 fake installs, 0 fake crashes).');
+    // No dummy installations
+    // No dummy crashes
+    // No dummy device logs
+    console.log('✅ Clean database ready: 1 Real Project (1962 VAS), 0 Mock Crashes, 0 Mock Installs.');
   } catch (error) {
-    console.error('⚠️  App setup warning:', error.message);
+    console.error('⚠️ App setup warning:', error.message);
   }
 }
 

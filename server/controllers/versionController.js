@@ -44,7 +44,7 @@ exports.checkVersion = async (req, res) => {
     const clientBuild = parseInt(req.query.buildNumber || req.body.buildNumber || '1', 10);
 
     const latestConfig = await query.get(
-      `SELECT * FROM app_versions WHERE project_id = ? AND is_active = 1 ORDER BY build_number DESC, id DESC LIMIT 1`,
+      `SELECT * FROM app_versions WHERE project_id = ? AND is_active = 1 ORDER BY id DESC LIMIT 1`,
       [project.id]
     );
 

@@ -9,6 +9,11 @@ const App = {
     VersionManager.loadVersions(selectedProjectId);
     CrashViewer.loadCrashes(selectedProjectId);
     this.loadDevices();
+
+    // ⚡ Real-Time Live Auto-Refresh every 6 seconds
+    setInterval(() => {
+      this.loadOverview();
+    }, 6000);
   },
 
   bindEvents() {
