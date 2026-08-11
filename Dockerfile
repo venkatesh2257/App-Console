@@ -1,14 +1,18 @@
 # Multi-App Enterprise Developer Console Container
-FROM node:20-alpine
+FROM node:20-bookworm-slim
 
 WORKDIR /usr/src/app
 
-RUN apk add --no-cache python3 make g++
+# Install build dependencies for native sqlite3 bindings on glibc
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 RUN npm install --omit=dev
 
 COPY . .
+
+# Create data directory for SQLite database
+RUN mkdir -p ./data
 
 VOLUME [ "/usr/src/app/data" ]
 
