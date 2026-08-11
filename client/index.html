@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Mobile Developer Console • Multi-App Hub</title>
+  
+  <!-- Google Fonts: Syne & Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="css/cred-theme.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- ==========================================
+         SIDEBAR NAVIGATION
+         ========================================== -->
+    <aside class="app-sidebar">
+      <div class="brand-header">
+        <div class="brand-logo">
+          <span>DEV</span>
+        </div>
+        <div class="brand-info">
+          <h2>App Console</h2>
+          <span>Enterprise Hub</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a class="nav-item active" data-tab="tab-overview">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Overview KPIs</span>
+        </a>
+        <a class="nav-item" data-tab="tab-projects">
+          <i class="fa-solid fa-cubes"></i>
+          <span>App Catalog (20+)</span>
+        </a>
+        <a class="nav-item" data-tab="tab-version-control">
+          <i class="fa-solid fa-code-branch"></i>
+          <span>Version Gatekeeper</span>
+        </a>
+        <a class="nav-item" data-tab="tab-crashlytics">
+          <i class="fa-solid fa-bug"></i>
+          <span>Crashlytics</span>
+        </a>
+        <a class="nav-item" data-tab="tab-devices">
+          <i class="fa-solid fa-tablet-screen-button"></i>
+          <span>Device Fleets</span>
+        </a>
+        <a class="nav-item" data-tab="tab-reports">
+          <i class="fa-solid fa-file-invoice"></i>
+          <span>Period Reports</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status-indicator">
+          <span class="pulse-dot"></span>
+          <span>Multi-Tenant Ingestion Live</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <main class="app-main">
+      <header class="app-header">
+        <div class="page-title">
+          <!-- Multi-Project Switcher Dropdown (Like Firebase / Play Store Console) -->
+          <div class="project-selector-wrapper">
+            <i class="fa-solid fa-mobile-screen-button text-emerald"></i>
+            <select id="select-active-project" class="project-select-dropdown">
+              <option value="all">🌐 All Projects (Global Overview)</option>
+              <!-- Projects loaded dynamically via JS -->
+            </select>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Timeframe Period Filter -->
+          <div class="period-pill-group" id="period-filters">
+            <button class="period-pill" data-period="today">Today</button>
+            <button class="period-pill" data-period="7d">7 Days</button>
+            <button class="period-pill active" data-period="30d">30 Days</button>
+            <button class="period-pill" data-period="1y">1 Year</button>
+            <button class="period-pill" data-period="all">All Time</button>
+          </div>
+
+          <button class="btn-cred btn-cred-violet btn-cred-sm" id="btn-open-new-app">
+            <i class="fa-solid fa-plus"></i> Add App
+          </button>
+          <button class="btn-cred btn-cred-outline btn-cred-sm" id="btn-refresh-data">
+            <i class="fa-solid fa-rotate"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+
+        <!-- =========================================================
+             TAB 1: OVERVIEW KPIS
+             ========================================================= -->
+        <section id="tab-overview" class="tab-content active">
+          <div class="grid-kpis">
+            <div class="cred-card glow-emerald">
+              <div class="kpi-title">
+                <span>Total App Installations</span>
+                <i class="fa-solid fa-download text-emerald"></i>
+              </div>
+              <div class="kpi-value text-emerald" id="kpi-total-installs">--</div>
+              <div class="kpi-footer">
+                <span class="badge-pill badge-emerald" id="kpi-installs-today">+0 Today</span>
+                <span class="text-muted" id="kpi-app-scope-label">Across Fleet</span>
+              </div>
+            </div>
+
+            <div class="cred-card glow-violet">
+              <div class="kpi-title">
+                <span>Active Users (DAU / MAU)</span>
+                <i class="fa-solid fa-users text-violet"></i>
+              </div>
+              <div class="kpi-value text-violet" id="kpi-active-dau">--</div>
+              <div class="kpi-footer">
+                <span class="badge-pill badge-violet" id="kpi-active-mau">MAU: --</span>
+                <span class="text-muted">Active Devices</span>
+              </div>
+            </div>
+
+            <div class="cred-card">
+              <div class="kpi-title">
+                <span>Crash-Free Rate</span>
+                <i class="fa-solid fa-shield-halved text-cyan"></i>
+              </div>
+              <div class="kpi-value" id="kpi-crash-free">--%</div>
+              <div class="kpi-footer">
+                <span class="badge-pill badge-emerald">Healthy</span>
+                <span class="text-muted" id="kpi-open-crashes">0 open issues</span>
+              </div>
+            </div>
+
+            <div class="cred-card glow-coral">
+              <div class="kpi-title">
+                <span>Managed Applications</span>
+                <i class="fa-solid fa-layer-group text-coral"></i>
+              </div>
+              <div class="kpi-value" id="kpi-total-apps">--</div>
+              <div class="kpi-footer">
+                <span class="badge-pill badge-coral">20+ Slots Ready</span>
+                <span class="text-muted">Enterprise Catalog</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-charts">
+            <div class="cred-card">
+              <div class="kpi-title">
+                <span>Installs & Engagement Timeline</span>
+                <span class="badge-pill badge-muted">Live Stream</span>
+              </div>
+              <div style="height: 280px; position: relative; margin-top: 16px;">
+                <canvas id="chart-activity-timeline"></canvas>
+              </div>
+            </div>
+
+            <div class="cred-card">
+              <div class="kpi-title">
+                <span id="chart-breakdown-title">App Installation Share</span>
+                <i class="fa-solid fa-chart-pie text-muted"></i>
+              </div>
+              <div style="height: 280px; position: relative; margin-top: 16px;">
+                <canvas id="chart-apps-distribution"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-two-col">
+            <div class="cred-card">
+              <div class="kpi-title" style="margin-bottom: 16px;">
+                <span>Recent Crash Signals</span>
+                <a href="javascript:void(0)" class="text-emerald" style="font-size: 12px; text-decoration: none;" onclick="switchTab('tab-crashlytics')">View All</a>
+              </div>
+              <div class="table-responsive">
+                <table class="cred-table" id="table-recent-crashes">
+                  <thead>
+                    <tr>
+                      <th>App</th>
+                      <th>Error Type</th>
+                      <th>Version</th>
+                      <th>Count</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="cred-card">
+              <div class="kpi-title" style="margin-bottom: 16px;">
+                <span>Active Enterprise Projects</span>
+                <a href="javascript:void(0)" class="text-violet" style="font-size: 12px; text-decoration: none;" onclick="switchTab('tab-projects')">Manage Apps</a>
+              </div>
+              <div class="table-responsive">
+                <table class="cred-table" id="table-active-projects-summary">
+                  <thead>
+                    <tr>
+                      <th>App Name</th>
+                      <th>Category</th>
+                      <th>Installs</th>
+                      <th>Active Version</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 2: APP CATALOG (20+ PROJECTS)
+             ========================================================= -->
+        <section id="tab-projects" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div>
+              <h2 style="font-size: 24px;">Enterprise Mobile Apps Catalog</h2>
+              <p class="text-secondary" style="font-size: 13px;">Manage all company mobile applications, API credentials, and global telemetry endpoints.</p>
+            </div>
+            <button class="btn-cred btn-cred-primary" onclick="openModal('modal-create-project')">
+              <i class="fa-solid fa-plus"></i> Register New App
+            </button>
+          </div>
+
+          <div class="grid-projects" id="grid-projects-cards">
+            <!-- Injected via JS -->
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 3: VERSION CONTROL & FORCE UPDATE MANAGER
+             ========================================================= -->
+        <section id="tab-version-control" class="tab-content">
+          <div class="cred-card glow-emerald" style="margin-bottom: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+              <div>
+                <span class="badge-pill badge-emerald" style="margin-bottom: 8px;" id="ver-active-project-badge">VAS 1962</span>
+                <h2 style="font-size: 24px; margin-bottom: 6px;">Per-App Force Update Gatekeeper</h2>
+                <p class="text-secondary" style="font-size: 13px; max-width: 600px;">
+                  Instantly block outdated versions from performing logins or accessing backend APIs. Mandate latest release downloads via portal APK.
+                </p>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 20px; background: var(--bg-black); padding: 14px 20px; border-radius: var(--radius-md); border: 1px solid var(--border-card);">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Force Update</div>
+                  <div style="font-size: 15px; font-weight: 700;" id="active-force-update-label">Enabled</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggle-force-update-master" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="cred-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <div>
+                <h3>Release Catalog & Enforcement</h3>
+                <p class="text-secondary" style="font-size: 13px;">Manage version thresholds and direct portal download URLs.</p>
+              </div>
+              <button class="btn-cred btn-cred-primary btn-cred-sm" id="btn-create-version-modal">
+                <i class="fa-solid fa-plus"></i> Publish Version
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="cred-table" id="table-version-catalog">
+                <thead>
+                  <tr>
+                    <th>Version</th>
+                    <th>Build No</th>
+                    <th>Min Supported</th>
+                    <th>Force Update</th>
+                    <th>Portal Download Link</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 4: CRASHLYTICS (MULTI-APP)
+             ========================================================= -->
+        <section id="tab-crashlytics" class="tab-content">
+          <div class="cred-card" style="margin-bottom: 24px; padding: 16px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 280px;">
+                <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                <input type="text" id="search-crashes" class="form-control" placeholder="Search crash errors, stack traces, screens..." style="max-width: 400px;">
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <select id="filter-crash-status" class="form-control" style="width: 140px;">
+                  <option value="all">All Statuses</option>
+                  <option value="open" selected>Open Only</option>
+                  <option value="investigating">Investigating</option>
+                  <option value="resolved">Resolved</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="cred-card">
+            <div class="table-responsive">
+              <table class="cred-table" id="table-crash-issues">
+                <thead>
+                  <tr>
+                    <th>App</th>
+                    <th>Error & Exception</th>
+                    <th>Screen</th>
+                    <th>Version</th>
+                    <th>Events</th>
+                    <th>Impacted Devices</th>
+                    <th>Last Seen</th>
+                    <th>Status</th>
+                    <th>Inspect</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 5: DEVICE INVENTORY
+             ========================================================= -->
+        <section id="tab-devices" class="tab-content">
+          <div class="cred-card" style="margin-bottom: 24px; padding: 16px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                <i class="fa-solid fa-tablet text-muted"></i>
+                <input type="text" id="search-devices" class="form-control" placeholder="Search Device ID, Model, District, App..." style="max-width: 400px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="cred-card">
+            <div class="table-responsive">
+              <table class="cred-table" id="table-devices-list">
+                <thead>
+                  <tr>
+                    <th>App Name</th>
+                    <th>Device ID</th>
+                    <th>Hardware / Model</th>
+                    <th>Android OS</th>
+                    <th>Current Version</th>
+                    <th>District</th>
+                    <th>Last Active</th>
+                    <th>Logs</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 6: PERIOD REPORTS & AUDIT EXPORTS
+             ========================================================= -->
+        <section id="tab-reports" class="tab-content">
+          <div class="grid-two-col">
+            <div class="cred-card glow-emerald">
+              <span class="badge-pill badge-emerald" style="margin-bottom: 12px;">Enterprise Installation Log</span>
+              <h2 style="font-size: 22px; margin-bottom: 8px;">Multi-App Installations Report</h2>
+              <p class="text-secondary" style="font-size: 13px; margin-bottom: 20px;">
+                Download complete deployment logs across all 20 apps with device IDs, districts, and active telemetry.
+              </p>
+              <div style="display: flex; gap: 12px;">
+                <a id="btn-export-installs-csv" href="/api/v1/admin/export?type=installations&format=csv" class="btn-cred btn-cred-primary" download>
+                  <i class="fa-solid fa-file-csv"></i> Download CSV
+                </a>
+                <a id="btn-export-installs-json" href="/api/v1/admin/export?type=installations&format=json" class="btn-cred btn-cred-outline" download>
+                  <i class="fa-solid fa-code"></i> JSON Export
+                </a>
+              </div>
+            </div>
+
+            <div class="cred-card glow-coral">
+              <span class="badge-pill badge-coral" style="margin-bottom: 12px;">Stability & Quality Audit</span>
+              <h2 style="font-size: 22px; margin-bottom: 8px;">Crashlytics & Exceptions Report</h2>
+              <p class="text-secondary" style="font-size: 13px; margin-bottom: 20px;">
+                Export all recorded crashes, stack traces, and affected mobile screens for compliance reviews.
+              </p>
+              <div style="display: flex; gap: 12px;">
+                <a id="btn-export-crashes-csv" href="/api/v1/admin/export?type=crashes&format=csv" class="btn-cred btn-cred-coral" download>
+                  <i class="fa-solid fa-file-csv"></i> Download CSV
+                </a>
+                <a id="btn-export-crashes-json" href="/api/v1/admin/export?type=crashes&format=json" class="btn-cred btn-cred-outline" download>
+                  <i class="fa-solid fa-code"></i> JSON Export
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- =========================================================
+       MODAL: REGISTER NEW MOBILE APP (PROJECT)
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-create-project">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Register New Mobile App</h3>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-create-project')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form-create-project">
+          <div class="form-group">
+            <label class="form-label">Application Name</label>
+            <input type="text" id="proj-name" class="form-control" placeholder="e.g. 108 Emergency Ambulance" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Application ID / Package Name</label>
+            <input type="text" id="proj-appid" class="form-control" placeholder="e.g. in.gov.emri.108" required>
+          </div>
+          <div class="grid-two-col" style="gap: 16px; margin-bottom: 0;">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="proj-category" class="form-control">
+                <option value="Government">Government</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Utilities">Utilities</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Platform</label>
+              <select id="proj-platform" class="form-control">
+                <option value="Android">Android</option>
+                <option value="iOS">iOS</option>
+                <option value="Cross-Platform">Cross-Platform (Flutter)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea id="proj-desc" class="form-control" placeholder="Brief description of this mobile application..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cred btn-cred-outline" onclick="closeModal('modal-create-project')">Cancel</button>
+        <button class="btn-cred btn-cred-primary" id="btn-save-project">Register App & Generate Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: PUBLISH VERSION RELEASE
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-version">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-version-title">Publish Version Release</h3>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-version')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form-version">
+          <input type="hidden" id="ver-proj-id">
+          <div class="grid-two-col" style="gap: 16px; margin-bottom: 0;">
+            <div class="form-group">
+              <label class="form-label">Version Name</label>
+              <input type="text" id="ver-name" class="form-control" placeholder="1.2.0" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Build Number</label>
+              <input type="number" id="ver-build" class="form-control" placeholder="3" required>
+            </div>
+          </div>
+          <div class="grid-two-col" style="gap: 16px; margin-bottom: 0;">
+            <div class="form-group">
+              <label class="form-label">Min Supported Version</label>
+              <input type="text" id="ver-min" class="form-control" placeholder="1.1.0" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Force Update Flag</label>
+              <select id="ver-force" class="form-control">
+                <option value="1">Yes (Mandatory Update)</option>
+                <option value="0">No (Optional Update)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Release Title</label>
+            <input type="text" id="ver-title" class="form-control" placeholder="Production Release" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Portal APK Download URL</label>
+            <input type="url" id="ver-url" class="form-control" placeholder="http://139.167.190.26/portal/app.apk" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Release Notes</label>
+            <textarea id="ver-notes" class="form-control" placeholder="• Fixes and performance updates..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cred btn-cred-outline" onclick="closeModal('modal-version')">Cancel</button>
+        <button class="btn-cred btn-cred-primary" id="btn-save-version">Deploy Version Rule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: CRASH INSPECTOR
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-crash-detail">
+    <div class="modal-dialog" style="max-width: 860px;">
+      <div class="modal-header">
+        <div>
+          <span class="badge-pill badge-coral" id="crash-badge-type">Exception</span>
+          <h3 id="crash-modal-title" style="margin-top: 6px; font-size: 18px;">Crash Details</h3>
+        </div>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-crash-detail')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: var(--bg-black); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-card); margin-bottom: 20px;">
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Application</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--cred-emerald);" id="crash-modal-app">--</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Device / OS</div>
+            <div style="font-size: 13px; font-weight: 600;" id="crash-modal-device">--</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Free RAM</div>
+            <div style="font-size: 13px; font-weight: 600;" id="crash-modal-ram">-- MB</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">District / User</div>
+            <div style="font-size: 13px; font-weight: 600;" id="crash-modal-user">--</div>
+          </div>
+        </div>
+
+        <div class="form-label" style="display: flex; justify-content: space-between;">
+          <span>Stack Trace</span>
+          <button class="btn-cred btn-cred-outline btn-cred-sm" id="btn-copy-stacktrace" style="padding: 2px 8px; font-size: 10px;">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+        <div class="stacktrace-box" id="crash-modal-stacktrace"></div>
+
+        <div style="margin-top: 24px;">
+          <div class="form-label">Pre-Crash Activity Trail (Breadcrumbs)</div>
+          <div class="timeline" id="crash-modal-breadcrumbs"></div>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between;">
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-cred btn-cred-outline btn-cred-sm" id="btn-status-investigating">Mark Investigating</button>
+          <button class="btn-cred btn-cred-primary btn-cred-sm" id="btn-status-resolved">Mark Resolved</button>
+        </div>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-crash-detail')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: DEVICE LOGS
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-device-logs">
+    <div class="modal-dialog" style="max-width: 800px;">
+      <div class="modal-header">
+        <div>
+          <span class="badge-pill badge-violet">Diagnostic Log Stream</span>
+          <h3 id="device-logs-title" style="margin-top: 6px; font-size: 18px;">Device Telemetry</h3>
+        </div>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-device-logs')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive" style="max-height: 400px;">
+          <table class="cred-table" id="table-device-raw-logs">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Tag</th>
+                <th>Message</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-device-logs')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/version-manager.js"></script>
+  <script src="js/crash-viewer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "enterprise-app-developer-console",
+  "version": "2.0.0",
+  "description": "Centralized Multi-App Developer Console, Version Control, Crashlytics & Telemetry Hub for Enterprise & Government Mobile Applications",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "seed": "node server/services/seedDataService.js",
+    "test": "node test_suite.js"
+  },
+  "keywords": [
+    "developer-console",
+    "multi-app",
+    "play-store-console",
+    "firebase-console-alternative",
+    "crashlytics",
+    "version-control",
+    "force-update",
+    "telemetry",
+    "flutter-sdk"
+  ],
+  "author": "Enterprise Mobile Engineering Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  }
+}
