@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account Deletion Request - Bavya Health Services</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #222222;
+      background-color: #ffffff;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 10px auto;
+      padding: 10px;
+    }
+    h1 {
+      color: #4d148c;
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      color: #cc004c;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    hr {
+      border: 0;
+      height: 1px;
+      background: #dddddd;
+      margin: 20px 0;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 4px;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #cccccc;
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #4d148c;
+    }
+    .btn-submit {
+      background-color: #4d148c;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 3px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn-submit:hover {
+      background-color: #cc004c;
+    }
+    .retention-note {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #eeeeee;
+      font-size: 13px;
+      color: #555555;
+    }
+    .back-link {
+      margin-top: 20px;
+      font-size: 13px;
+    }
+    a {
+      color: #cc004c;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Account Deletion Request</h1>
+  <div class="subtitle">Bavya Health Services (BHSPL)</div>
+
+  <hr>
+
+  <p style="font-size: 14px;">If you wish to request the deletion of your account and personal data associated with any Bavya Health Services mobile application (including <strong>BHSPL BTGS</strong>, <strong>BHSPL Ops 108</strong>, and <strong>104 Citizen App</strong>), please complete the form below:</p>
+
+  <form action="mailto:qualitycontrol@bhspl.in" method="POST" enctype="text/plain">
+    <div class="form-group">
+      <label for="app_name">Application Name:</label>
+      <select id="app_name" name="Application" required>
+        <option value="BHSPL BTGS (com.bavya.btgs)">BHSPL BTGS (com.bavya.btgs)</option>
+        <option value="BHSPL Ops 108 (in.bhspl.ops108)">BHSPL Ops 108 (in.bhspl.ops108)</option>
+        <option value="104 Citizen App">104 Citizen App</option>
+        <option value="Other BHSPL Application">Other BHSPL Application</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="user_id">Employee ID / Registered User ID:</label>
+      <input type="text" id="user_id" name="User ID" required placeholder="Enter your Employee ID or User ID">
+    </div>
+
+    <div class="form-group">
+      <label for="contact">Registered Phone / Email:</label>
+      <input type="text" id="contact" name="Contact Info" required placeholder="Enter registered phone number or email">
+    </div>
+
+    <div class="form-group">
+      <label for="reason">Reason for Request (Optional):</label>
+      <textarea id="reason" name="Reason" rows="3" placeholder="State reason for account deletion..."></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">Submit Deletion Request</button>
+  </form>
+
+  <div class="retention-note">
+    <strong>Data Retention Notice:</strong><br>
+    Upon verification of your identity, your personal profile and account credentials will be permanently removed within 30 days. Historical operational records required for statutory or regulatory audits will be retained as per BHSPL policy.
+  </div>
+
+  <div class="back-link">
+    <a href="privacy-policy.html">&larr; Return to Privacy Policy</a>
+  </div>
+</div>
+
+</body>
+</html>

@@ -4,6 +4,9 @@ let currentPeriod = '30d';
 const App = {
   async init() {
     this.bindEvents();
+    if (window.PlayStoreAuditor) {
+      PlayStoreAuditor.init();
+    }
     await Projects.loadProjects();
     this.loadOverview();
     VersionManager.loadVersions(selectedProjectId);
@@ -17,13 +20,23 @@ const App = {
   },
 
   bindEvents() {
-    // 1. Sidebar Tab Switching
+    // 1. Sidebar Tab Switching & Mobile Drawer Auto-Close
     document.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('click', () => {
         const tabId = item.getAttribute('data-tab');
         switchTab(tabId);
+        if (window.innerWidth <= 992) {
+          this.toggleMobileSidebar(false);
+        }
       });
     });
+
+    // Close mobile sidebar when window is resized above tablet breakpoint
+    window.addEventListener('resize', debounce(() => {
+      if (window.innerWidth > 992) {
+        this.toggleMobileSidebar(false);
+      }
+    }, 200));
 
     // 2. Project Switcher in Header
     document.getElementById('select-active-project')?.addEventListener('change', (e) => {
@@ -217,6 +230,22 @@ const App = {
     VersionManager.loadVersions(selectedProjectId);
     CrashViewer.loadCrashes(selectedProjectId);
     this.loadDevices();
+  },
+
+  toggleMobileSidebar(open) {
+    const sidebar = document.querySelector('.app-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (!sidebar) return;
+    const shouldOpen = open !== undefined ? open : !sidebar.classList.contains('open');
+    if (shouldOpen) {
+      sidebar.classList.add('open');
+      if (backdrop) backdrop.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    } else {
+      sidebar.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('show');
+      document.body.style.overflow = '';
+    }
   }
 };
 

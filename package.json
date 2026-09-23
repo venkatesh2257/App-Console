@@ -7,7 +7,9 @@
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
     "seed": "node server/services/seedDataService.js",
-    "test": "node test_suite.js"
+    "test": "node test_suite.js && node test_playstore_audit.js",
+    "test:console": "node test_suite.js",
+    "test:audit": "node test_playstore_audit.js"
   },
   "keywords": [
     "developer-console",

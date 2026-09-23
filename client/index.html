@@ -3,67 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enterprise Mobile Developer Console • Multi-App Hub</title>
+  <title>ReleaseHub • Mobile Release Command Center</title>
   
-  <!-- Google Fonts: Syne & Inter & JetBrains Mono -->
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link rel="stylesheet" href="css/cred-theme.css">
+  <link rel="stylesheet" href="css/releasehub-theme.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pipeline-stepper.css">
+  <link rel="stylesheet" href="css/release-command-center.css">
 </head>
 <body>
 
   <div class="app-container">
+    <!-- Sidebar Mobile Backdrop Overlay -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="App.toggleMobileSidebar(false)"></div>
+
     <!-- ==========================================
-         SIDEBAR NAVIGATION
+         RELEASEHUB SIDEBAR NAVIGATION
          ========================================== -->
     <aside class="app-sidebar">
       <div class="brand-header">
-        <div class="brand-logo">
-          <span>DEV</span>
+        <div class="brand-logo" style="background: linear-gradient(135deg, #4F46E5, #6366F1); width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);">
+          <span>◈</span>
         </div>
         <div class="brand-info">
-          <h2>App Console</h2>
-          <span>Enterprise Hub</span>
+          <h2 style="font-size: 15.5px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary);">ReleaseHub</h2>
+          <span style="font-size: 10.5px; font-weight: 700; color: #4F46E5; text-transform: uppercase; letter-spacing: 0.05em;">Release Command Center</span>
         </div>
       </div>
 
       <nav class="nav-menu">
-        <a class="nav-item active" data-tab="tab-overview">
-          <i class="fa-solid fa-chart-pie"></i>
-          <span>Overview KPIs</span>
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 12px 14px 4px 14px; letter-spacing: 0.07em;">Platform</div>
+        <a class="nav-item" data-tab="tab-overview">
+          <i class="fa-solid fa-gauge" style="color: #0284C7;"></i>
+          <span>Overview</span>
+        </a>
+        <a class="nav-item active" data-tab="tab-playstore-audit">
+          <i class="fa-solid fa-rocket" style="color: #4F46E5;"></i>
+          <span>Release</span>
+          <span class="badge-pill badge-emerald" style="margin-left: auto; font-size: 9.5px; padding: 2px 7px;">ACTIVE</span>
         </a>
         <a class="nav-item" data-tab="tab-projects">
-          <i class="fa-solid fa-cubes"></i>
-          <span>App Catalog (20+)</span>
+          <i class="fa-solid fa-cubes" style="color: #8B5CF6;"></i>
+          <span>App Registry</span>
+          <span class="badge-pill badge-cyan" style="margin-left: auto; font-size: 9.5px; padding: 2px 7px;">3 APPS</span>
         </a>
-        <a class="nav-item" data-tab="tab-version-control">
-          <i class="fa-solid fa-code-branch"></i>
-          <span>Version Gatekeeper</span>
+
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Analysis & SAST</div>
+        <a class="nav-item" data-tab="tab-engines">
+          <i class="fa-solid fa-microchip" style="color: #0284C7;"></i>
+          <span>Audit Engines</span>
+        </a>
+        <a class="nav-item" data-tab="tab-findings">
+          <i class="fa-solid fa-shield-halved" style="color: #D97706;"></i>
+          <span>Security & Findings</span>
+          <span class="badge-pill badge-amber" style="margin-left: auto; font-size: 9.5px; padding: 2px 7px;">0 BLOCK</span>
+        </a>
+        <a class="nav-item" data-tab="tab-delta">
+          <i class="fa-solid fa-code-compare" style="color: #FF6B6B;"></i>
+          <span>Release Delta</span>
+        </a>
+
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Governance</div>
+        <a class="nav-item" data-tab="tab-policies">
+          <i class="fa-solid fa-scale-balanced" style="color: #059669;"></i>
+          <span>Policies & Declarations</span>
+        </a>
+        <a class="nav-item" data-tab="tab-approvals">
+          <i class="fa-solid fa-user-check" style="color: #4F46E5;"></i>
+          <span>Human Approvals</span>
+        </a>
+        <a class="nav-item" data-tab="tab-evidence">
+          <i class="fa-solid fa-box-archive" style="color: #8B5CF6;"></i>
+          <span>Canonical Evidence</span>
+        </a>
+
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Reporting & Devices</div>
+        <a class="nav-item" data-tab="tab-reports">
+          <i class="fa-solid fa-file-invoice" style="color: #0284C7;"></i>
+          <span>Executive Reports</span>
         </a>
         <a class="nav-item" data-tab="tab-crashlytics">
-          <i class="fa-solid fa-bug"></i>
-          <span>Crashlytics</span>
+          <i class="fa-solid fa-bug" style="color: #E11D48;"></i>
+          <span>Crashlytics Telemetry</span>
         </a>
         <a class="nav-item" data-tab="tab-devices">
-          <i class="fa-solid fa-tablet-screen-button"></i>
-          <span>Device Fleets</span>
-        </a>
-        <a class="nav-item" data-tab="tab-reports">
-          <i class="fa-solid fa-file-invoice"></i>
-          <span>Period Reports</span>
+          <i class="fa-solid fa-mobile-screen-button" style="color: #059669;"></i>
+          <span>16KB Test Fleet</span>
         </a>
       </nav>
 
       <div class="sidebar-footer">
         <div class="system-status-indicator">
-          <span class="pulse-dot"></span>
-          <span>Multi-Tenant Ingestion Live</span>
+          <span class="pulse-dot" style="background: #059669; box-shadow: 0 0 8px #059669;"></span>
+          <span style="font-weight: 600; font-size: 11.5px; color: var(--text-secondary);">Release Gate Ready • 2026.09</span>
         </div>
       </div>
     </aside>
@@ -73,97 +112,257 @@
          ========================================== -->
     <main class="app-main">
       <header class="app-header">
-        <div class="page-title">
-          <!-- Multi-Project Switcher Dropdown (Like Firebase / Play Store Console) -->
-          <div class="project-selector-wrapper">
-            <i class="fa-solid fa-mobile-screen-button text-emerald"></i>
-            <select id="select-active-project" class="project-select-dropdown">
-              <option value="all">🌐 All Projects (Global Overview)</option>
-              <!-- Projects loaded dynamically via JS -->
-            </select>
+        <div class="page-title" style="display: flex; align-items: center; gap: 14px;">
+          <!-- Mobile Hamburger Menu Button -->
+          <button class="btn-mobile-nav-toggle" id="btn-mobile-sidebar-toggle" onclick="App.toggleMobileSidebar()" aria-label="Toggle Navigation Menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+
+          <!-- Command Palette Search Bar (Cmd + K) -->
+          <div class="rc-search-bar" onclick="ReleaseHubUI.openCommandModal()">
+            <i class="fa-solid fa-magnifying-glass" style="color: #4F46E5;"></i>
+            <span style="margin-left: 8px;">Search releases, apps, findings, artifacts...</span>
+            <span class="rc-kbd">⌘ K</span>
+          </div>
+
+          <!-- Live Top Bar Release HUD Pill -->
+          <div style="display: flex; align-items: center; gap: 8px; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 5px 14px; border-radius: 9999px; font-size: 12px; font-weight: 700; color: #059669; flex-shrink: 0;">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Ready for Play Store</span>
+            <span style="color: #64748B; font-weight: 500; font-size: 11px; margin-left: 4px;">com.bavya.btgs • v41</span>
           </div>
         </div>
 
-        <div class="header-actions">
-          <!-- Timeframe Period Filter -->
-          <div class="period-pill-group" id="period-filters">
-            <button class="period-pill" data-period="today">Today</button>
-            <button class="period-pill" data-period="7d">7 Days</button>
-            <button class="period-pill active" data-period="30d">30 Days</button>
-            <button class="period-pill" data-period="1y">1 Year</button>
-            <button class="period-pill" data-period="all">All Time</button>
+        <div class="header-actions" style="display: flex; align-items: center; gap: 12px;">
+          <!-- Quick Stage Switcher HUD Dropdown Button -->
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.scanLocalSample('aab')" title="Quick Scan Sample AAB">
+              <i class="fa-solid fa-bolt" style="color: #4F46E5;"></i> Quick Scan
+            </button>
           </div>
 
-          <button class="btn-cred btn-cred-violet btn-cred-sm" id="btn-open-new-app">
-            <i class="fa-solid fa-plus"></i> Add App
+          <!-- Notification Bell -->
+          <button class="btn-cred btn-cred-outline btn-cred-sm" style="border-radius: 50%; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Release Notifications">
+            <i class="fa-regular fa-bell"></i>
           </button>
-          <button class="btn-cred btn-cred-outline btn-cred-sm" id="btn-refresh-data">
-            <i class="fa-solid fa-rotate"></i>
+
+          <!-- Primary + New Release Action Button -->
+          <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="ReleaseHubUI.openNewReleaseWizard()">
+            <i class="fa-solid fa-plus"></i> New Release
           </button>
+
+          <!-- Admin Avatar -->
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #EEF2FF; border: 2px solid #4F46E5; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #4F46E5;" title="Venkatesh (Release Lead)">
+            V
+          </div>
         </div>
       </header>
 
       <div class="content-wrapper">
 
         <!-- =========================================================
-             TAB 1: OVERVIEW KPIS
+             TAB 1: MOBILE RELEASE COMMAND CENTER
              ========================================================= -->
-        <section id="tab-overview" class="tab-content active">
-          <div class="grid-kpis">
-            <div class="cred-card glow-emerald">
-              <div class="kpi-title">
-                <span>Total App Installations</span>
-                <i class="fa-solid fa-download text-emerald"></i>
+        <section id="tab-overview" class="tab-content">
+          <!-- Command Center Header Banner -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+            <div>
+              <h2 style="font-size: 24px; font-weight: 800; margin: 0 0 4px 0;">Release Command Center</h2>
+              <p style="font-size: 13.5px; color: var(--rc-text-secondary); margin: 0;">
+                Monitor mobile application release readiness, signing integrity, and gate approvals across your organization.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="ReleaseHubUI.openNewReleaseWizard()">
+                <i class="fa-solid fa-cloud-arrow-up"></i> + New Release Scan
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 High-Level Metric Cards -->
+          <div class="rc-metric-grid">
+            <div class="rc-metric-card">
+              <div class="rc-metric-title">
+                <span>Applications</span>
+                <i class="fa-solid fa-cubes text-emerald"></i>
               </div>
-              <div class="kpi-value text-emerald" id="kpi-total-installs">--</div>
-              <div class="kpi-footer">
-                <span class="badge-pill badge-emerald" id="kpi-installs-today">+0 Today</span>
-                <span class="text-muted" id="kpi-app-scope-label">Across Fleet</span>
+              <div class="rc-metric-value" id="rc-stat-apps">4</div>
+              <div class="rc-metric-sub">Registered Baselines</div>
+            </div>
+
+            <div class="rc-metric-card">
+              <div class="rc-metric-title">
+                <span>Releases</span>
+                <i class="fa-solid fa-rocket text-cyan"></i>
+              </div>
+              <div class="rc-metric-value" id="rc-stat-releases">18</div>
+              <div class="rc-metric-sub">This Month</div>
+            </div>
+
+            <div class="rc-metric-card">
+              <div class="rc-metric-title">
+                <span>Blocked</span>
+                <i class="fa-solid fa-ban text-coral"></i>
+              </div>
+              <div class="rc-metric-value" style="color: var(--rc-blocker);" id="rc-stat-blocked">2</div>
+              <div class="rc-metric-sub">Need Developer Action</div>
+            </div>
+
+            <div class="rc-metric-card">
+              <div class="rc-metric-title">
+                <span>Reviews</span>
+                <i class="fa-solid fa-triangle-exclamation" style="color: #ff8a00;"></i>
+              </div>
+              <div class="rc-metric-value" style="color: var(--rc-review);" id="rc-stat-reviews">3</div>
+              <div class="rc-metric-sub">Need Human Approval</div>
+            </div>
+          </div>
+
+          <!-- 2-Column Command Center Grid -->
+          <div class="rc-app-releases-grid">
+            <!-- Left: Application Releases List -->
+            <div>
+              <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--rc-text-muted); margin-bottom: 12px; letter-spacing: 0.04em;">
+                Application Release Readiness
+              </div>
+
+              <!-- App Card 1: BTGS -->
+              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('btgs')">
+                <div style="display: flex; gap: 16px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(37, 99, 235, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700;">
+                    <i class="fa-solid fa-plane-departure"></i>
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <strong style="font-size: 15px;">Travelite Ground Staff (BTGS)</strong>
+                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v41 (Code 7)</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
+                      <code>com.bavya.btgs</code> • Target SDK 36 • 16 KB Page Aligned ✓
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <span class="rc-badge-ready"><i class="fa-solid fa-circle-check"></i> READY FOR SUBMISSION</span>
+                </div>
+              </div>
+
+              <!-- App Card 2: VAS 1962 -->
+              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('bh1962')">
+                <div style="display: flex; gap: 16px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(22, 163, 74, 0.1); color: #22c55e; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <i class="fa-solid fa-shield-heart"></i>
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <strong style="font-size: 15px;">VAS 1962 Veterinary Ops</strong>
+                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v18 (Code 12)</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
+                      <code>in.gov.telangana.vas1962</code> • Target SDK 36 • 2 Policy Disclosures Pending
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <span class="rc-badge-review"><i class="fa-solid fa-triangle-exclamation"></i> REVIEW REQUIRED</span>
+                </div>
+              </div>
+
+              <!-- App Card 3: 108 Emergency Ops -->
+              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('ops108')">
+                <div style="display: flex; gap: 16px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(220, 38, 38, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <i class="fa-solid fa-truck-medical"></i>
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <strong style="font-size: 15px;">108 Emergency Ambulance Ops</strong>
+                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v27 (Code 29)</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
+                      <code>in.bhspl.ops108</code> • 2 Blockers: 16 KB alignment & Signing Keystore mismatch
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <span class="rc-badge-blocked"><i class="fa-solid fa-ban"></i> RELEASE BLOCKED</span>
+                </div>
+              </div>
+
+              <!-- App Card 4: 104 Grievance -->
+              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('citizen104')">
+                <div style="display: flex; gap: 16px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(162, 89, 255, 0.1); color: #a855f7; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <strong style="font-size: 15px;">104 Health Grievance System</strong>
+                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v12 (Code 15)</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
+                      <code>in.bhspl.citizen104</code> • Target SDK 36 • 0 Open Defects
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <span class="rc-badge-ready"><i class="fa-solid fa-circle-check"></i> READY FOR SUBMISSION</span>
+                </div>
               </div>
             </div>
 
-            <div class="cred-card glow-violet">
-              <div class="kpi-title">
-                <span>Active Users (DAU / MAU)</span>
-                <i class="fa-solid fa-users text-violet"></i>
+            <!-- Right: Risk Changes & Release Delta Summary -->
+            <div>
+              <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--rc-text-muted); margin-bottom: 12px; letter-spacing: 0.04em;">
+                Release Delta Intelligence
               </div>
-              <div class="kpi-value text-violet" id="kpi-active-dau">--</div>
-              <div class="kpi-footer">
-                <span class="badge-pill badge-violet" id="kpi-active-mau">MAU: --</span>
-                <span class="text-muted">Active Devices</span>
-              </div>
-            </div>
 
-            <div class="cred-card">
-              <div class="kpi-title">
-                <span>Crash-Free Rate</span>
-                <i class="fa-solid fa-shield-halved text-cyan"></i>
+              <div class="cred-card" style="margin-bottom: 16px;">
+                <div style="font-size: 12px; font-weight: 700; color: var(--rc-text-primary); margin-bottom: 10px; display: flex; justify-content: space-between;">
+                  <span>Latest Release Delta</span>
+                  <span class="badge-pill badge-violet" style="font-size: 10px;">v40 ➔ v41</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12.5px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--rc-text-secondary);"><i class="fa-solid fa-plus text-coral"></i> New Permission</span>
+                    <code style="font-size: 11px;">POST_NOTIFICATIONS</code>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--rc-text-secondary);"><i class="fa-solid fa-arrow-up text-emerald"></i> Target SDK Upgrade</span>
+                    <span style="font-weight: 700; color: var(--rc-pass);">API 35 ➔ 36</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--rc-text-secondary);"><i class="fa-solid fa-plus text-cyan"></i> Native Libraries</span>
+                    <span>+2 .so (16KB aligned)</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--rc-text-secondary);"><i class="fa-solid fa-lock text-emerald"></i> Keystore SHA-256</span>
+                    <span style="color: var(--rc-pass); font-size: 11px;">Official Match</span>
+                  </div>
+                </div>
               </div>
-              <div class="kpi-value" id="kpi-crash-free">--%</div>
-              <div class="kpi-footer">
-                <span class="badge-pill badge-emerald">Healthy</span>
-                <span class="text-muted" id="kpi-open-crashes">0 open issues</span>
-              </div>
-            </div>
 
-            <div class="cred-card glow-coral">
-              <div class="kpi-title">
-                <span>Managed Applications</span>
-                <i class="fa-solid fa-layer-group text-coral"></i>
-              </div>
-              <div class="kpi-value" id="kpi-total-apps">--</div>
-              <div class="kpi-footer">
-                <span class="badge-pill badge-coral">20+ Slots Ready</span>
-                <span class="text-muted">Enterprise Catalog</span>
+              <!-- Quick Engine Status Card -->
+              <div class="cred-card">
+                <div style="font-size: 12px; font-weight: 700; color: var(--rc-text-primary); margin-bottom: 8px;">
+                  Active Analysis Engines
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--rc-text-secondary);">
+                  <div><span style="color: var(--rc-pass);">●</span> <strong>bundletool:</strong> AAB Splits & 16KB</div>
+                  <div><span style="color: var(--rc-pass);">●</span> <strong>Greenlight:</strong> Play Store Policies</div>
+                  <div><span style="color: var(--rc-pass);">●</span> <strong>MobSF:</strong> SAST & Secrets Engine</div>
+                  <div><span style="color: var(--rc-pass);">●</span> <strong>App Registry:</strong> 4 Official Baselines</div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="grid-charts">
+          <!-- Fleet Health & Activity Charts Row -->
+          <div class="grid-two-col" style="margin-bottom: 24px;">
             <div class="cred-card">
               <div class="kpi-title">
-                <span>Installs & Engagement Timeline</span>
-                <span class="badge-pill badge-muted">Live Stream</span>
+                <span>Fleet Installations & Activity</span>
+                <i class="fa-solid fa-chart-line text-muted"></i>
               </div>
               <div style="height: 280px; position: relative; margin-top: 16px;">
                 <canvas id="chart-activity-timeline"></canvas>
@@ -183,9 +382,12 @@
 
           <div class="grid-two-col">
             <div class="cred-card">
-              <div class="kpi-title" style="margin-bottom: 16px;">
+              <div class="kpi-title" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <span>Recent Crash Signals</span>
-                <a href="javascript:void(0)" class="text-emerald" style="font-size: 12px; text-decoration: none;" onclick="switchTab('tab-crashlytics')">View All</a>
+                <a href="javascript:void(0)" class="btn-cred btn-cred-outline btn-cred-sm" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;" onclick="switchTab('tab-crashlytics')">
+                  <span>View All</span>
+                  <i class="fa-solid fa-arrow-right" style="font-size: 9.5px;"></i>
+                </a>
               </div>
               <div class="table-responsive">
                 <table class="cred-table" id="table-recent-crashes">
@@ -204,9 +406,12 @@
             </div>
 
             <div class="cred-card">
-              <div class="kpi-title" style="margin-bottom: 16px;">
+              <div class="kpi-title" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <span>Active Enterprise Projects</span>
-                <a href="javascript:void(0)" class="text-violet" style="font-size: 12px; text-decoration: none;" onclick="switchTab('tab-projects')">Manage Apps</a>
+                <a href="javascript:void(0)" class="btn-cred btn-cred-outline btn-cred-sm" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;" onclick="switchTab('tab-projects')">
+                  <span>Manage Apps</span>
+                  <i class="fa-solid fa-arrow-right" style="font-size: 9.5px;"></i>
+                </a>
               </div>
               <div class="table-responsive">
                 <table class="cred-table" id="table-active-projects-summary">
@@ -302,7 +507,687 @@
         </section>
 
         <!-- =========================================================
-             TAB 4: CRASHLYTICS (MULTI-APP)
+             TAB: GOOGLE PLAY STORE PRE-SUBMISSION RELEASE GATE PIPELINE
+             ========================================================= -->
+        <section id="tab-playstore-audit" class="tab-content active">
+          <!-- Hero Banner -->
+          <div class="cred-card glow-emerald" style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+              <div>
+                <span class="badge-pill badge-emerald" style="margin-bottom: 8px;">
+                  <i class="fa-brands fa-google-play"></i> Play Store Gatekeeper Pipeline
+                </span>
+                <h2 style="font-size: 24px; margin-bottom: 6px;">Pre-Submission Policy & Compliance Tester</h2>
+                <p class="text-secondary" style="font-size: 13.5px; max-width: 720px;">
+                  Automated end-to-end Google Play verification pipeline: <strong>Binary Intake & Hash Lock</strong> ➔ <strong>16 KB Page Alignment & Target SDK 36</strong> ➔ <strong>SBOM & SAST</strong> ➔ <strong>Policy Consistency</strong> ➔ <strong>Runtime Smoke Testing</strong> ➔ <strong>Release Arbiter</strong>.
+                </p>
+              </div>
+
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="btn-cred btn-cred-outline btn-cred-sm" id="btn-quick-scan-aab" type="button" onclick="PlayStoreAuditor.scanLocalSample('aab')">
+                  <i class="fa-solid fa-file-zipper text-emerald"></i> Quick Scan Sample AAB
+                </button>
+                <button class="btn-cred btn-cred-outline btn-cred-sm" id="btn-quick-scan-apk" type="button" onclick="PlayStoreAuditor.scanLocalSample('apk')">
+                  <i class="fa-brands fa-android text-emerald"></i> Quick Scan Sample APK
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-Stage Progression Stepper (7 Stages) -->
+          <div class="pipeline-stepper" id="audit-pipeline-stepper">
+            <div class="pipeline-step engine-bundletool active" id="step-btn-1" onclick="PlayStoreAuditor.goToStage(1)" title="Stage 1: Intake & Lock (Google bundletool)">
+              <div class="step-badge" id="step-badge-1">1</div>
+              <div class="step-info">
+                <span class="step-title">Intake & Lock</span>
+                <span class="step-sub" id="step-sub-1">bundletool</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+
+            <div class="pipeline-step engine-16kb" id="step-btn-2" onclick="PlayStoreAuditor.goToStage(2)" title="Stage 2: Static Binary (16KB Native ELF & Target SDK 36)">
+              <div class="step-badge" id="step-badge-2">2</div>
+              <div class="step-info">
+                <span class="step-title">Static Binary</span>
+                <span class="step-sub" id="step-sub-2">16KB & SDK 36</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+
+            <div class="pipeline-step engine-mobsf" id="step-btn-3" onclick="PlayStoreAuditor.goToStage(3)" title="Stage 3: Source & SBOM (MobSF Security SAST)">
+              <div class="step-badge" id="step-badge-3">3</div>
+              <div class="step-info">
+                <span class="step-title">Source & SBOM</span>
+                <span class="step-sub" id="step-sub-3">MobSF SAST</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+
+            <div class="pipeline-step engine-greenlight" id="step-btn-4" onclick="PlayStoreAuditor.goToStage(4)" title="Stage 4: Policy Check (RevylAI Greenlight)">
+              <div class="step-badge" id="step-badge-4">4</div>
+              <div class="step-info">
+                <span class="step-title">Policy Check</span>
+                <span class="step-sub" id="step-sub-4">Greenlight</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+
+            <div class="pipeline-step engine-16kb" id="step-btn-5" onclick="PlayStoreAuditor.goToStage(5)" title="Stage 5: Runtime Smoke (16KB Runtime Simulation)">
+              <div class="step-badge" id="step-badge-5">5</div>
+              <div class="step-info">
+                <span class="step-title">Runtime Smoke</span>
+                <span class="step-sub" id="step-sub-5">16KB Sim</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+
+            <div class="pipeline-step engine-greenlight" id="step-btn-6" onclick="PlayStoreAuditor.goToStage(6)" title="Stage 6: Release Decision Gate (RevylAI Greenlight Arbiter)">
+              <div class="step-badge" id="step-badge-6">6</div>
+              <div class="step-info">
+                <span class="step-title">Release Gate</span>
+                <span class="step-sub" id="step-sub-6">Arbiter</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+
+            <div class="pipeline-step engine-bundletool" id="step-btn-7" onclick="PlayStoreAuditor.goToStage(7)" title="Stage 7: Evidence & Audit Package (Google bundletool)">
+              <div class="step-badge" id="step-badge-7">7</div>
+              <div class="step-info">
+                <span class="step-title">Evidence & Audit</span>
+                <span class="step-sub" id="step-sub-7">Audit Package</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="audit-scan-progress" class="cred-card" style="display: none; margin-bottom: 24px; text-align: center; padding: 40px 20px;">
+            <div class="spinner" style="width: 44px; height: 44px; border: 3px solid rgba(0, 245, 155, 0.2); border-top-color: var(--cred-emerald); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px auto;"></div>
+            <h3 style="font-size: 18px; margin-bottom: 4px;">Executing 7-Stage Release Gate Pipeline...</h3>
+            <p class="text-muted" style="font-size: 13px;">Analyzing binary manifest, 16 KB ELF alignment, Target SDK 36 mandate, App Registry signing, and consistency checks for <span id="audit-scan-filename" class="text-emerald" style="font-weight:600;"></span></p>
+          </div>
+
+          <!-- ==========================================
+               STAGE 1: INTAKE & APP PROFILE
+               ========================================== -->
+          <div class="pipeline-stage-view active" id="stage-view-1">
+            <!-- App Profile & Verification Mode Selector -->
+            <div class="cred-card" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                <div>
+                  <span class="badge-pill badge-emerald" style="margin-bottom: 4px;"><i class="fa-solid fa-id-card"></i> Organization App Registry</span>
+                  <h3 style="font-size: 18px; margin: 0;">Select Target App Profile & Inspection Mode</h3>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <span class="badge-pill badge-violet" id="badge-selected-mode">Mode: AAB Only (Partial Source)</span>
+                </div>
+              </div>
+
+              <div class="grid-stage1-select">
+                <div>
+                  <label class="form-label" for="select-app-profile">Application Registry Profile</label>
+                  <select class="form-control" id="select-app-profile" onchange="PlayStoreAuditor.handleAppProfileSelect(event)">
+                    <option value="btgs">Travelite Ground Staff (BTGS) - com.bavya.btgs</option>
+                    <option value="bh1962">VAS 1962 Veterinary Operations - in.gov.telangana.vas1962</option>
+                    <option value="ops108">108 Emergency Ambulance Ops - in.bhspl.ops108</option>
+                    <option value="citizen104">104 Health Grievance System - in.bhspl.citizen104</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" for="select-scan-mode">Verification Mode</label>
+                  <select class="form-control" id="select-scan-mode" onchange="PlayStoreAuditor.handleScanModeSelect(event)">
+                    <option value="aab_only">AAB Binary Only</option>
+                    <option value="source_aab">Source Code + AAB Binary</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Integrated Multi-Engine Adapters Row -->
+              <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-card); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div style="font-size: 11.5px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+                  <i class="fa-solid fa-microchip text-emerald"></i> Active Analysis Engines:
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <span class="badge-pill" style="font-size: 11px; background: rgba(0, 245, 155, 0.08); color: var(--cred-emerald); border: 1px solid rgba(0, 245, 155, 0.2);">
+                    <i class="fa-brands fa-google"></i> Google bundletool
+                  </span>
+                  <span class="badge-pill" style="font-size: 11px; background: rgba(0, 212, 255, 0.08); color: var(--cred-cyan); border: 1px solid rgba(0, 212, 255, 0.2);">
+                    <i class="fa-solid fa-traffic-light"></i> RevylAI Greenlight
+                  </span>
+                  <span class="badge-pill" style="font-size: 11px; background: rgba(162, 89, 255, 0.08); color: var(--cred-violet); border: 1px solid rgba(162, 89, 255, 0.2);">
+                    <i class="fa-solid fa-shield-halved"></i> MobSF Security SAST
+                  </span>
+                  <span class="badge-pill" style="font-size: 11px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); border: 1px solid var(--border-card);">
+                    <i class="fa-solid fa-bolt"></i> Native 16KB ELF Engine
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Drop Zone when no file is loaded or re-uploading -->
+            <div class="cred-card" style="margin-bottom: 24px; text-align: center; padding: 40px 20px; border: 2px dashed var(--border-card); cursor: pointer; transition: all 0.2s ease;" id="playstore-drop-zone">
+              <input type="file" id="playstore-file-input" style="display: none;" onchange="PlayStoreAuditor.handleFileInputChange(event)">
+              <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 245, 155, 0.1); color: var(--cred-emerald); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px auto;">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <h3 style="font-size: 19px; margin-bottom: 6px;">Drop your .AAB or .APK release file here</h3>
+              <p class="text-muted" style="font-size: 13px; max-width: 480px; margin: 0 auto 18px auto;">
+                Supports Android App Bundles (<code>.aab</code>) and Release APKs (<code>.apk</code>). The engine extracts package attributes, locks SHA-256 hash, and initiates 7-stage gating.
+              </p>
+              <label for="playstore-file-input" class="btn-cred btn-cred-primary btn-cred-sm" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                <i class="fa-solid fa-folder-open"></i> Browse Release File
+              </label>
+            </div>
+
+            <!-- Stage 1 Extracted Binary Details Card -->
+            <div class="cred-card glow-bundletool" id="stage1-binary-card" style="display: none; margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+                <div>
+                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                    <span class="engine-tag engine-tag-bundletool"><i class="fa-brands fa-google"></i> Google bundletool</span>
+                    <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> SHA-256 Hash Locked</span>
+                  </div>
+                  <h3 style="font-size: 22px; margin: 0;" id="st1-pkg-name">com.bavya.btgs</h3>
+                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;" id="st1-file-info">app-release.aab (44.6 MB)</p>
+                  <p style="font-family: monospace; font-size: 11px; color: var(--text-muted); margin: 4px 0 0 0;" id="st1-hash-info">SHA-256: --</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <label for="playstore-file-input" class="btn-cred btn-cred-outline btn-cred-sm" style="cursor: pointer;">
+                    <i class="fa-solid fa-arrows-rotate"></i> Change File
+                  </label>
+                  <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.goToStage(2)">
+                    Proceed to Stage 2: Static Analysis <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; padding-top: 16px; border-top: 1px solid var(--border-card);">
+                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Version</div>
+                  <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);" id="st1-version">v6.0.1 (Code: 7)</div>
+                </div>
+                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Target SDK Level</div>
+                  <div style="font-size: 16px; font-weight: 700; color: var(--cred-emerald);" id="st1-target-sdk">SDK 36 (Android 16)</div>
+                </div>
+                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Min SDK</div>
+                  <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);" id="st1-min-sdk">SDK 24 (Android 7.0)</div>
+                </div>
+                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Native Architectures</div>
+                  <div style="font-size: 14px; font-weight: 600; color: var(--cred-violet);" id="st1-archs">arm64-v8a, armeabi-v7a</div>
+                </div>
+              </div>
+
+              <!-- Detected Permissions List -->
+              <div style="margin-top: 18px;">
+                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">
+                  Detected Permissions in Manifest (<span id="st1-perm-count">0</span>):
+                </div>
+                <div id="st1-perms-container" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               STAGE 2: STATIC ANDROID & BINARY ANALYSIS
+               ========================================== -->
+          <div class="pipeline-stage-view" id="stage-view-2">
+            <div class="cred-card glow-16kb" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                    <span class="engine-tag engine-tag-16kb"><i class="fa-solid fa-bolt"></i> 16 KB Native ELF Engine</span>
+                    <span class="badge-pill badge-neutral">Stage 2: Static Analysis</span>
+                  </div>
+                  <h3 style="font-size: 20px; margin: 0;">Play Store Static Gates & 16 KB Alignment Checklist</h3>
+                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
+                    Deep multi-layer verification: <strong>16 KB Memory Page Alignment</strong>, <strong>Target SDK 36</strong>, <strong>App Registry Signing Key Matching</strong>, <strong>64-Bit ABIs</strong>, and <strong>Component Security</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Cards Grid -->
+            <div class="grid-two-col" style="gap: 16px; margin-bottom: 20px;">
+              <div class="cred-card" id="audit-16kb-status-box" style="margin-bottom: 0;"></div>
+              <div class="cred-card" id="audit-signing-status-box" style="margin-bottom: 0;"></div>
+            </div>
+
+            <div class="grid-two-col" style="gap: 16px; margin-bottom: 20px;">
+              <div class="cred-card" id="audit-64bit-status-box" style="margin-bottom: 0;"></div>
+              <div class="cred-card" id="audit-manifest-status-box" style="margin-bottom: 0;"></div>
+            </div>
+
+            <!-- Detailed 16 KB Per-Library Table -->
+            <div class="cred-card" id="audit-16kb-libs-card" style="display: none; margin-bottom: 20px;">
+              <div class="card-header" style="margin-bottom: 12px;">
+                <h3 style="font-size: 15px;"><i class="fa-solid fa-microchip text-emerald"></i> 16 KB Native Shared Libraries (.so) Inspection Breakdown</h3>
+                <span id="audit-16kb-libs-summary-badge" class="badge-pill badge-emerald">0 Libraries Checked</span>
+              </div>
+              <div class="table-responsive">
+                <table class="cred-table" id="table-16kb-libs">
+                  <thead>
+                    <tr>
+                      <th>Library Name (.so)</th>
+                      <th>Architecture (ABI)</th>
+                      <th>ELF Type</th>
+                      <th>Max PT_LOAD Alignment</th>
+                      <th>16 KB Status</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Stage 2 Navigation -->
+            <div class="stage-nav-bar">
+              <button class="btn-cred btn-cred-outline" onclick="PlayStoreAuditor.goToStage(1)">
+                <i class="fa-solid fa-arrow-left"></i> Back to Intake
+              </button>
+              <button class="btn-cred btn-cred-primary" onclick="PlayStoreAuditor.goToStage(3)">
+                Proceed to Stage 3: Source & SBOM <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               STAGE 3: SOURCE & SBOM DEPENDENCY ANALYSIS
+               ========================================== -->
+          <div class="pipeline-stage-view" id="stage-view-3">
+            <div class="cred-card glow-mobsf" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                    <span class="engine-tag engine-tag-mobsf"><i class="fa-solid fa-shield-halved"></i> MobSF Security SAST</span>
+                    <span class="badge-pill badge-neutral">Stage 3: Source & SBOM</span>
+                  </div>
+                  <h3 style="font-size: 20px; margin: 0;">Dependency Bill of Materials & R8 Verification</h3>
+                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
+                    Attribution of native libraries to third-party SDKs and code shrinking/deobfuscation verification.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-two-col" style="gap: 16px; margin-bottom: 20px;">
+              <div class="cred-card" id="audit-proguard-status-box" style="margin-bottom: 0;"></div>
+              <div class="cred-card" id="audit-sbom-summary-box" style="margin-bottom: 0;">
+                <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Software Bill of Materials</div>
+                <h4 style="font-size: 16px; margin: 4px 0 8px 0;">Third-Party SDK Inventory</h4>
+                <div style="font-size: 13px; color: var(--text-secondary);" id="sbom-inventory-details">
+                  • Flutter Engine Framework (16 KB Compatible)<br>
+                  • AndroidX Core KTX / Lifecycle<br>
+                  • Google Play Location & Maps Services<br>
+                  • OkHttp 4.x / Retrofit Networking
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 3 Navigation -->
+            <div class="stage-nav-bar">
+              <button class="btn-cred btn-cred-outline" onclick="PlayStoreAuditor.goToStage(2)">
+                <i class="fa-solid fa-arrow-left"></i> Back to Static Analysis
+              </button>
+              <button class="btn-cred btn-cred-primary" onclick="PlayStoreAuditor.goToStage(4)">
+                Proceed to Stage 4: Policy Consistency <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               STAGE 4: POLICY & DISCLOSURE CONSISTENCY
+               ========================================== -->
+          <div class="pipeline-stage-view" id="stage-view-4">
+            <div class="cred-card glow-greenlight" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                <div>
+                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                    <span class="engine-tag engine-tag-greenlight"><i class="fa-solid fa-traffic-light"></i> RevylAI Greenlight Engine</span>
+                    <span class="badge-pill badge-neutral">Stage 4: Disclosure Consistency</span>
+                  </div>
+                  <h3 style="font-size: 20px; margin: 0;">Privacy Policy & Data Safety Consistency Engine</h3>
+                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
+                    Heuristic cross-verification of declared binary permissions against published privacy policy disclosures.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Privacy Policy Input Box -->
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px;">
+                <div style="flex: 1; min-width: 320px;">
+                  <label class="form-label" for="input-privacy-policy-source">Privacy Policy URL or Document Path</label>
+                  <input type="text" class="form-control" id="input-privacy-policy-source" value="/privacy-policy.html" placeholder="https://ops.bhspl.in/privacy-policy or /privacy-policy.html">
+                </div>
+                <button class="btn-cred btn-cred-primary" id="btn-analyze-policy" onclick="PlayStoreAuditor.analyzePolicyInput()">
+                  <i class="fa-solid fa-magnifying-glass"></i> Check Disclosures
+                </button>
+                <button class="btn-cred btn-cred-outline" onclick="PlayStoreAuditor.useMasterPolicyPreset()">
+                  <i class="fa-solid fa-bookmark"></i> Master Preset
+                </button>
+              </div>
+            </div>
+
+            <!-- Side-by-Side Comparison Table -->
+            <div class="matrix-card" style="margin-bottom: 20px;">
+              <div class="table-responsive">
+                <table class="comparison-table" id="table-comparison-matrix">
+                  <thead>
+                    <tr>
+                      <th style="width: 25%;">Required Item / Permission</th>
+                      <th style="width: 20%;">Binary Manifest Status</th>
+                      <th style="width: 22%;">Privacy Policy Clause</th>
+                      <th style="width: 15%;">Consistency Status</th>
+                      <th style="width: 18%;">Evidence Type</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- REQUEST_INSTALL_PACKAGES Human Justification Card -->
+            <div class="cred-card" id="card-install-packages-review" style="display: none; margin-bottom: 20px; border-left: 4px solid #ff8a00;">
+              <div style="font-weight: 700; color: #ff8a00; margin-bottom: 8px;">
+                <i class="fa-solid fa-triangle-exclamation"></i> REQUEST_INSTALL_PACKAGES Policy Justification Form
+              </div>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                Google Play restricts in-app package installation. Confirm if core app functionality involves user-initiated package dispatch.
+              </p>
+              <div style="display: flex; gap: 16px; align-items: center;">
+                <label><input type="checkbox" id="chk-core-installer"> Core functionality requires user-initiated package installation</label>
+                <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.submitJustification('install_packages')">Record Justification</button>
+              </div>
+            </div>
+
+            <!-- Stage 4 Navigation -->
+            <div class="stage-nav-bar">
+              <button class="btn-cred btn-cred-outline" onclick="PlayStoreAuditor.goToStage(3)">
+                <i class="fa-solid fa-arrow-left"></i> Back to Source & SBOM
+              </button>
+              <button class="btn-cred btn-cred-primary" onclick="PlayStoreAuditor.goToStage(5)">
+                Proceed to Stage 5: Runtime Smoke Testing <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               STAGE 5: RUNTIME SMOKE TESTING
+               ========================================== -->
+          <div class="pipeline-stage-view" id="stage-view-5">
+            <div class="cred-card glow-16kb" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                    <span class="engine-tag engine-tag-16kb"><i class="fa-solid fa-bolt"></i> 16 KB Runtime Simulation Engine</span>
+                    <span class="badge-pill badge-neutral">Stage 5: Runtime Testing</span>
+                  </div>
+                  <h3 style="font-size: 20px; margin: 0;">Application-Specific Runtime Smoke Test Profiles</h3>
+                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
+                    Simulates installation, cold launch, critical path navigation, and 16 KB memory crash/ANR detection.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2-Column Runtime Layout: Tests & Logs Left, Device Mockup Right -->
+            <div class="grid-stage5-runtime">
+              <div>
+                <div class="cred-card" style="margin-bottom: 16px;">
+                  <div class="card-header" style="margin-bottom: 16px;">
+                    <h3 style="font-size: 16px;" id="runtime-profile-title">Active Profile: btgs-smoke-v1</h3>
+                    <span class="badge-pill badge-emerald" id="runtime-status-badge"><i class="fa-solid fa-circle-check"></i> 7/7 Smoke Tests Passed</span>
+                  </div>
+                  <div id="runtime-tests-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;"></div>
+                </div>
+
+                <!-- Live Test Telemetry Terminal -->
+                <div class="cred-card">
+                  <div class="card-header" style="margin-bottom: 10px;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--rc-text-muted); text-transform: uppercase;">
+                      <i class="fa-solid fa-terminal text-cyan"></i> Runtime Execution Stream (Level A + Level B)
+                    </div>
+                    <span class="badge-pill" style="font-size: 10px;">Android 16 Emulator (16KB Kernel)</span>
+                  </div>
+                  <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 12px 14px; font-family: var(--rc-font-mono); font-size: 11.5px; color: #475569; max-height: 180px; overflow-y: auto; line-height: 1.6;">
+                    <div><span style="color: #0D9488; font-weight: 600;">[00:00.12]</span> INIT: Booting Pixel 9 Emulator (API 36, arm64-v8a, 16KB page kernel)...</div>
+                    <div><span style="color: #0D9488; font-weight: 600;">[00:00.45]</span> ADB: Installing base-master.apk + split_config.arm64_v8a.apk...</div>
+                    <div><span style="color: #0D9488; font-weight: 600;">[00:00.89]</span> TEST: cold_launch package=com.bavya.btgs (Launch time: 650ms, 0 frames dropped)</div>
+                    <div><span style="color: #0D9488; font-weight: 600;">[00:01.32]</span> TEST: auth_flow - Verified token storage & biometrics hook</div>
+                    <div><span style="color: #0D9488; font-weight: 600;">[00:01.85]</span> TEST: gps_flow - Granted ACCESS_FINE_LOCATION & ACCESS_BACKGROUND_LOCATION</div>
+                    <div><span style="color: #0D9488; font-weight: 600;">[00:02.10]</span> MEMCHECK: 0 native page alignment segfaults, 0 SIGSEGV, 0 SIGBUS</div>
+                    <div><span style="color: #3B8FF3; font-weight: 600;">[00:02.40]</span> SUCCESS: All 7 runtime smoke validations exited with code 0</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Interactive Device Frame Mockup -->
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <div class="rc-device-mockup">
+                  <div class="rc-device-notch"></div>
+                  <div class="rc-device-screen">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: #64748B; margin-bottom: 20px;">
+                      <span>09:41</span>
+                      <div style="display: flex; gap: 4px;">
+                        <i class="fa-solid fa-signal"></i>
+                        <i class="fa-solid fa-wifi"></i>
+                        <i class="fa-solid fa-battery-full"></i>
+                      </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px; margin-bottom: 24px;">
+                      <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, var(--rh-brand-primary, #F29F67), var(--rh-teal, #0D9488)); margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FFFFFF; box-shadow: 0 2px 10px var(--rh-brand-primary-glow, rgba(242,159,103,0.3));">
+                        ◈
+                      </div>
+                      <div style="font-weight: 700; font-size: 15px; color: #1E1E2C;">Travelite Ground Staff</div>
+                      <div style="font-size: 11px; color: #64748B; font-family: var(--rc-font-mono);">com.bavya.btgs • v41</div>
+                    </div>
+
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                      <div style="font-size: 10px; color: #0D9488; font-weight: 700; text-transform: uppercase;">Runtime Gating Status</div>
+                      <div style="font-size: 12px; font-weight: 600; color: #1E1E2C; margin-top: 2px;">0 ANRs • 0 Crashes</div>
+                      <div style="font-size: 10px; color: #64748B; margin-top: 2px;">16 KB Kernel Compatibility Verified</div>
+                    </div>
+
+                    <div style="margin-top: auto; padding: 8px; background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.25); border-radius: 6px; text-align: center;">
+                      <span style="color: #0D9488; font-size: 11px; font-weight: 600;"><i class="fa-solid fa-circle-check"></i> Smoke Test Passed</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 5 Navigation -->
+            <div class="stage-nav-bar">
+              <button class="btn-cred btn-cred-outline" onclick="PlayStoreAuditor.goToStage(4)">
+                <i class="fa-solid fa-arrow-left"></i> Back to Policy Consistency
+              </button>
+              <button class="btn-cred btn-cred-primary" onclick="PlayStoreAuditor.goToStage(6)">
+                Proceed to Stage 6: Release Decision <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               STAGE 6: RELEASE GATE DECISION & DELTA MATRIX
+               ========================================== -->
+          <div class="pipeline-stage-view" id="stage-view-6">
+            <!-- Scorecard Hero Banner -->
+            <div class="cred-card glow-greenlight" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+                <div style="display: flex; gap: 20px; align-items: center;">
+                  <div style="width: 85px; height: 85px; border-radius: var(--radius-md); background: var(--bg-black); border: 2px solid var(--border-card); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <span id="audit-score-value" style="font-size: 28px; font-weight: 800; line-height: 1;">--%</span>
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px;">Score</span>
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                      <h3 style="font-size: 22px; margin: 0;" id="audit-res-pkg">com.bavya.btgs</h3>
+                      <span class="engine-tag engine-tag-greenlight"><i class="fa-solid fa-traffic-light"></i> RevylAI Greenlight Arbiter</span>
+                      <span id="audit-score-badge" class="badge-pill badge-emerald">Ready for Release</span>
+                    </div>
+                    <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 6px 0;" id="audit-score-status-text">--</p>
+                    <div style="display: flex; gap: 16px; font-size: 12px; color: var(--text-muted);">
+                      <span><i class="fa-solid fa-file text-emerald"></i> <span id="audit-res-file">--</span></span>
+                      <span><i class="fa-solid fa-code-branch text-violet"></i> <span id="audit-res-ver">--</span></span>
+                      <span><i class="fa-brands fa-android text-cyan"></i> <span id="audit-res-sdk">--</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.goToStage(7)">
+                    <i class="fa-solid fa-box-archive"></i> View Audit Package <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 4-Tier Gate Counters -->
+              <div class="grid-decision-metrics" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-card);">
+                <div style="background: rgba(0, 245, 155, 0.05); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(0, 245, 155, 0.2);">
+                  <div style="font-size: 11px; color: var(--cred-emerald); font-weight: 700; text-transform: uppercase;">Passed Gates</div>
+                  <div style="font-size: 22px; font-weight: 800; color: var(--cred-emerald);" id="audit-count-passed">0</div>
+                </div>
+                <div style="background: rgba(229, 165, 10, 0.05); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(229, 165, 10, 0.2);">
+                  <div style="font-size: 11px; color: #e5a50a; font-weight: 700; text-transform: uppercase;">Warnings</div>
+                  <div style="font-size: 22px; font-weight: 800; color: #e5a50a;" id="audit-count-warn">0</div>
+                </div>
+                <div style="background: rgba(255, 138, 0, 0.05); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(255, 138, 0, 0.2);">
+                  <div style="font-size: 11px; color: #ff8a00; font-weight: 700; text-transform: uppercase;">Review Required</div>
+                  <div style="font-size: 22px; font-weight: 800; color: #ff8a00;" id="audit-count-high">0</div>
+                </div>
+                <div style="background: rgba(255, 75, 75, 0.05); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(255, 75, 75, 0.2);">
+                  <div style="font-size: 11px; color: var(--cred-coral); font-weight: 700; text-transform: uppercase;">Hard Blockers</div>
+                  <div style="font-size: 22px; font-weight: 800; color: var(--cred-coral);" id="audit-count-fail">0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Release-to-Release Delta Comparison -->
+            <div class="cred-card" style="margin-bottom: 20px;">
+              <div class="card-header" style="margin-bottom: 12px;">
+                <h3 style="font-size: 16px;"><i class="fa-solid fa-code-compare text-violet"></i> Release-to-Release Delta Matrix (v40 ➔ v41)</h3>
+                <span class="badge-pill badge-emerald" id="delta-summary-badge">No Critical Regressions</span>
+              </div>
+              <div id="delta-items-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+
+            <!-- Actionable Developer Checklist -->
+            <div class="cred-card" style="margin-bottom: 20px;">
+              <div class="card-header" style="margin-bottom: 16px;">
+                <h3 style="font-size: 16px;">Actionable Release Gate Remediation</h3>
+              </div>
+              <div id="audit-final-remediation-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+
+            <!-- Stage 6 Navigation -->
+            <div class="stage-nav-bar">
+              <button class="btn-cred btn-cred-outline" onclick="PlayStoreAuditor.goToStage(5)">
+                <i class="fa-solid fa-arrow-left"></i> Back to Runtime Smoke
+              </button>
+              <button class="btn-cred btn-cred-primary" onclick="PlayStoreAuditor.goToStage(7)">
+                Proceed to Stage 7: Evidence Package <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               STAGE 7: CANONICAL AUDIT & EVIDENCE PACKAGE
+               ========================================== -->
+          <div class="pipeline-stage-view" id="stage-view-7">
+            <div class="cred-card glow-bundletool" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                    <span class="engine-tag engine-tag-bundletool"><i class="fa-brands fa-google"></i> Google bundletool & Release Sign-Off</span>
+                    <span class="badge-pill badge-neutral">Stage 7: Canonical Audit</span>
+                  </div>
+                  <h3 style="font-size: 20px; margin: 0;">Release Gate Evidence Package & Sign-Off</h3>
+                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
+                    Immutable canonical report artifact with full evidence logs, reasonings, and sign-offs.
+                  </p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.exportReport()">
+                    <i class="fa-solid fa-print"></i> Print Executive PDF
+                  </button>
+                  <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.downloadJsonReport()">
+                    <i class="fa-solid fa-file-code"></i> Download release-report.json
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Evidence Inspector Drawer -->
+            <div class="cred-card" style="margin-bottom: 20px;">
+              <div class="card-header" style="margin-bottom: 16px;">
+                <h3 style="font-size: 16px;">Full Evidence Drawer (<span id="evidence-count">0</span> Verified Rules)</h3>
+              </div>
+              <div id="evidence-drawer-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+
+            <!-- Upcoming Google Play Requirements Horizon -->
+            <div class="cred-card" style="margin-bottom: 20px; background: rgba(162, 89, 255, 0.05); border: 1px solid rgba(162, 89, 255, 0.2);">
+              <div class="card-header" style="margin-bottom: 12px;">
+                <h3 style="font-size: 15px; color: var(--cred-violet);"><i class="fa-solid fa-calendar-check"></i> Upcoming Google Play Requirement Horizon</h3>
+              </div>
+              <div id="upcoming-requirements-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+
+            <!-- Stage 7 Navigation -->
+            <div class="stage-nav-bar">
+              <button class="btn-cred btn-cred-outline" onclick="PlayStoreAuditor.goToStage(6)">
+                <i class="fa-solid fa-arrow-left"></i> Back to Release Decision
+              </button>
+              <button class="btn-cred btn-cred-primary" onclick="PlayStoreAuditor.goToStage(1)">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Start New Release Scan
+              </button>
+            </div>
+          </div>
+
+          <!-- Audit Scan History Dropdown Accordion -->
+          <div class="cred-card" style="margin-top: 30px; border-radius: 12px; transition: all 0.25s ease;">
+            <div class="card-header" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;" onclick="PlayStoreAuditor.toggleAuditHistory()">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 34px; height: 34px; border-radius: 8px; background: var(--rh-brand-primary-subtle); color: var(--rh-brand-primary); display: flex; align-items: center; justify-content: center; font-size: 15px;">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <div>
+                  <h3 style="font-size: 15px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 10px;">
+                    Recent Pre-Submission Audits
+                    <span id="audit-history-count" class="badge-pill badge-neutral" style="font-size: 11px; font-weight: 500;">0 Scans</span>
+                  </h3>
+                  <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">Review previous audit history logs, artifact verification reports, and pass rates.</p>
+                </div>
+              </div>
+              <button class="btn-cred btn-cred-outline" type="button" style="padding: 6px 14px; font-size: 12.5px; display: flex; align-items: center; gap: 6px; border-radius: 8px;" onclick="event.stopPropagation(); PlayStoreAuditor.toggleAuditHistory();">
+                <span id="history-toggle-label">Show Audits</span>
+                <i id="history-chevron" class="fa-solid fa-chevron-down" style="transition: transform 0.25s ease; font-size: 11px;"></i>
+              </button>
+            </div>
+            <div id="audit-history-dropdown-content" style="display: none; margin-top: 16px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+              <div class="table-responsive">
+                <table class="cred-table" id="table-audit-history">
+                  <thead>
+                    <tr>
+                      <th>Package Name</th>
+                      <th>File Name</th>
+                      <th>Version</th>
+                      <th>Target SDK</th>
+                      <th>Compliance Score</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 5: CRASHLYTICS (MULTI-APP)
              ========================================================= -->
         <section id="tab-crashlytics" class="tab-content">
           <div class="cred-card" style="margin-bottom: 24px; padding: 16px 24px;">
@@ -413,6 +1298,389 @@
                 <a id="btn-export-crashes-json" href="/api/v1/admin/export?type=crashes&format=json" class="btn-cred btn-cred-outline" download>
                   <i class="fa-solid fa-code"></i> JSON Export
                 </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB: AUDIT ENGINES
+             ========================================================= -->
+        <section id="tab-engines" class="tab-content">
+          <div class="cred-card glow-cyan" style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <span class="badge-pill badge-cyan" style="margin-bottom: 6px;"><i class="fa-solid fa-microchip"></i> Engine Architecture</span>
+                <h2 style="font-size: 24px; margin: 0;">Multi-Engine Release Verification Suite</h2>
+                <p class="text-secondary" style="font-size: 13.5px; margin: 4px 0 0 0;">
+                  ReleaseHub orchestrates open-source engines and internal compliance baselines into a single release arbiter.
+                </p>
+              </div>
+              <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="ReleaseHubUI.openNewReleaseWizard()">
+                <i class="fa-solid fa-play"></i> Run All Engines
+              </button>
+            </div>
+          </div>
+
+          <div class="grid-two-col">
+            <!-- Engine 1: Google bundletool -->
+            <div class="cred-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div style="display: flex; gap: 14px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(37, 99, 235, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <i class="fa-solid fa-cubes-stacked"></i>
+                  </div>
+                  <div>
+                    <h3 style="font-size: 16px; margin: 0;">Google bundletool Adapter</h3>
+                    <span style="font-size: 12px; color: var(--rc-text-muted);">v1.17.2 • Official Google AAB Engine</span>
+                  </div>
+                </div>
+                <span class="badge-pill badge-emerald"><i class="fa-solid fa-circle-check"></i> Connected</span>
+              </div>
+              <p style="font-size: 13px; color: var(--rc-text-secondary); margin-bottom: 14px;">
+                Extracts Android App Bundles, validates split-APK generation, checks <code>PAGE_ALIGNMENT_16K</code> metadata, and verifies APK zip-alignment.
+              </p>
+              <div style="background: var(--rc-bg-subtle); padding: 10px 14px; border-radius: 6px; font-size: 12px; color: var(--rc-text-muted);">
+                <strong>Capabilities:</strong> 16KB Zip Alignment • ABI Slicing • BUNDLE-METADATA Extraction • Keystore Parsing
+              </div>
+            </div>
+
+            <!-- Engine 2: RevylAI Greenlight -->
+            <div class="cred-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div style="display: flex; gap: 14px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(22, 163, 74, 0.1); color: #22c55e; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <i class="fa-solid fa-traffic-light"></i>
+                  </div>
+                  <div>
+                    <h3 style="font-size: 16px; margin: 0;">RevylAI Greenlight Adapter</h3>
+                    <span style="font-size: 12px; color: var(--rc-text-muted);">Pre-submission Store Policy Engine</span>
+                  </div>
+                </div>
+                <span class="badge-pill badge-emerald"><i class="fa-solid fa-circle-check"></i> Connected</span>
+              </div>
+              <p style="font-size: 13px; color: var(--rc-text-secondary); margin-bottom: 14px;">
+                Scans binary manifests and compiled resources against Google Play & App Store policies (API level, 64-bit, permission boundaries).
+              </p>
+              <div style="background: var(--rc-bg-subtle); padding: 10px 14px; border-radius: 6px; font-size: 12px; color: var(--rc-text-muted);">
+                <strong>Capabilities:</strong> Play Policy Rules • Target SDK Verification • High-Risk Permission Flags
+              </div>
+            </div>
+
+            <!-- Engine 3: MobSF SAST -->
+            <div class="cred-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div style="display: flex; gap: 14px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(220, 38, 38, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <i class="fa-solid fa-shield-virus"></i>
+                  </div>
+                  <div>
+                    <h3 style="font-size: 16px; margin: 0;">MobSF SAST Scanner</h3>
+                    <span style="font-size: 12px; color: var(--rc-text-muted);">Static Application Security Testing</span>
+                  </div>
+                </div>
+                <span class="badge-pill badge-emerald"><i class="fa-solid fa-circle-check"></i> Connected</span>
+              </div>
+              <p style="font-size: 13px; color: var(--rc-text-secondary); margin-bottom: 14px;">
+                Detects cleartext network traffic (<code>usesCleartextTraffic</code>), hardcoded API secrets/keys, and insecure exported IPC components.
+              </p>
+              <div style="background: var(--rc-bg-subtle); padding: 10px 14px; border-radius: 6px; font-size: 12px; color: var(--rc-text-muted);">
+                <strong>Capabilities:</strong> Cleartext Gating • Secret Detection • Exported Component Auditing • TLS Enforcement
+              </div>
+            </div>
+
+            <!-- Engine 4: Enterprise App Registry -->
+            <div class="cred-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div style="display: flex; gap: 14px; align-items: center;">
+                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(162, 89, 255, 0.1); color: #a855f7; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <i class="fa-solid fa-database"></i>
+                  </div>
+                  <div>
+                    <h3 style="font-size: 16px; margin: 0;">Enterprise App Registry</h3>
+                    <span style="font-size: 12px; color: var(--rc-text-muted);">Canonical Organization Baseline & Release Lock</span>
+                  </div>
+                </div>
+                <span class="badge-pill badge-emerald"><i class="fa-solid fa-circle-check"></i> 4 Registered</span>
+              </div>
+              <p style="font-size: 13px; color: var(--rc-text-secondary); margin-bottom: 14px;">
+                Stores registered production signing SHA-256 fingerprints, approved capability whitelists, and runtime smoke testing profiles.
+              </p>
+              <div style="background: var(--rc-bg-subtle); padding: 10px 14px; border-radius: 6px; font-size: 12px; color: var(--rc-text-muted);">
+                <strong>Profiles:</strong> BTGS (<code>com.bavya.btgs</code>) • VAS 1962 • 108 Emergency Ops • 104 Grievance
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB: FINDINGS & REMEDIATION TICKETS
+             ========================================================= -->
+        <section id="tab-findings" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div>
+              <h2 style="font-size: 24px; margin-bottom: 4px;">Release Gate Findings & Tickets</h2>
+              <p class="text-secondary" style="font-size: 13px; margin: 0;">Actionable engineering tickets formatted with precise requirements, reasons, and remediation steps.</p>
+            </div>
+            <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="switchTab('tab-playstore-audit')">
+              <i class="fa-solid fa-rocket"></i> Back to Release Hub
+            </button>
+          </div>
+
+          <!-- Finding Ticket 1 -->
+          <div class="rc-finding-card">
+            <div class="rc-finding-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="rc-badge-blocked"><i class="fa-solid fa-ban"></i> BLOCKER</span>
+                <strong style="font-size: 15px;">RULE-16KB-ALIGN: Native Library 16 KB Page Memory Alignment</strong>
+              </div>
+              <span style="font-size: 12px; color: var(--rc-text-muted);">ELF PT_LOAD Alignment</span>
+            </div>
+            <div class="rc-finding-section">
+              <div class="rc-finding-label">What Was Found</div>
+              <div style="color: var(--rc-text-primary);">64-bit native library compiled with legacy 4 KB max page size (<code>p_align &lt; 0x4000</code>).</div>
+            </div>
+            <div class="rc-finding-section">
+              <div class="rc-finding-label">Why It Blocks Release</div>
+              <div style="color: var(--rc-text-secondary);">Google Play requires 16 KB page alignment for Android 15/16. Unaligned apps crash immediately on launch with SIGSEGV/SIGBUS.</div>
+            </div>
+            <div class="rc-finding-section">
+              <div class="rc-finding-label">Remediation Action</div>
+              <div class="rc-finding-code">-Wl,-z,max-page-size=16384 (or upgrade AGP &gt;= 8.5.1 and NDK &gt;= r27)</div>
+            </div>
+          </div>
+
+          <!-- Finding Ticket 2 -->
+          <div class="rc-finding-card review">
+            <div class="rc-finding-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="rc-badge-review"><i class="fa-solid fa-triangle-exclamation"></i> REVIEW REQUIRED</span>
+                <strong style="font-size: 15px;">RULE-PERM-INSTALL: REQUEST_INSTALL_PACKAGES Justification</strong>
+              </div>
+              <span style="font-size: 12px; color: var(--rc-text-muted);">Restricted Permission</span>
+            </div>
+            <div class="rc-finding-section">
+              <div class="rc-finding-label">What Was Found</div>
+              <div style="color: var(--rc-text-primary);">Manifest declares <code>android.permission.REQUEST_INSTALL_PACKAGES</code>.</div>
+            </div>
+            <div class="rc-finding-section">
+              <div class="rc-finding-label">Requirement</div>
+              <div style="color: var(--rc-text-secondary);">Must have user-facing core app justification for enterprise dispatch or direct update. Requires human approval before submission.</div>
+            </div>
+          </div>
+
+          <!-- Finding Ticket 3 -->
+          <div class="rc-finding-card warning">
+            <div class="rc-finding-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge-pill" style="background: rgba(202, 138, 4, 0.1); color: var(--rc-warning);"><i class="fa-solid fa-circle-info"></i> WARNING</span>
+                <strong style="font-size: 15px;">RULE-R8-PROGUARD: Partial Deobfuscation Verification in AAB Mode</strong>
+              </div>
+              <span style="font-size: 12px; color: var(--rc-text-muted);">Source Code Horizon</span>
+            </div>
+            <div class="rc-finding-section">
+              <div class="rc-finding-label">Status</div>
+              <div style="color: var(--rc-text-secondary);">Mapping file confirmed in <code>BUNDLE-METADATA</code>. For full keep-rule safety and reflection verification, execute scan in Source Code Mode.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB: RELEASE DELTA
+             ========================================================= -->
+        <section id="tab-delta" class="tab-content">
+          <div class="cred-card glow-emerald" style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <span class="badge-pill badge-violet" style="margin-bottom: 6px;"><i class="fa-solid fa-code-compare"></i> Version Continuity Engine</span>
+                <h2 style="font-size: 24px; margin: 0;">Release-to-Release Delta Comparison</h2>
+                <p class="text-secondary" style="font-size: 13.5px; margin: 4px 0 0 0;">
+                  Compares target release against previously approved production baseline to detect unannounced capability escalations.
+                </p>
+              </div>
+              <span class="badge-pill badge-emerald" style="font-size: 13px; padding: 6px 14px;">Baseline: BTGS v40 (Code 6)</span>
+            </div>
+          </div>
+
+          <div class="rc-delta-grid">
+            <div class="rc-delta-box">
+              <div style="font-size: 13px; font-weight: 700; color: var(--rc-text-primary); margin-bottom: 12px; display: flex; justify-content: space-between;">
+                <span>Previous Approved Release (v40)</span>
+                <span class="badge-pill badge-muted">Production</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Version Code</span>
+                <span style="font-weight: 700;">6</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Target SDK</span>
+                <span>API 35 (Android 15)</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Total Permissions</span>
+                <span>5 permissions</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">16 KB Page Memory</span>
+                <span class="badge-pill badge-emerald">Verified</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Keystore SHA-256</span>
+                <code style="font-size: 11px;">3B:5A:F2:78...</code>
+              </div>
+            </div>
+
+            <div class="rc-delta-box" style="border-color: var(--rc-pass);">
+              <div style="font-size: 13px; font-weight: 700; color: var(--rc-pass); margin-bottom: 12px; display: flex; justify-content: space-between;">
+                <span>Current Release Candidate (v41)</span>
+                <span class="badge-pill badge-emerald">Candidate</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Version Code</span>
+                <span style="font-weight: 700; color: var(--rc-pass);">7 (Monotonic Increment ✓)</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Target SDK</span>
+                <span style="color: var(--rc-pass); font-weight: 700;">API 36 (Android 16 Upgrade ✓)</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Permission Delta</span>
+                <span style="color: #22c55e;">+1 (POST_NOTIFICATIONS - Approved ✓)</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">16 KB Page Memory</span>
+                <span class="badge-pill badge-emerald">Verified (4/4 Native Libs ✓)</span>
+              </div>
+              <div class="rc-delta-row">
+                <span style="color: var(--rc-text-secondary);">Keystore SHA-256</span>
+                <span style="color: var(--rc-pass); font-weight: 700;">Exact Baseline Match ✓</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB: POLICIES GOVERNANCE
+             ========================================================= -->
+        <section id="tab-policies" class="tab-content">
+          <div class="cred-card" style="margin-bottom: 24px;">
+            <span class="badge-pill badge-emerald" style="margin-bottom: 6px;"><i class="fa-solid fa-shield-halved"></i> Policy Registry 2026.09</span>
+            <h2 style="font-size: 24px; margin-bottom: 6px;">Google Play Compliance Policy Catalog</h2>
+            <p class="text-secondary" style="font-size: 13.5px; margin: 0;">
+              Active enforcement rules and upcoming horizon deadlines versioned for the organization.
+            </p>
+          </div>
+
+          <div class="cred-card" style="margin-bottom: 20px;">
+            <div class="card-header" style="margin-bottom: 16px;">
+              <h3 style="font-size: 16px;">Active Enforced Policies (Version 2026.09)</h3>
+              <span class="badge-pill badge-emerald">Enforced</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
+                <strong>Target SDK 36 (Android 16):</strong> Releases targeting production must target API level &gt;= 36.
+              </div>
+              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
+                <strong>16 KB Page Size Alignment:</strong> All 64-bit ELF LOAD segments must have <code>p_align &gt;= 0x4000</code>.
+              </div>
+              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
+                <strong>Production Signing Certificate:</strong> Must match registered keystore SHA-256 fingerprint; debug keys strictly blocked.
+              </div>
+              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
+                <strong>Privacy Policy Disclosures:</strong> Explicit clauses required for GPS location, camera, microphone, and account deletion.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB: APPROVALS & HUMAN SIGN-OFFS
+             ========================================================= -->
+        <section id="tab-approvals" class="tab-content">
+          <div class="cred-card" style="margin-bottom: 24px;">
+            <span class="badge-pill badge-violet" style="margin-bottom: 6px;"><i class="fa-solid fa-user-check"></i> Governance Gate</span>
+            <h2 style="font-size: 24px; margin-bottom: 6px;">Human Approvals & Exception Justifications</h2>
+            <p class="text-secondary" style="font-size: 13.5px; margin: 0;">
+              Items requiring human sign-off before Stage 6 can transition from <code>REVIEW_REQUIRED</code> to <code>READY</code>.
+            </p>
+          </div>
+
+          <div class="grid-two-col">
+            <div class="cred-card">
+              <div class="card-header" style="margin-bottom: 12px;">
+                <h3 style="font-size: 16px;">Active Release Approvals</h3>
+                <span class="badge-pill badge-emerald">1 Approved</span>
+              </div>
+              <div style="background: var(--rc-bg-subtle); padding: 14px; border-radius: 6px; margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <strong>com.bavya.btgs • v41</strong>
+                  <span class="badge-pill badge-emerald">Signed Off</span>
+                </div>
+                <div style="font-size: 12px; color: var(--rc-text-secondary);">Approved by Release Lead (Venkatesh) for Play Console submission.</div>
+              </div>
+            </div>
+
+            <div class="cred-card">
+              <div class="card-header" style="margin-bottom: 12px;">
+                <h3 style="font-size: 16px;">Pending Exception Reviews</h3>
+                <span class="badge-pill badge-violet">1 Pending</span>
+              </div>
+              <div style="background: var(--rc-bg-subtle); padding: 14px; border-radius: 6px; border-left: 3px solid var(--rc-review);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <strong>in.gov.telangana.vas1962</strong>
+                  <span class="badge-pill badge-violet">Action Needed</span>
+                </div>
+                <div style="font-size: 12px; color: var(--rc-text-secondary); margin-bottom: 8px;">Privacy policy disclosure pending for background GPS dispatch.</div>
+                <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="ReleaseHubUI.viewAppRelease('bh1962')">Inspect & Sign Off</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB: EVIDENCE PACKAGE
+             ========================================================= -->
+        <section id="tab-evidence" class="tab-content">
+          <div class="cred-card glow-emerald" style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <span class="badge-pill badge-emerald" style="margin-bottom: 6px;"><i class="fa-solid fa-box-archive"></i> Immutable Audit Trail</span>
+                <h2 style="font-size: 24px; margin: 0;">Canonical Evidence Package Explorer</h2>
+                <p class="text-secondary" style="font-size: 13.5px; margin: 4px 0 0 0;">
+                  Export-ready evidence items structured with Requirement, Source, Evidence Type, and SHA-256 Lock.
+                </p>
+              </div>
+              <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.downloadJsonReport()">
+                <i class="fa-solid fa-download"></i> Export Evidence JSON
+              </button>
+            </div>
+          </div>
+
+          <div class="cred-card">
+            <div class="card-header" style="margin-bottom: 16px;">
+              <h3 style="font-size: 16px;">Evidence Items by Verification Class</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="color: var(--rc-text-primary);">DETERMINISTIC Binary Verification</strong>
+                  <div style="font-size: 12px; color: var(--rc-text-muted);">16 KB page alignment, target SDK level, 64-bit ABI inclusion, keystore SHA-256 match.</div>
+                </div>
+                <span class="badge-pill badge-emerald">4/4 Cleared</span>
+              </div>
+              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="color: var(--rc-text-primary);">HEURISTIC Policy Verification</strong>
+                  <div style="font-size: 12px; color: var(--rc-text-muted);">Privacy policy clauses, background location disclosures, account deletion mechanism.</div>
+                </div>
+                <span class="badge-pill badge-emerald">7/7 Cleared</span>
+              </div>
+              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="color: var(--rc-text-primary);">RUNTIME Smoke Verification</strong>
+                  <div style="font-size: 12px; color: var(--rc-text-muted);">Pixel 9 Android 16 emulator cold boot, memory crash detection, ANR monitoring.</div>
+                </div>
+                <span class="badge-pill badge-emerald">7/7 Cleared</span>
               </div>
             </div>
           </div>
@@ -548,7 +1816,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: var(--bg-black); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-card); margin-bottom: 20px;">
+        <div class="grid-report-metrics" style="background: var(--bg-black); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-card); margin-bottom: 20px;">
           <div>
             <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Application</div>
             <div style="font-size: 13px; font-weight: 600; color: var(--cred-emerald);" id="crash-modal-app">--</div>
@@ -625,11 +1893,160 @@
     </div>
   </div>
 
+  <!-- =========================================================
+       MODAL: GLOBAL COMMAND PALETTE (CMD + K)
+       ========================================================= -->
+  <div class="rc-command-modal" id="modal-command-palette">
+    <div class="rc-command-box">
+      <div style="position: relative; display: flex; align-items: center;">
+        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 18px; color: var(--rc-text-muted);"></i>
+        <input type="text" id="rc-command-search-input" class="rc-command-input" placeholder="Type a command, app name, or release gate..." style="padding-left: 48px;">
+        <span class="rc-kbd" style="position: absolute; right: 18px;">ESC</span>
+      </div>
+      <div class="rc-command-results" id="rc-command-results-list"></div>
+      <div style="padding: 10px 18px; background: rgba(0,0,0,0.3); border-top: 1px solid var(--rc-border-base); display: flex; justify-content: space-between; font-size: 11px; color: var(--rc-text-muted);">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+        <span><kbd>↵</kbd> to select</span>
+        <span><kbd>ESC</kbd> to close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: 3-STEP RELEASE VALIDATION WIZARD
+       ========================================================= -->
+  <div class="rc-wizard-modal" id="modal-new-release-wizard">
+    <div class="rc-wizard-box">
+      <div class="rc-wizard-header">
+        <div>
+          <span class="badge-pill badge-emerald" style="font-size: 11px; margin-bottom: 4px;">Release Gate Setup</span>
+          <h3 style="margin: 0; font-size: 18px;">New Mobile Release Scan</h3>
+        </div>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="ReleaseHubUI.closeNewReleaseWizard()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 3-Step Wizard Navigation Indicator -->
+      <div style="display: flex; border-bottom: 1px solid var(--rc-border-base); background: rgba(0,0,0,0.2);">
+        <div class="rc-wiz-stepper-item active" style="flex: 1; padding: 12px 16px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid var(--rc-pass); color: var(--rc-text-primary);">
+          <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--rc-pass); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px;">1</span>
+          <span>Target App & Mode</span>
+        </div>
+        <div class="rc-wiz-stepper-item" style="flex: 1; padding: 12px 16px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--rc-text-muted);">
+          <span style="width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.1); color: var(--rc-text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px;">2</span>
+          <span>Upload Artifact</span>
+        </div>
+        <div class="rc-wiz-stepper-item" style="flex: 1; padding: 12px 16px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--rc-text-muted);">
+          <span style="width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.1); color: var(--rc-text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px;">3</span>
+          <span>Review & Execute</span>
+        </div>
+      </div>
+
+      <div class="rc-wizard-body">
+        <!-- Step 1 Pane -->
+        <div class="rc-wiz-step-pane" id="wiz-step-1">
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label class="form-label" style="font-weight: 600;">Select Enterprise Application Profile</label>
+            <select class="form-control" id="wizard-select-app">
+              <option value="btgs" selected>Travelite Ground Staff (BTGS) • com.bavya.btgs</option>
+              <option value="bh1962">VAS 1962 Veterinary Ops • in.gov.telangana.vas1962</option>
+              <option value="ops108">108 Emergency Ambulance Ops • in.bhspl.ops108</option>
+              <option value="citizen104">104 Health Grievance System • in.bhspl.citizen104</option>
+            </select>
+            <div style="font-size: 12px; color: var(--rc-text-muted); margin-top: 4px;">
+              Loads registered production signing SHA-256 fingerprint, approved permissions, and runtime smoke profiles.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 600;">Verification Mode</label>
+            <div class="grid-wizard-mode">
+              <label style="background: var(--rc-bg-subtle); border: 1px solid var(--rc-border-base); border-radius: 8px; padding: 14px; cursor: pointer; display: flex; gap: 10px; align-items: flex-start;">
+                <input type="radio" name="wizard-mode" value="aab_only" checked style="margin-top: 3px;">
+                <div>
+                  <strong style="font-size: 13.5px; color: var(--rc-text-primary);">AAB Only Mode</strong>
+                  <p style="font-size: 11.5px; color: var(--rc-text-muted); margin: 3px 0 0 0;">
+                    Partial R8 mapping verification from BUNDLE-METADATA. Fast binary release gate.
+                  </p>
+                </div>
+              </label>
+              <label style="background: var(--rc-bg-subtle); border: 1px solid var(--rc-border-base); border-radius: 8px; padding: 14px; cursor: pointer; display: flex; gap: 10px; align-items: flex-start;">
+                <input type="radio" name="wizard-mode" value="source_aab" style="margin-top: 3px;">
+                <div>
+                  <strong style="font-size: 13.5px; color: var(--rc-text-primary);">Source Code + AAB</strong>
+                  <p style="font-size: 11.5px; color: var(--rc-text-muted); margin: 3px 0 0 0;">
+                    Full R8 rules analysis, proguard-rules.pro verification, and full MobSF SAST scan.
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 Pane -->
+        <div class="rc-wiz-step-pane" id="wiz-step-2" style="display: none;">
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label class="form-label" style="font-weight: 600;">Upload Android App Bundle (.aab) or APK</label>
+            <div class="drop-zone" id="wizard-drop-zone" style="padding: 28px 20px;">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 32px; color: var(--rc-pass); margin-bottom: 10px;"></i>
+              <div style="font-weight: 600; font-size: 14px;">Drop .aab or .apk here, or click to browse</div>
+              <div style="font-size: 12px; color: var(--rc-text-muted); margin-top: 4px;">Supports Android App Bundle (.aab), APK (.apk), and ZIP Archives</div>
+              <input type="file" id="wizard-file-input" style="display: none;" accept=".aab,.apk,.zip">
+            </div>
+            <div id="wizard-selected-file-info"></div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label class="form-label" style="font-weight: 600;">Or Select Sample Release Artifact</label>
+            <div style="display: flex; gap: 16px;">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                <input type="radio" name="wizard-source-type" value="aab" checked> Production Sample AAB (BTGS v41 - 16 KB Aligned)
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                <input type="radio" name="wizard-source-type" value="apk"> Sample APK Build
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 600;">Privacy Policy Source</label>
+            <input type="text" class="form-control" id="wizard-input-policy" value="/privacy-policy.html" placeholder="https://yourdomain.com/privacy-policy or /privacy-policy.html">
+          </div>
+        </div>
+
+        <!-- Step 3 Pane -->
+        <div class="rc-wiz-step-pane" id="wiz-step-3" style="display: none;">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Release Gate Execution Summary</div>
+          <div id="wizard-step3-summary"></div>
+          <div style="margin-top: 14px; font-size: 12px; color: var(--rc-text-muted); display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-shield-halved text-emerald"></i>
+            <span>Execution will evaluate all 7 verification stages with Stage 6 as the release arbiter.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rc-wizard-footer">
+        <button class="btn-cred btn-cred-outline btn-cred-sm" id="btn-wizard-back" onclick="ReleaseHubUI.prevWizardStep()" style="visibility: hidden;">
+          <i class="fa-solid fa-arrow-left"></i> Back
+        </button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="ReleaseHubUI.closeNewReleaseWizard()">Cancel</button>
+          <button class="btn-cred btn-cred-primary btn-cred-sm" id="btn-wizard-next" onclick="ReleaseHubUI.nextWizardStep()">
+            Continue <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/api.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/projects.js"></script>
   <script src="js/version-manager.js"></script>
   <script src="js/crash-viewer.js"></script>
+  <script src="js/playstore-auditor.js"></script>
+  <script src="js/release-hub-ui.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

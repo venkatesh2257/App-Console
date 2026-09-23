@@ -6,6 +6,7 @@ const versionController = require('../controllers/versionController');
 const crashController = require('../controllers/crashController');
 const deviceController = require('../controllers/deviceController');
 const reportsController = require('../controllers/reportsController');
+const playStoreAuditController = require('../controllers/playStoreAuditController');
 
 // 💻 1. Projects Management (Multi-App Console)
 router.get('/projects', projectController.getAllProjects);
@@ -31,4 +32,14 @@ router.patch('/crashes/:id/status', crashController.updateCrashStatus);
 router.get('/devices', deviceController.getAllDevices);
 router.get('/devices/:deviceId/logs', deviceController.getDeviceLogs);
 
+// 💻 6. Google Play Store Pre-Submission Compliance & Audit Hub
+router.post('/playstore-audit/scan', playStoreAuditController.runMasterAuditScan);
+router.post('/playstore-audit/upload', playStoreAuditController.auditUploadedFile);
+router.post('/playstore-audit/scan-path', playStoreAuditController.auditLocalFile);
+router.post('/playstore-audit/analyze-policy', playStoreAuditController.analyzePolicy);
+router.post('/playstore-audit/compare-policy', playStoreAuditController.comparePolicyWithBinary);
+router.get('/playstore-audit/app-registry', playStoreAuditController.getAppRegistry);
+router.get('/playstore-audit/history', playStoreAuditController.getAuditHistory);
+
 module.exports = router;
+

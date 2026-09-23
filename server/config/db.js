@@ -169,6 +169,26 @@ async function initSchema() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
     );
+
+    -- Play Store Pre-Submission Compliance Audits Table
+    CREATE TABLE IF NOT EXISTS playstore_audits (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      project_id INTEGER,
+      file_name TEXT NOT NULL,
+      file_type TEXT NOT NULL, -- 'AAB' or 'APK'
+      file_size_bytes INTEGER,
+      package_name TEXT NOT NULL,
+      version_name TEXT,
+      version_code INTEGER,
+      target_sdk INTEGER,
+      min_sdk INTEGER,
+      compliance_score INTEGER DEFAULT 100,
+      overall_status TEXT DEFAULT 'PASSED', -- 'PASSED', 'WARNING', 'FAILED'
+      checks_summary TEXT, -- JSON string of all test results
+      permissions_found TEXT, -- JSON array of detected permissions
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
+    );
   `;
 
   await query.exec(schemaSQL);

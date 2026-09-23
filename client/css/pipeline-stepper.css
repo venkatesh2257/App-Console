@@ -1,0 +1,479 @@
+/* ==========================================================================
+   PIPELINE STEPPER & RELEASE STAGE NAVIGATION (LIGHT THEME)
+   ========================================================================== */
+
+.pipeline-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--rc-bg-card, #FFFFFF);
+  border: 1px solid var(--rc-border-base, #E2E8F0);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 4px;
+}
+
+.pipeline-stepper::-webkit-scrollbar {
+  display: none;
+}
+
+.pipeline-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 48px;
+  max-height: 48px;
+  box-sizing: border-box;
+  user-select: none;
+  overflow: hidden;
+}
+
+.pipeline-step:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+/* --- Generic Active / Completed Fallbacks --- */
+.pipeline-step.active {
+  background: #EEF2FF;
+  border-color: rgba(79, 70, 229, 0.45);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.14);
+}
+
+.pipeline-step.completed {
+  background: #ECFDF5;
+  border-color: rgba(5, 150, 105, 0.25);
+}
+
+.step-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  font-family: var(--rc-font-mono, monospace);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pipeline-step.active .step-badge {
+  background: linear-gradient(135deg, #4F46E5, #6366F1);
+  border-color: #4F46E5;
+  color: #FFFFFF;
+  box-shadow: 0 1px 6px rgba(79, 70, 229, 0.35);
+}
+
+.pipeline-step.completed .step-badge {
+  background: #D1FAE5;
+  border-color: #059669;
+  color: #059669;
+}
+
+/* ==========================================================================
+   ENGINE-SPECIFIC COLOR CODING & THEMES (COMPACT & UNIFORM)
+   ========================================================================== */
+
+/* 1. Google bundletool (Azure / Sky Blue) */
+.pipeline-step.engine-bundletool {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+.pipeline-step.engine-bundletool:hover {
+  background: #F0F9FF;
+  border-color: #BAE6FD;
+}
+.pipeline-step.engine-bundletool.active {
+  background: #F0F9FF;
+  border-color: #0284C7;
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.16);
+}
+.pipeline-step.engine-bundletool.active .step-badge {
+  background: linear-gradient(135deg, #0284C7, #38BDF8);
+  border-color: #0284C7;
+  color: #FFFFFF;
+  box-shadow: 0 1px 6px rgba(2, 132, 199, 0.35);
+}
+.pipeline-step.engine-bundletool.active .step-title {
+  color: #0369A1;
+}
+.pipeline-step.engine-bundletool.active .step-sub {
+  color: #0284C7;
+  font-weight: 700;
+}
+.pipeline-step.engine-bundletool.completed {
+  background: #F0F9FF;
+  border-color: #BAE6FD;
+}
+.pipeline-step.engine-bundletool.completed .step-badge {
+  background: #E0F2FE;
+  border-color: #0284C7;
+  color: #0284C7;
+}
+.pipeline-step.engine-bundletool.completed .step-title {
+  color: #0C4A6E;
+}
+.pipeline-step.engine-bundletool.completed .step-sub {
+  color: #0284C7;
+}
+
+/* 2. 16 KB Native ELF Engine (Indigo / Royal Violet) */
+.pipeline-step.engine-16kb {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+.pipeline-step.engine-16kb:hover {
+  background: #EEF2FF;
+  border-color: #C7D2FE;
+}
+.pipeline-step.engine-16kb.active {
+  background: #EEF2FF;
+  border-color: #4F46E5;
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.16);
+}
+.pipeline-step.engine-16kb.active .step-badge {
+  background: linear-gradient(135deg, #4F46E5, #818CF8);
+  border-color: #4F46E5;
+  color: #FFFFFF;
+  box-shadow: 0 1px 6px rgba(79, 70, 229, 0.35);
+}
+.pipeline-step.engine-16kb.active .step-title {
+  color: #3730A3;
+}
+.pipeline-step.engine-16kb.active .step-sub {
+  color: #4F46E5;
+  font-weight: 700;
+}
+.pipeline-step.engine-16kb.completed {
+  background: #EEF2FF;
+  border-color: #C7D2FE;
+}
+.pipeline-step.engine-16kb.completed .step-badge {
+  background: #E0E7FF;
+  border-color: #4F46E5;
+  color: #4F46E5;
+}
+.pipeline-step.engine-16kb.completed .step-title {
+  color: #312E81;
+}
+.pipeline-step.engine-16kb.completed .step-sub {
+  color: #4F46E5;
+}
+
+/* 3. MobSF Security SAST (Rose Red / Crimson Coral) */
+.pipeline-step.engine-mobsf {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+.pipeline-step.engine-mobsf:hover {
+  background: #FFF1F2;
+  border-color: #FECDD3;
+}
+.pipeline-step.engine-mobsf.active {
+  background: #FFF1F2;
+  border-color: #E11D48;
+  box-shadow: 0 2px 10px rgba(225, 29, 72, 0.16);
+}
+.pipeline-step.engine-mobsf.active .step-badge {
+  background: linear-gradient(135deg, #E11D48, #FB7185);
+  border-color: #E11D48;
+  color: #FFFFFF;
+  box-shadow: 0 1px 6px rgba(225, 29, 72, 0.35);
+}
+.pipeline-step.engine-mobsf.active .step-title {
+  color: #9F1239;
+}
+.pipeline-step.engine-mobsf.active .step-sub {
+  color: #E11D48;
+  font-weight: 700;
+}
+.pipeline-step.engine-mobsf.completed {
+  background: #FFF1F2;
+  border-color: #FECDD3;
+}
+.pipeline-step.engine-mobsf.completed .step-badge {
+  background: #FFE4E6;
+  border-color: #E11D48;
+  color: #E11D48;
+}
+.pipeline-step.engine-mobsf.completed .step-title {
+  color: #881337;
+}
+.pipeline-step.engine-mobsf.completed .step-sub {
+  color: #E11D48;
+}
+
+/* 4. RevylAI Greenlight (Emerald Seafoam) */
+.pipeline-step.engine-greenlight {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+.pipeline-step.engine-greenlight:hover {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+}
+.pipeline-step.engine-greenlight.active {
+  background: #ECFDF5;
+  border-color: #059669;
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.16);
+}
+.pipeline-step.engine-greenlight.active .step-badge {
+  background: linear-gradient(135deg, #059669, #34D399);
+  border-color: #059669;
+  color: #FFFFFF;
+  box-shadow: 0 1px 6px rgba(5, 150, 105, 0.35);
+}
+.pipeline-step.engine-greenlight.active .step-title {
+  color: #065F46;
+}
+.pipeline-step.engine-greenlight.active .step-sub {
+  color: #059669;
+  font-weight: 700;
+}
+.pipeline-step.engine-greenlight.completed {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+}
+.pipeline-step.engine-greenlight.completed .step-badge {
+  background: #D1FAE5;
+  border-color: #059669;
+  color: #059669;
+}
+.pipeline-step.engine-greenlight.completed .step-title {
+  color: #064E3B;
+}
+.pipeline-step.engine-greenlight.completed .step-sub {
+  color: #059669;
+}
+
+/* --- Engine Badges & Tags --- */
+.engine-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.engine-tag-bundletool {
+  background: #E0F2FE;
+  color: #0369A1;
+  border: 1px solid #BAE6FD;
+}
+
+.engine-tag-16kb {
+  background: #EEF2FF;
+  color: #4338CA;
+  border: 1px solid #C7D2FE;
+}
+
+.engine-tag-mobsf {
+  background: #FFE4E6;
+  color: #BE123C;
+  border: 1px solid #FECDD3;
+}
+
+.engine-tag-greenlight {
+  background: #D1FAE5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+}
+
+/* --- Engine Card Header & Border Accents --- */
+.glow-bundletool {
+  border-left: 4px solid #0284C7 !important;
+  box-shadow: 0 2px 12px rgba(2, 132, 199, 0.08) !important;
+}
+
+.glow-16kb {
+  border-left: 4px solid #4F46E5 !important;
+  box-shadow: 0 2px 12px rgba(79, 70, 229, 0.08) !important;
+}
+
+.glow-mobsf {
+  border-left: 4px solid #E11D48 !important;
+  box-shadow: 0 2px 12px rgba(225, 29, 72, 0.08) !important;
+}
+
+.glow-greenlight {
+  border-left: 4px solid #059669 !important;
+  box-shadow: 0 2px 12px rgba(5, 150, 105, 0.08) !important;
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.step-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #1E293B;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.step-sub {
+  font-size: 10px;
+  font-weight: 500;
+  color: #64748B;
+  line-height: 1.15;
+  margin-top: 1.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pipeline-arrow {
+  color: #CBD5E1;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin: 0 -1px;
+  opacity: 0.7;
+}
+
+@media (max-width: 1024px) {
+  .pipeline-stepper {
+    padding: 8px 10px;
+    gap: 3px;
+    scroll-snap-type: x mandatory;
+    margin-bottom: 18px;
+  }
+  .pipeline-step {
+    min-width: 120px;
+    height: 46px;
+    max-height: 46px;
+    padding: 5px 8px;
+    scroll-snap-align: start;
+  }
+  .step-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+  .step-title {
+    font-size: 11px;
+  }
+  .step-sub {
+    font-size: 9.5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pipeline-arrow {
+    display: none;
+  }
+  .pipeline-step {
+    min-width: 130px;
+  }
+}
+
+/* Stage Views */
+.pipeline-stage-view {
+  display: none;
+  animation: stageFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pipeline-stage-view.active {
+  display: block;
+}
+
+@keyframes stageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Comparison Matrix Styling */
+.matrix-card {
+  background: var(--rc-bg-card, #FFFFFF);
+  border: 1px solid var(--rc-border-base, #E2E8F0);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th {
+  background: #F8FAFC;
+  padding: 14px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748B;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #E2E8F0;
+  white-space: nowrap;
+}
+
+.comparison-table td {
+  padding: 16px 20px;
+  font-size: 13px;
+  border-bottom: 1px solid #E2E8F0;
+  color: #475569;
+  vertical-align: middle;
+}
+
+.comparison-table tr:hover td {
+  background: #F8FAFC;
+  color: #1E1E2C;
+}
+
+@media (max-width: 640px) {
+  .comparison-table th, .comparison-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
+
+.stage-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid #E2E8F0;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .stage-nav-bar button {
+    width: 100%;
+  }
+}

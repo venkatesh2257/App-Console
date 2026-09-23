@@ -1,53 +1,104 @@
-# Enterprise Multi-App Developer Console & Version Control Hub
+# App Console 📱
 
-A centralized, enterprise-grade **Developer Control Console, Crashlytics & Force Update Hub** designed to manage **20+ mobile applications** across your organization with:
-- **Project Switcher & Multi-App Registry** (Like Google Play Console & Firebase Console)
-- **Per-App Version Gatekeeper & Live Force Update Master Switch**
-- **Portal Distribution KPIs** (Installs, Active Fleets, DAU, WAU, MAU)
-- **Real-Time Crashlytics Engine** (Stack traces, line numbers, hardware states, breadcrumbs)
-- **Comprehensive Period Reports** (Day / Week / Month / Year with CSV & JSON exports)
-- **Universal Flutter Client SDK** (`sdk/flutter/`) for instant 2-line integration into any app.
+A self-hosted developer console to manage app versions, force updates, track APK installs, and catch crashes across multiple mobile apps — without needing Google Play Store or Firebase.
+
+Built for internal apps, enterprise fleets, and government projects where apps are distributed directly via APK portals.
 
 ---
 
-## 🚀 Quick Deployment Guide
+## What does it do?
 
+- **Manage 20+ apps in one place**: Switch between projects easily from the top dropdown.
+- **Remote Force Updates**: Block outdated app versions on launch and force users to download the latest APK with 1 click.
+- **Install & Active Device Tracking**: See daily active users (DAU), total installs, and device specs (models, Android OS versions).
+- **Crash Reports & Stack Traces**: View exact error stack traces, line numbers, affected screens, and user action breadcrumbs before a crash happened.
+- **Audit Reports**: Export install counts and crash logs to CSV or JSON whenever needed.
+- **Drop-in Flutter SDK**: Add it to any Flutter app in under 2 minutes.
+
+---
+
+## Quick Start (Run Locally)
+
+### 1. Clone & Install
 ```bash
-# 1. Enter the console directory
-cd app_dev_console
-
-# 2. Install dependencies
+git clone https://github.com/venkatesh2257/App-Console.git
+cd App-Console
 npm install
+```
 
-# 3. Start the console server
+### 2. Configure Environment
+```bash
+cp .env.example .env
+```
+*(Default settings work out of the box with local SQLite).*
+
+### 3. Start the Server
+```bash
 npm start
 ```
-Open **`http://localhost:5000`** in your browser to access the live Multi-App Developer Console!
+Open **`http://localhost:5000`** in your browser.
 
 ---
 
-## 📱 Mobile API Endpoints (Shared Across All 20 Apps)
+## Deploy to Cloud (Render / Free Tier)
 
-All apps hit the same central API host by providing their `app_id` and `api_key`:
+1. Go to [render.com](https://render.com) and click **New +** > **Web Service**.
+2. Connect this GitHub repo.
+3. Choose **Docker** runtime and select the **Free** tier.
+4. Add environment variable: `PORT` = `5000`.
+5. Click **Deploy**.
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET / POST` | `/api/v1/app/version-check` | Returns version status, force update flag & APK URL for specific app |
-| `POST` | `/api/v1/app/telemetry/install` | Records first-time installation / activation |
-| `POST` | `/api/v1/app/telemetry/session` | Sends session heartbeat & active status |
-| `POST` | `/api/v1/app/telemetry/crash` | Uploads full stack trace & device diagnostics |
-| `POST` | `/api/v1/app/telemetry/logs` | Uploads batch breadcrumb logs |
+Render will give you a free public HTTPS URL (e.g. `https://your-app-console.onrender.com`).
 
 ---
 
-## 💻 Admin Console Endpoints
+## How to Connect Your Flutter App
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET / POST` | `/api/v1/admin/projects` | List all 20+ apps, register new mobile app |
-| `GET` | `/api/v1/admin/overview` | Global & Per-app KPI overview |
-| `GET` | `/api/v1/admin/timeseries` | Installs & crash timeline trends |
-| `GET / POST` | `/api/v1/admin/versions/:projectId`| Manage version releases & force update rules |
-| `GET` | `/api/v1/admin/crashes` | Paginated crash issues with search & filters |
-| `GET` | `/api/v1/admin/devices` | All registered government tablet inventory |
-| `GET` | `/api/v1/admin/export` | Download CSV / JSON audit reports |
+### 1. Copy SDK
+Copy the `sdk/flutter/lib/` folder into your Flutter project's `lib/sdk/` folder.
+
+Make sure you have these standard packages in your `pubspec.yaml`:
+```yaml
+dependencies:
+  http: ^1.3.0
+  shared_preferences: ^2.5.1
+  package_info_plus: ^8.3.0
+```
+
+### 2. Initialize in `main.dart`
+```dart
+import 'package:flutter/material.dart';
+import 'package:your_app/sdk/app_console_sdk.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Developer Console
+  await AppConsoleSDK.initialize(
+    serverUrl: "https://your-app-console.onrender.com/api/v1/app",
+    appId: "in.gov.telangana.vas1962",
+    apiKey: "app_key_your_generated_key_from_dashboard",
+  );
+
+  runApp(const MyApp());
+}
+```
+
+### 3. Add Version Check in `SplashScreen`
+```dart
+import '../sdk/app_console_sdk.dart';
+
+Future.delayed(const Duration(milliseconds: 1500), () async {
+  bool canProceed = await AppConsoleSDK.checkAppVersion(context: context);
+  if (canProceed) {
+    // Version is good -> proceed to login/home
+    loginController.checkLoginStatus();
+  }
+  // If outdated, a force update dialog pops up automatically and blocks login!
+});
+```
+
+---
+
+## License
+MIT

@@ -1,0 +1,632 @@
+/* ==========================================================================
+   RELEASEHUB • MOBILE RELEASE COMMAND CENTER DESIGN SYSTEM (V2 PRO)
+   Curated Rich Palette: #4F46E5 (Electric Indigo), #FF6B6B (Sunset Coral),
+   #059669 (Emerald Seafoam), #0284C7 (Electric Azure), #D97706 (Golden Ochre), #E11D48 (Crimson Rose)
+   ========================================================================== */
+
+:root {
+  /* Crisp Light Theme Canvas & Surfaces */
+  --rc-bg-base: #F6F8FC;
+  --rc-bg-canvas: #F6F8FC;
+  --rc-bg-card: #FFFFFF;
+  --rc-bg-card-hover: #F8FAFC;
+  --rc-bg-subtle: #F1F5F9;
+  --rc-bg-elevated: #FFFFFF;
+  --rc-bg-glass: rgba(255, 255, 255, 0.94);
+
+  /* Refined Glass & Border Accents */
+  --rc-border-base: #E5E9F2;
+  --rc-border-strong: rgba(79, 70, 229, 0.45);
+  --rc-border-focus: var(--rh-brand-primary, #4F46E5);
+  --rc-border-top-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 1);
+
+  /* Primary Brand Accent (Electric Indigo) */
+  --rc-primary: #4F46E5;
+  --rc-primary-glow: rgba(79, 70, 229, 0.3);
+  --rc-primary-subtle: rgba(79, 70, 229, 0.08);
+
+  /* Semantic State Colors */
+  --rc-pass: #059669;
+  --rc-pass-glow: rgba(5, 150, 105, 0.25);
+  --rc-pass-subtle: #ECFDF5;
+
+  --rc-blocker: #E11D48;
+  --rc-blocker-glow: rgba(225, 29, 72, 0.25);
+  --rc-blocker-subtle: #FFF1F2;
+
+  --rc-review: #D97706;
+  --rc-review-glow: rgba(217, 119, 6, 0.25);
+  --rc-review-subtle: #FFFBEB;
+
+  --rc-info: #0284C7;
+  --rc-info-glow: rgba(2, 132, 199, 0.25);
+  --rc-info-subtle: #F0F9FF;
+
+  --rc-violet: #4F46E5;
+  --rc-violet-glow: rgba(79, 70, 229, 0.3);
+  --rc-violet-subtle: rgba(79, 70, 229, 0.08);
+
+  /* Typography */
+  --rc-text-primary: #0F172A;
+  --rc-text-secondary: #475569;
+  --rc-text-muted: #94A3B8;
+
+  --rc-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rc-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Shadows */
+  --rc-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --rc-shadow-md: 0 6px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.03);
+  --rc-shadow-lg: 0 20px 40px -4px rgba(15, 23, 42, 0.08), 0 8px 16px -4px rgba(15, 23, 42, 0.04);
+}
+
+/* -------------------------------------------------------------
+   GLOBAL SEARCH BAR & COMMAND PALETTE TRIGGER
+   ------------------------------------------------------------- */
+.rc-search-bar {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid var(--rc-border-base);
+  box-shadow: var(--rc-shadow-sm);
+  border-radius: 10px;
+  padding: 8px 16px;
+  width: 380px;
+  max-width: 100%;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--rc-text-muted);
+  font-size: 13px;
+  min-width: 0;
+}
+
+.rc-search-bar:hover {
+  border-color: var(--rc-border-strong);
+  background: #F8FAFC;
+  color: var(--rc-text-primary);
+  box-shadow: var(--rc-shadow-md);
+}
+
+.rc-kbd {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-family: var(--rc-font-mono);
+  font-weight: 600;
+  color: #475569;
+  margin-left: auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+/* -------------------------------------------------------------
+   TOP METRIC CARDS (COMMAND CENTER)
+   ------------------------------------------------------------- */
+.rc-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 1200px) {
+  .rc-metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .rc-metric-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.rc-metric-card {
+  background: var(--rc-bg-card);
+  border: 1px solid var(--rc-border-base);
+  box-shadow: var(--rc-shadow-sm);
+  border-radius: 14px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rc-metric-card:hover {
+  border-color: var(--rc-border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--rc-shadow-md);
+}
+
+.rc-metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(79, 70, 229, 0.45), transparent);
+}
+
+.rc-metric-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rc-text-muted);
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rc-metric-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--rc-text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-family: var(--rc-font-body);
+}
+
+@media (max-width: 768px) {
+  .rc-metric-card {
+    padding: 16px 18px;
+  }
+  .rc-metric-value {
+    font-size: 26px;
+  }
+}
+
+.rc-metric-sub {
+  font-size: 12px;
+  color: var(--rc-text-secondary);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* -------------------------------------------------------------
+   COMMAND CENTER 2-COLUMN APPLICATION GRID
+   ------------------------------------------------------------- */
+.rc-app-releases-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 1080px) {
+  .rc-app-releases-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+.rc-release-item-card {
+  background: var(--rc-bg-card);
+  border: 1px solid var(--rc-border-base);
+  box-shadow: var(--rc-shadow-sm);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .rc-release-item-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 16px;
+  }
+  .rc-release-item-card > div:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F1F5F9;
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+}
+
+.rc-release-item-card:hover {
+  border-color: var(--rc-border-strong);
+  background: var(--rc-bg-card-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--rc-shadow-md);
+}
+
+/* -------------------------------------------------------------
+   STATUS PILL BADGES
+   ------------------------------------------------------------- */
+.rc-badge-ready, .badge-emerald {
+  background: var(--rc-pass-subtle);
+  color: var(--rc-pass);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rc-badge-blocked, .badge-coral {
+  background: var(--rc-blocker-subtle);
+  color: var(--rc-blocker);
+  border: 1px solid rgba(225, 29, 72, 0.3);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rc-badge-review, .badge-violet {
+  background: var(--rc-review-subtle);
+  color: var(--rc-review);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* -------------------------------------------------------------
+   ENGINEERING TICKET FINDING CARDS
+   ------------------------------------------------------------- */
+.rc-finding-card {
+  background: var(--rc-bg-card);
+  border: 1px solid var(--rc-border-base);
+  border-left: 4px solid var(--rc-blocker);
+  box-shadow: var(--rc-shadow-sm);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  transition: all 0.2s ease;
+}
+
+.rc-finding-card:hover {
+  border-color: var(--rc-border-strong);
+  box-shadow: var(--rc-shadow-md);
+}
+
+.rc-finding-card.review { border-left-color: var(--rc-review); }
+.rc-finding-card.warning { border-left-color: #D97706; }
+
+.rc-finding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rc-finding-section {
+  margin-bottom: 10px;
+}
+
+.rc-finding-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rc-text-muted);
+  margin-bottom: 4px;
+}
+
+.rc-finding-code {
+  font-family: var(--rc-font-mono);
+  background: #F1F5F9;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--rc-border-base);
+  display: inline-block;
+  font-size: 12px;
+  color: #0284C7;
+  max-width: 100%;
+  overflow-x: auto;
+  word-break: break-all;
+}
+
+/* -------------------------------------------------------------
+   RELEASE DELTA MATRIX
+   ------------------------------------------------------------- */
+.rc-delta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.rc-delta-box {
+  background: var(--rc-bg-card);
+  border: 1px solid var(--rc-border-base);
+  box-shadow: var(--rc-shadow-sm);
+  border-radius: 12px;
+  padding: 18px 22px;
+}
+
+.rc-delta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 13px;
+}
+
+.rc-delta-row:last-child {
+  border-bottom: none;
+}
+
+/* -------------------------------------------------------------
+   SMARTPHONE EMULATOR FRAME (STAGE 5 RUNTIME SMOKE)
+   ------------------------------------------------------------- */
+.rc-device-mockup {
+  width: 290px;
+  height: 540px;
+  background: #1E293B;
+  border: 10px solid #334155;
+  border-radius: 40px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.25), inset 0 0 0 2px rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.rc-device-notch {
+  width: 90px;
+  height: 18px;
+  background: #334155;
+  border-radius: 0 0 12px 12px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.rc-device-screen {
+  width: 100%;
+  height: 100%;
+  padding: 26px 16px 16px 16px;
+  background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+  display: flex;
+  flex-direction: column;
+  color: #1E1E2C;
+  font-size: 12px;
+  position: relative;
+}
+
+/* -------------------------------------------------------------
+   COMMAND PALETTE SPOTLIGHT MODAL (⌘ K)
+   ------------------------------------------------------------- */
+.rc-command-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 90px;
+  animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rc-command-box {
+  background: var(--rc-bg-card);
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  width: 640px;
+  max-width: 90vw;
+  overflow: hidden;
+}
+
+.rc-command-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 20px 24px;
+  font-size: 16px;
+  color: var(--rc-text-primary);
+  border-bottom: 1px solid var(--rc-border-base);
+  font-family: var(--rc-font-body);
+}
+
+.rc-command-results {
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.rc-command-item {
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13.5px;
+  color: var(--rc-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rc-command-item:hover, .rc-command-item.active {
+  background: #FFF7ED;
+  color: #C26223;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------------------------------------
+   3-STEP RELEASE WIZARD MODAL
+   ------------------------------------------------------------- */
+.rc-wizard-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9998;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rc-wizard-box {
+  background: var(--rc-bg-card);
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  width: 740px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.rc-wizard-header {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--rc-border-base);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rc-wizard-body {
+  padding: 28px;
+}
+
+.rc-wizard-footer {
+  padding: 18px 28px;
+  border-top: 1px solid var(--rc-border-base);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F8FAFC;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* -------------------------------------------------------------
+   RESPONSIVE UTILITY GRIDS ACROSS ALL TABS
+   ------------------------------------------------------------- */
+.grid-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 992px) {
+  .grid-two-col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.grid-stage1-select {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .grid-stage1-select {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.grid-stage5-runtime {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  .grid-stage5-runtime {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.grid-decision-metrics, .grid-report-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 992px) {
+  .grid-decision-metrics, .grid-report-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .grid-decision-metrics, .grid-report-metrics {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+.grid-wizard-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .grid-wizard-mode {
+    grid-template-columns: 1fr;
+  }
+  .rc-wizard-header, .rc-wizard-body, .rc-wizard-footer {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rc-device-mockup {
+    width: 250px;
+    height: 480px;
+    border-width: 8px;
+    border-radius: 32px;
+  }
+  .rc-command-box {
+    max-width: 95vw;
+  }
+  .rc-command-input {
+    padding: 14px 18px;
+    font-size: 14px;
+  }
+}
