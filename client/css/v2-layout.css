@@ -1,0 +1,364 @@
+/* ==========================================================================
+   RELEASEHUB V2 — LAYOUT LAYER  (airy + minimal, spacious sidebar)
+   Loads LAST so it is the authoritative layer. Additive: delete this file
+   and its <link> to revert to the previous look.
+   ========================================================================== */
+
+/* -------------------------------------------------------------
+   1. RHYTHM & GEOMETRY — wider rail, taller header, 8px scale
+   ------------------------------------------------------------- */
+:root {
+  --sidebar-width: 288px;
+  --header-height: 80px;
+
+  --ux-1: 4px;
+  --ux-2: 8px;
+  --ux-3: 12px;
+  --ux-4: 16px;
+  --ux-5: 24px;
+  --ux-6: 32px;
+  --ux-7: 44px;
+  --ux-8: 64px;
+
+  --ux-ink: #0B1220;
+  --ux-body: #5A6577;
+  --ux-muted: #98A2B3;
+  --ux-line: #EDF0F5;
+  --ux-line-strong: #E4E7EC;
+  --ux-surface: #FFFFFF;
+  --ux-canvas: #FAFBFD;
+}
+
+body {
+  background-color: var(--ux-canvas);
+  line-height: 1.6;
+  letter-spacing: -0.008em;
+}
+
+/* Quieter canvas: drop the engineering grid, keep a whisper of aurora */
+body::before { display: none !important; }
+body::after { opacity: 0.36 !important; filter: blur(10px) !important; }
+
+/* -------------------------------------------------------------
+   2. SPACIOUS SIDEBAR
+   ------------------------------------------------------------- */
+.app-sidebar {
+  padding: 26px 16px;
+  background: var(--ux-surface);
+  border-right: 1px solid var(--ux-line);
+  box-shadow: none;
+}
+
+.app-sidebar::after { opacity: 0.45; }
+
+.brand-header {
+  padding: 6px 10px 22px 10px;
+  margin-bottom: 10px;
+}
+
+/* Calmer brand rule — no rainbow motion in a minimal layout */
+.brand-header::after {
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0.45), transparent);
+  opacity: 0.5;
+  animation: none;
+}
+
+.brand-logo {
+  border-radius: 14px;
+  box-shadow: 0 4px 14px -4px rgba(79, 70, 229, 0.45);
+}
+
+.brand-info h2 { font-size: 16px; font-weight: 750; }
+.brand-info span {
+  font-size: 10.5px;
+  font-weight: 600 !important;
+  color: var(--ux-muted) !important;
+  letter-spacing: 0.08em;
+}
+
+/* Group overlines: lighter, sentence-friendly, generous separation */
+.nav-menu > div {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  color: var(--ux-muted) !important;
+  letter-spacing: 0.07em !important;
+  padding: 22px 12px 8px 12px !important;
+}
+
+.nav-menu { gap: 2px; padding-top: 0; }
+
+/* Nav items: taller, quieter, no sliding furniture */
+.nav-item {
+  padding: 12px 14px;
+  gap: 14px;
+  min-height: 46px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ux-body);
+  transform: none;
+}
+
+.nav-item:hover {
+  background: #F7F9FC;
+  color: var(--ux-ink);
+  transform: none;
+  border-color: transparent;
+}
+
+/* Remove the coloured sheen + keep only a simple active rail */
+.nav-item::before { display: none; }
+
+.nav-item::after {
+  width: 3px;
+  background: var(--rh-brand-primary);
+  box-shadow: none;
+}
+.nav-item:hover::after { height: 0; }
+.nav-item.active::after { height: 56%; }
+
+.nav-item:hover span { transform: none; }
+.nav-item i { transition: color var(--ux-d-2) ease; }
+.nav-item:hover i { transform: none; }
+.nav-item.active i { transform: none; }
+
+.nav-item.active {
+  background: #F1F4FF;
+  border-color: transparent;
+  color: var(--rh-brand-primary);
+  box-shadow: none;
+}
+
+/* Sidebar status badges: tinted, borderless, calm */
+.nav-item .badge-pill,
+.nav-item .rh-badge {
+  font-size: 10px !important;
+  padding: 3px 9px !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.02em !important;
+  border: none !important;
+  box-shadow: none !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sidebar-footer { padding-top: 18px; border-top-color: var(--ux-line); }
+.system-status-indicator { font-size: 11.5px; color: var(--ux-muted); }
+
+/* -------------------------------------------------------------
+   3. HEADER — airy, borderless until you scroll
+   ------------------------------------------------------------- */
+.app-header {
+  height: var(--header-height);
+  padding: 0 var(--ux-7);
+  background: rgba(250, 251, 253, 0.82);
+  border-bottom: 1px solid transparent;
+}
+
+.app-header.ux-condensed {
+  height: 64px;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom-color: var(--ux-line);
+  box-shadow: 0 8px 24px -18px rgba(15, 23, 42, 0.35);
+}
+
+.rc-search-bar {
+  min-width: 420px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--ux-surface);
+  border-color: var(--ux-line-strong);
+  font-size: 13.5px;
+  box-shadow: none;
+}
+
+.rc-search-bar:hover { box-shadow: 0 4px 16px -10px rgba(15, 23, 42, 0.3); }
+.rc-kbd { background: #F8FAFC; }
+
+/* -------------------------------------------------------------
+   4. CONTENT RHYTHM — generous, consistent gutters
+   ------------------------------------------------------------- */
+.content-wrapper { padding: var(--ux-7) var(--ux-7) var(--ux-8); }
+
+.grid-kpis { gap: var(--ux-5); margin-bottom: var(--ux-6); }
+.grid-charts,
+.grid-two-col { gap: var(--ux-5); margin-bottom: var(--ux-6); }
+.grid-projects { gap: var(--ux-5); margin-bottom: var(--ux-6); }
+.rc-metric-grid { gap: var(--ux-5) !important; margin-bottom: var(--ux-6) !important; }
+
+/* -------------------------------------------------------------
+   5. CARDS — flat at rest, soft on hover, no coloured borders
+   ------------------------------------------------------------- */
+.rh-card, .cred-card {
+  padding: 28px;
+  border-radius: 20px;
+  border-color: var(--ux-line);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035);
+}
+
+.rh-card:hover, .cred-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--ux-line-strong);
+  box-shadow: 0 20px 44px -28px rgba(15, 23, 42, 0.3);
+}
+
+/* Glow variants → quiet tinted surfaces instead of neon borders */
+.rh-card.glow-emerald, .cred-card.glow-emerald { border-color: #E4F5EC; background: linear-gradient(180deg, #F8FDFA, #FFFFFF 55%); box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035); }
+.rh-card.glow-violet,  .cred-card.glow-violet  { border-color: #E8E9FB; background: linear-gradient(180deg, #F9F9FE, #FFFFFF 55%); box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035); }
+.rh-card.glow-coral,   .cred-card.glow-coral   { border-color: #FBE7EB; background: linear-gradient(180deg, #FEF8F9, #FFFFFF 55%); box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035); }
+.rh-card.glow-cyan,    .cred-card.glow-cyan    { border-color: #E4F1F9; background: linear-gradient(180deg, #F8FCFE, #FFFFFF 55%); box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035); }
+
+.rc-metric-card {
+  border-radius: 18px !important;
+  border-color: var(--ux-line) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035) !important;
+  padding: 24px !important;
+}
+.rc-metric-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 20px 44px -28px rgba(15, 23, 42, 0.3) !important;
+}
+
+.card-header { margin-bottom: 20px; }
+
+/* -------------------------------------------------------------
+   6. TYPOGRAPHY — sentence case over SHOUTING CAPS
+   ------------------------------------------------------------- */
+.kpi-title,
+.form-label,
+.rc-metric-title,
+.audit-metric-box-label {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: var(--ux-body) !important;
+}
+
+.kpi-value { font-size: 36px; }
+.rc-metric-value { font-size: 34px !important; letter-spacing: -0.03em !important; }
+
+h2 { letter-spacing: -0.022em; }
+h3 { letter-spacing: -0.018em; }
+
+/* Inline "SHOUTING" section overlines carry hardcoded uppercase — calm them
+   down without touching the markup. */
+.content-wrapper div[style*="text-transform: uppercase"],
+.content-wrapper span[style*="text-transform: uppercase"],
+.content-wrapper td[style*="text-transform: uppercase"] {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 650 !important;
+}
+
+/* -------------------------------------------------------------
+   7. TABLES — roomier rows, readable headers, no sliding rows
+   ------------------------------------------------------------- */
+.rh-table th, .cred-table th {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--ux-muted);
+  background: #FBFCFE;
+  border-bottom: 1px solid var(--ux-line);
+}
+
+.rh-table td, .cred-table td {
+  padding: 16px;
+  font-size: 13.5px;
+  color: var(--ux-body);
+  border-bottom: 1px solid var(--ux-line);
+}
+
+.rh-table tbody tr:hover, .cred-table tbody tr:hover { transform: none !important; }
+.rh-table tbody tr:hover td, .cred-table tbody tr:hover td { background: #FAFBFD; }
+
+.table-responsive {
+  border-color: var(--ux-line);
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+/* -------------------------------------------------------------
+   8. BUTTONS & FORMS — comfortable, flat, obvious
+   ------------------------------------------------------------- */
+.rh-btn, .btn-cred {
+  min-height: 44px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.rh-btn-sm, .btn-cred-sm { min-height: 38px; padding: 9px 16px; font-size: 12.5px; }
+
+.rh-btn-outline, .btn-cred-outline {
+  background: var(--ux-surface);
+  border-color: var(--ux-line-strong);
+  color: #344054;
+  box-shadow: none;
+}
+
+.rh-btn-outline:hover, .btn-cred-outline:hover {
+  background: #F8FAFC;
+  border-color: #C9D2E0;
+  color: var(--ux-ink);
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.form-group { margin-bottom: 22px; }
+
+.form-control {
+  padding: 13px 16px;
+  font-size: 14.5px;
+  border-radius: 12px;
+  border-color: var(--ux-line-strong);
+  box-shadow: none;
+}
+
+.form-control:focus { box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12); }
+
+/* Badges: tinted, borderless */
+.badge-pill, .rh-badge {
+  padding: 5px 12px;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  border: none;
+  box-shadow: none;
+}
+
+/* -------------------------------------------------------------
+   9. MODALS — room to breathe
+   ------------------------------------------------------------- */
+.modal-dialog { border-radius: 22px; border-color: var(--ux-line); }
+.modal-header { padding: 24px 30px; }
+.modal-body { padding: 30px; }
+.modal-footer { padding: 20px 30px; gap: 14px; }
+
+/* -------------------------------------------------------------
+   10. RESPONSIVE
+   ------------------------------------------------------------- */
+@media (max-width: 1280px) {
+  .rc-search-bar { min-width: 280px; }
+}
+
+@media (max-width: 992px) {
+  .app-header { padding: 0 20px; }
+  .content-wrapper { padding: var(--ux-6) 20px var(--ux-7); }
+}
+
+@media (max-width: 768px) {
+  .app-header { height: auto; min-height: 68px; padding: 12px 16px; }
+  .content-wrapper { padding: var(--ux-5) 16px var(--ux-7); }
+  .rh-card, .cred-card { padding: 20px; border-radius: 18px; }
+  .kpi-value, .rc-metric-value { font-size: 28px !important; }
+  .rc-search-bar { min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper { padding: var(--ux-4) 12px var(--ux-6); }
+  .rh-btn, .btn-cred { min-height: 46px; }
+}

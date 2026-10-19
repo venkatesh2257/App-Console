@@ -1,0 +1,787 @@
+/* ==========================================================================
+   RELEASEHUB V4 — GOOGLE PLAY CONSOLE IDENTITY
+   Material Design · light surfaces · Roboto · Google Blue · dense tables
+
+   Loads LAST (after v3-premium.css) and is authoritative for BOTH themes:
+   the Play Console experience is a light, functional workspace, so the dark
+   "SaaS" identity is neutralised here regardless of data-theme.
+
+   Non-destructive + additive. Delete this file and its <link> to revert.
+   ========================================================================== */
+
+/* ------------------------------------------------------------------
+   1. DESIGN TOKENS  (Google Material / Play Console palette)
+   ------------------------------------------------------------------ */
+html {
+  --g-blue:      #1A73E8;
+  --g-blue-dark: #174EA6;
+  --g-blue-hover:#1B66C9;
+  --g-blue-bg:   #E8F0FE;
+  --g-green:     #188038;
+  --g-green-bg:  #E6F4EA;
+  --g-yellow:    #F9AB00;
+  --g-orange:    #E37400;
+  --g-amber-bg:  #FEF7E0;
+  --g-red:       #D93025;
+  --g-red-bg:    #FCE8E6;
+  --g-cyan:      #12B5CB;
+  --g-cyan-bg:   #E4F7FB;
+
+  --g-bg:        #F8F9FA;
+  --g-surface:   #FFFFFF;
+  --g-surface-2: #F1F3F4;
+  --g-hover:     #F1F3F4;
+
+  --g-text:      #202124;
+  --g-text-2:    #5F6368;
+  --g-muted:     #80868B;
+  --g-border:    #DADCE0;
+  --g-border-2:  #E8EAED;
+
+  --g-shadow-1:  0 1px 2px rgba(60, 64, 67, 0.10), 0 1px 3px 1px rgba(60, 64, 67, 0.08);
+  --g-shadow-2:  0 1px 3px rgba(60, 64, 67, 0.16), 0 4px 8px 3px rgba(60, 64, 67, 0.10);
+  --g-shadow-3:  0 4px 8px 3px rgba(60, 64, 67, 0.12), 0 1px 3px rgba(60, 64, 67, 0.20);
+
+  --g-radius:    8px;
+  --g-radius-lg: 12px;
+  --g-radius-sm: 4px;
+  --g-font:      'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+
+  /* --- Remap the app's legacy token families onto Material --- */
+  --rh-brand-primary: var(--g-blue);
+  --rh-brand-primary-hover: var(--g-blue-hover);
+  --rh-brand-primary-glow: rgba(26, 115, 232, 0.28);
+  --rh-brand-primary-subtle: var(--g-blue-bg);
+  --rh-brand-accent: var(--g-orange);
+  --rh-brand-accent-glow: rgba(227, 116, 0, 0.24);
+  --rh-blue: var(--g-blue);
+  --rh-teal: var(--g-green);
+  --rh-purple: #8430CE;
+  --rh-cyan: var(--g-cyan);
+  --rh-coral: var(--g-red);
+  --rh-amber: var(--g-yellow);
+
+  --rc-primary: var(--g-blue);
+  --rc-primary-glow: rgba(26, 115, 232, 0.28);
+  --rc-primary-subtle: var(--g-blue-bg);
+  --rc-violet: #8430CE;
+  --rc-violet-glow: rgba(132, 48, 206, 0.26);
+  --rc-violet-subtle: #F3E8FD;
+  --rc-info: var(--g-blue);
+  --rc-info-subtle: var(--g-blue-bg);
+  --rc-pass: var(--g-green);
+  --rc-pass-subtle: var(--g-green-bg);
+  --rc-review: var(--g-orange);
+  --rc-review-subtle: var(--g-amber-bg);
+  --rc-blocker: var(--g-red);
+  --rc-blocker-subtle: var(--g-red-bg);
+  --rc-border-focus: var(--g-blue);
+
+  --bg-canvas: var(--g-bg);
+  --bg-black: var(--g-bg);
+  --bg-surface: var(--g-surface);
+  --text-primary: var(--g-text);
+  --text-secondary: var(--g-text-2);
+  --text-muted: var(--g-muted);
+  --border-subtle: var(--g-border-2);
+  --border-card: var(--g-border);
+  --rc-bg-canvas: var(--g-bg);
+  --rc-bg-base: var(--g-bg);
+  --rc-bg-card: var(--g-surface);
+  --rc-bg-card-hover: var(--g-surface-2);
+  --rc-bg-subtle: var(--g-surface-2);
+  --rc-bg-elevated: var(--g-surface);
+  --rc-text-primary: var(--g-text);
+  --rc-text-secondary: var(--g-text-2);
+  --rc-text-muted: var(--g-muted);
+  --rc-border-base: var(--g-border);
+
+  --ux-ink: var(--g-text);
+  --ux-body: var(--g-text-2);
+  --ux-muted: var(--g-muted);
+  --ux-line: var(--g-border);
+  --ux-line-strong: var(--g-border);
+  --ux-canvas: var(--g-bg);
+  --ux-surface: var(--g-surface);
+
+  --sidebar-width: 256px;
+  --header-height: 64px;
+  color-scheme: light;
+}
+
+/* Neutralise every V3 dark token family — Play Console stays light. */
+html[data-theme="dark"] {
+  --g-bg: #F8F9FA; --g-surface: #FFFFFF; --g-surface-2: #F1F3F4;
+  --g-text: #202124; --g-text-2: #5F6368; --g-muted: #80868B;
+  --g-border: #DADCE0; --g-border-2: #E8EAED;
+  --v3-bg-0: #F8F9FA; --v3-bg-1: #FFFFFF; --v3-bg-2: #F1F3F4;
+  --v3-ink: #202124; --v3-body: #5F6368; --v3-muted: #80868B;
+  --v3-line: #DADCE0; --v3-line-strong: #DADCE0;
+  --v3-surface: #FFFFFF; --v3-surface-2: #F8F9FA;
+  --v3-glass: #FFFFFF; --v3-glass-strong: #FFFFFF;
+  --v3-grad-ink: #202124;
+  --v3-shadow: var(--g-shadow-1); --v3-shadow-hover: var(--g-shadow-2);
+  --bg-surface: #FFFFFF; --bg-black: #F8F9FA;
+  --text-primary: #202124; --text-secondary: #5F6368; --text-muted: #80868B;
+  --border-subtle: #E8EAED; --border-card: #DADCE0;
+  --rc-bg-card: #FFFFFF; --rc-bg-base: #F8F9FA; --rc-bg-canvas: #F8F9FA;
+  --rc-bg-card-hover: #F1F3F4; --rc-bg-subtle: #F1F3F4; --rc-bg-elevated: #FFFFFF;
+  --rc-text-primary: #202124; --rc-text-secondary: #5F6368; --rc-text-muted: #80868B;
+  --rc-border-base: #DADCE0;
+  --ux-ink: #202124; --ux-body: #5F6368; --ux-muted: #80868B;
+  --ux-line: #DADCE0; --ux-line-strong: #DADCE0; --ux-canvas: #F8F9FA; --ux-surface: #FFFFFF;
+  --rh-brand-primary: #1A73E8; --rh-brand-primary-subtle: #E8F0FE;
+  --rc-primary: #1A73E8; --rc-info: #1A73E8; --rc-pass: #188038; --rc-review: #E37400; --rc-blocker: #D93025;
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------
+   2. BASE — flat #F8F9FA canvas, Roboto, no gradients/aurora/grid
+   ------------------------------------------------------------------ */
+html body,
+html[data-theme="dark"] body,
+html[data-theme="light"] body {
+  background-color: var(--g-bg) !important;
+  background: var(--g-bg) !important;
+  background-image: none !important;
+  background-attachment: scroll !important;
+  color: var(--g-text) !important;
+  font-family: var(--g-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body::after { content: none !important; }
+
+/* Kill the V3 decorative motion layers — Play Console is restrained. */
+.ux-cursor-dot, .ux-cursor-ring, .ux-scroll-progress,
+.ux-hero-orb, .ux-spotlight { display: none !important; }
+.ux-theme-toggle { display: none !important; }
+
+/* Neutralise the V2 pointer FX at the source: restore the system cursor,
+   park the card spotlight off-canvas, and cancel the magnetic pull. */
+html.ux-cursor-on, html.ux-cursor-on * { cursor: auto !important; }
+html.ux-cursor-on a, html.ux-cursor-on button, html.ux-cursor-on .nav-item,
+html.ux-cursor-on [role="button"], html.ux-cursor-on .rc-search-bar,
+html.ux-cursor-on .pcs-menu-item { cursor: pointer !important; }
+.rh-card, .cred-card { --mx: -9999px !important; --my: -9999px !important; }
+.ux-magnetic { --ux-mx: 0px !important; --ux-my: 0px !important; transform: none !important; }
+
+h1, h2, h3, h4, h5, h6,
+.brand-info h2, .kpi-value, .rc-metric-value, .stage-title-text,
+.page-title h1, .page-title h2 {
+  font-family: var(--g-font) !important;
+  letter-spacing: normal !important;
+  color: var(--g-text);
+}
+
+::selection { background: var(--g-blue-bg); color: var(--g-text); }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Reveal choreography → fast, subtle Material fade. */
+.ux-reveal-ready { transition-duration: 0.22s !important; }
+.ux-reveal-ready.ux-reveal-in { transform: none !important; }
+
+/* ------------------------------------------------------------------
+   3. SIDEBAR — white, docked, Material navigation
+   ------------------------------------------------------------------ */
+.app-sidebar {
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  width: var(--sidebar-width) !important;
+  padding: 8px 0 0 0 !important;
+  border: none !important;
+  border-right: 1px solid var(--g-border-2) !important;
+  border-radius: 0 !important;
+  background: var(--g-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  overflow-y: auto;
+}
+.app-sidebar::after { display: none !important; }
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px 16px 20px !important;
+  border-bottom: 1px solid var(--g-border-2);
+}
+.brand-header::after { display: none !important; }
+.brand-logo {
+  width: 34px !important; height: 34px !important;
+  border-radius: 8px !important;
+  background: var(--g-surface) !important;
+  border: 1px solid var(--g-border) !important;
+  color: var(--g-blue) !important;
+  box-shadow: none !important;
+  font-size: 16px !important;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.brand-info h2 { font-size: 15px !important; font-weight: 500 !important; color: var(--g-text) !important; }
+.brand-info span {
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  color: var(--g-text-2) !important;
+}
+
+/* Group headers → Play Console section labels */
+.nav-menu > div {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: 0.04em !important;
+  color: var(--g-muted) !important;
+  padding: 18px 24px 6px 24px !important;
+}
+
+/* Collapsible navigation groups (Play Console behaviour) */
+.nav-menu > div.pcs-nav-group {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+.nav-menu > div.pcs-nav-group:hover { color: var(--g-text-2) !important; }
+.nav-menu > div.pcs-nav-group:focus-visible { outline: 2px solid var(--g-blue); outline-offset: -2px; border-radius: 6px; }
+.pcs-group-caret { font-size: 9px !important; color: var(--g-muted) !important; transition: transform 0.15s ease; }
+.pcs-nav-group.pcs-collapsed .pcs-group-caret { transform: rotate(-90deg); }
+.nav-item.pcs-collapsed { display: none !important; }
+
+.nav-item {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+  margin: 0 8px 0 0;
+  padding: 0 16px 0 24px !important;
+  height: 42px;
+  white-space: nowrap;
+  border-radius: 0 21px 21px 0 !important;
+  color: var(--g-text-2) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  background: transparent !important;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-item i { color: var(--g-text-2) !important; font-size: 16px !important; width: 20px; text-align: center; }
+.nav-item span:not(.badge-pill):not(.rh-badge) { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-item:hover { background: var(--g-hover) !important; color: var(--g-text) !important; transform: none !important; }
+.nav-item.active {
+  background: var(--g-blue-bg) !important;
+  color: var(--g-blue-dark) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.nav-item.active i { color: var(--g-blue) !important; }
+.nav-item.active::before { display: none !important; }
+.nav-item::after { display: none !important; }
+
+.nav-item .badge-pill, .nav-item .rh-badge {
+  background: var(--g-surface-2) !important;
+  color: var(--g-text-2) !important;
+  border: none !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  padding: 2px 8px !important;
+}
+
+.sidebar-footer { border-top: 1px solid var(--g-border-2) !important; padding: 14px 20px !important; }
+.system-status-indicator { color: var(--g-text-2) !important; font-size: 12px !important; }
+.pulse-dot { box-shadow: none !important; }
+
+/* ------------------------------------------------------------------
+   4. TOP HEADER — white bar, bottom border, Play Console layout
+   ------------------------------------------------------------------ */
+.app-main {
+  margin-left: var(--sidebar-width) !important;
+  width: calc(100% - var(--sidebar-width)) !important;
+  max-width: calc(100% - var(--sidebar-width)) !important;
+}
+.app-header {
+  position: sticky !important;
+  top: 0 !important;
+  margin: 0 !important;
+  height: var(--header-height) !important;
+  padding: 0 20px !important;
+  border: none !important;
+  border-bottom: 1px solid var(--g-border-2) !important;
+  border-radius: 0 !important;
+  background: var(--g-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  z-index: 40;
+}
+.app-header::after { display: none !important; }
+.app-header.ux-condensed { top: 0 !important; margin: 0 !important; height: var(--header-height) !important; box-shadow: none !important; }
+
+.rc-search-bar {
+  background: var(--g-surface-2) !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  height: 40px;
+  padding: 0 14px !important;
+  min-width: 280px;
+  color: var(--g-text-2) !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+}
+.rc-search-bar > i, .rc-search-bar > i.fa-magnifying-glass { color: var(--g-text-2) !important; }
+.rc-search-bar:hover { background: #EAECEF !important; border-color: transparent !important; box-shadow: none !important; }
+.rc-kbd {
+  background: transparent !important;
+  border: none !important;
+  color: var(--g-muted) !important;
+  font-size: 12px !important;
+}
+
+.btn-mobile-nav-toggle {
+  color: var(--g-text-2) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Material icon buttons in the header */
+.pcs-icon-btn {
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--g-text-2);
+  font-size: 17px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.pcs-icon-btn:hover { background: var(--g-hover); color: var(--g-text); }
+.pcs-icon-btn:focus-visible { outline: 2px solid var(--g-blue); outline-offset: 2px; }
+
+.pcs-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 500;
+  color: #FFFFFF; background: var(--g-blue);
+  border: none;
+  cursor: pointer;
+}
+.pcs-avatar:focus-visible { outline: 2px solid var(--g-blue); outline-offset: 2px; }
+
+/* The header status pill (was inline-styled) */
+.pcs-status-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 12px;
+  border-radius: 16px;
+  font-size: 13px; font-weight: 500;
+  color: var(--g-green) !important;
+  background: var(--g-green-bg) !important;
+  border: none !important;
+}
+.pcs-status-chip i { color: var(--g-green); }
+.pcs-status-chip .pcs-status-meta { color: var(--g-text-2) !important; font-weight: 400; font-size: 12px; }
+
+/* Dropdown panels (notifications / app selector / help) */
+.pcs-menu {
+  position: absolute;
+  top: calc(var(--header-height) - 6px);
+  right: 20px;
+  z-index: 60;
+  min-width: 340px;
+  background: var(--g-surface);
+  border: 1px solid var(--g-border-2);
+  border-radius: var(--g-radius-lg);
+  box-shadow: var(--g-shadow-3);
+  padding: 8px 0;
+  display: none;
+  overflow: hidden;
+}
+.pcs-menu.is-open { display: block; animation: pcsMenuIn 0.12s ease-out; }
+@keyframes pcsMenuIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.pcs-menu-head {
+  padding: 12px 20px 8px;
+  font-size: 13px; font-weight: 500; color: var(--g-text);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pcs-menu-head .pcs-menu-sub { font-size: 11px; color: var(--g-muted); font-weight: 400; }
+.pcs-menu-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.pcs-menu-item:hover { background: var(--g-hover); }
+.pcs-menu-item i { margin-top: 2px; font-size: 15px; }
+.pcs-menu-item .pcs-mi-title { font-size: 13.5px; color: var(--g-text); font-weight: 500; }
+.pcs-menu-item .pcs-mi-body { font-size: 12.5px; color: var(--g-text-2); margin-top: 2px; line-height: 1.45; }
+.pcs-menu-item .pcs-mi-time { font-size: 11px; color: var(--g-muted); margin-top: 3px; }
+.pcs-menu-empty { padding: 22px 20px; font-size: 13px; color: var(--g-muted); text-align: center; }
+.pcs-menu-foot {
+  border-top: 1px solid var(--g-border-2);
+  padding: 10px 20px; font-size: 12px; color: var(--g-muted);
+}
+.pcs-kbd-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 20px; font-size: 13.5px; color: var(--g-text-2); }
+.pcs-kbd-row kbd {
+  font-family: var(--g-font); font-size: 11px; font-weight: 500;
+  background: var(--g-surface-2); border: 1px solid var(--g-border);
+  border-radius: 4px; padding: 2px 7px; color: var(--g-text-2);
+}
+
+/* ------------------------------------------------------------------
+   5. CONTENT WRAPPER
+   ------------------------------------------------------------------ */
+.content-wrapper { padding: 24px !important; max-width: 1440px; }
+
+/* ------------------------------------------------------------------
+   6. APP HEADER  (Play Console application header)
+   ------------------------------------------------------------------ */
+.pcs-app-header {
+  background: var(--g-surface);
+  border: 1px solid var(--g-border-2);
+  border-radius: var(--g-radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  box-shadow: none;
+}
+.pcs-app-id { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.pcs-app-icon {
+  width: 56px; height: 56px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 700; letter-spacing: 0.02em;
+  color: #FFFFFF; background: var(--g-blue);
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.pcs-app-titles { min-width: 0; }
+.pcs-crumbs {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--g-muted); margin-bottom: 3px;
+}
+.pcs-crumbs i { font-size: 9px; }
+.pcs-app-name {
+  font-size: 22px !important; font-weight: 500 !important;
+  line-height: 1.2; margin: 0 !important; color: var(--g-text) !important;
+}
+.pcs-app-pkg {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12.5px; color: var(--g-text-2); margin-top: 3px;
+}
+.pcs-app-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+.pcs-app-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.pcs-meta-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 30px; padding: 0 12px;
+  border-radius: 6px;
+  font-size: 12.5px; font-weight: 500;
+  background: var(--g-surface-2);
+  color: var(--g-text-2);
+  border: 1px solid var(--g-border-2);
+}
+.pcs-meta-chip i { font-size: 12px; }
+.pcs-meta-chip.ok   { background: var(--g-green-bg) !important; color: var(--g-green) !important; border-color: transparent !important; }
+.pcs-meta-chip.warn { background: var(--g-amber-bg) !important; color: var(--g-orange) !important; border-color: transparent !important; }
+.pcs-meta-chip.info { background: var(--g-blue-bg) !important; color: var(--g-blue-dark) !important; border-color: transparent !important; }
+
+/* ------------------------------------------------------------------
+   7. CARDS
+   ------------------------------------------------------------------ */
+.rh-card, .cred-card {
+  background: var(--g-surface) !important;
+  border: 1px solid var(--g-border-2) !important;
+  border-radius: var(--g-radius-lg) !important;
+  box-shadow: none !important;
+  padding: 20px !important;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.rh-card:hover, .cred-card:hover {
+  transform: none !important;
+  box-shadow: var(--g-shadow-1) !important;
+  border-color: var(--g-border) !important;
+}
+.rh-card.glow-emerald, .cred-card.glow-emerald,
+.rh-card.glow-violet, .cred-card.glow-violet,
+.rh-card.glow-coral, .cred-card.glow-coral,
+.rh-card.glow-cyan, .cred-card.glow-cyan {
+  background: var(--g-surface) !important; border-color: var(--g-border-2) !important;
+}
+
+/* ------------------------------------------------------------------
+   8. METRIC CARDS
+   ------------------------------------------------------------------ */
+.rc-metric-card {
+  background: var(--g-surface) !important;
+  border: 1px solid var(--g-border-2) !important;
+  border-radius: var(--g-radius-lg) !important;
+  box-shadow: none !important;
+  padding: 18px 20px !important;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.rc-metric-card::before { display: none !important; }
+.rc-metric-card:hover {
+  transform: none !important;
+  box-shadow: var(--g-shadow-1) !important;
+  border-color: var(--g-border) !important;
+}
+.rc-metric-title span { color: var(--g-text-2) !important; font-size: 13px !important; font-weight: 500 !important; }
+.rc-metric-title i {
+  width: auto !important; height: auto !important;
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--g-text-2) !important;
+  font-size: 16px !important;
+}
+.rc-metric-value {
+  font-size: 30px !important; font-weight: 500 !important;
+  margin: 10px 0 4px !important;
+  color: var(--g-text) !important;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+.rc-metric-sub { color: var(--g-muted) !important; font-size: 12.5px !important; }
+
+/* ------------------------------------------------------------------
+   9. BUTTONS — Material filled / outlined / text
+   ------------------------------------------------------------------ */
+.rh-btn, .btn-cred {
+  border-radius: 4px !important;
+  font-family: var(--g-font) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  letter-spacing: normal !important;
+  min-height: 36px;
+  box-shadow: none !important;
+  transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.rh-btn-primary, .btn-cred-primary {
+  background: var(--g-blue) !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.rh-btn-primary:hover, .btn-cred-primary:hover {
+  background: var(--g-blue-hover) !important;
+  background-image: none !important;
+  transform: none !important;
+  box-shadow: var(--g-shadow-1) !important;
+}
+.rh-btn-primary:active, .btn-cred-primary:active { transform: none !important; background: var(--g-blue-dark) !important; }
+
+.rh-btn-outline, .btn-cred-outline {
+  background: var(--g-surface) !important;
+  border: 1px solid var(--g-border) !important;
+  color: var(--g-blue) !important;
+}
+.rh-btn-outline:hover, .btn-cred-outline:hover {
+  background: var(--g-blue-bg) !important;
+  border-color: var(--g-blue) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.rh-btn-danger, .btn-cred-coral {
+  background: var(--g-red) !important; background-image: none !important; color: #FFFFFF !important;
+  border: none !important;
+}
+.rh-btn-danger:hover, .btn-cred-coral:hover { background: #B3261E !important; transform: none !important; }
+
+/* ------------------------------------------------------------------
+   10. STATUS CHIPS / BADGES
+   ------------------------------------------------------------------ */
+.rh-badge, .badge-pill {
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  letter-spacing: normal !important;
+  font-size: 11.5px !important;
+  border: none !important;
+}
+.badge-emerald, .badge-pass { background: var(--g-green-bg) !important; color: var(--g-green) !important; }
+.badge-violet               { background: #F3E8FD !important; color: #8430CE !important; }
+.badge-coral, .badge-blocker{ background: var(--g-red-bg) !important; color: var(--g-red) !important; }
+.badge-amber, .badge-review { background: var(--g-amber-bg) !important; color: var(--g-orange) !important; }
+.badge-cyan, .badge-info    { background: var(--g-blue-bg) !important; color: var(--g-blue-dark) !important; }
+.badge-muted                { background: var(--g-surface-2) !important; color: var(--g-text-2) !important; }
+html[data-theme="dark"] .badge-emerald, html[data-theme="dark"] .badge-pass { color: var(--g-green) !important; }
+html[data-theme="dark"] .badge-violet { color: #8430CE !important; }
+html[data-theme="dark"] .badge-coral, html[data-theme="dark"] .badge-blocker { color: var(--g-red) !important; }
+html[data-theme="dark"] .badge-amber, html[data-theme="dark"] .badge-review { color: var(--g-orange) !important; }
+html[data-theme="dark"] .badge-cyan, html[data-theme="dark"] .badge-info { color: var(--g-blue-dark) !important; }
+
+/* ------------------------------------------------------------------
+   11. TABLES — Google-style dense data tables
+   ------------------------------------------------------------------ */
+.rh-table, .cred-table { border-collapse: separate; border-spacing: 0; width: 100%; }
+.rh-table th, .cred-table th {
+  background: var(--g-surface) !important;
+  color: var(--g-text-2) !important;
+  border-bottom: 1px solid var(--g-border) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: none !important;
+  padding: 12px 16px !important;
+  text-align: left;
+}
+.rh-table td, .cred-table td {
+  color: var(--g-text) !important;
+  border-bottom: 1px solid var(--g-border-2) !important;
+  font-size: 13.5px !important;
+  padding: 13px 16px !important;
+}
+.rh-table tbody tr:hover td, .cred-table tbody tr:hover td {
+  background: var(--g-surface-2) !important;
+}
+.table-responsive {
+  background: var(--g-surface) !important;
+  border: 1px solid var(--g-border-2) !important;
+  border-radius: var(--g-radius) !important;
+  box-shadow: none !important;
+}
+
+/* ------------------------------------------------------------------
+   12. FORMS
+   ------------------------------------------------------------------ */
+.form-label { color: var(--g-text-2) !important; font-weight: 500 !important; font-size: 13px !important; }
+.form-control,
+input:not([type="checkbox"]):not([type="radio"]),
+select, textarea {
+  background: var(--g-surface) !important;
+  border: 1px solid var(--g-border) !important;
+  color: var(--g-text) !important;
+  border-radius: 4px !important;
+  font-family: var(--g-font) !important;
+  font-size: 14px !important;
+}
+.form-control::placeholder, input::placeholder, textarea::placeholder { color: var(--g-muted) !important; }
+.form-control:hover:not(:focus), input:hover:not(:focus), select:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--g-text-2) !important; }
+.form-control:focus, input:focus, select:focus, textarea:focus {
+  border-color: var(--g-blue) !important;
+  box-shadow: 0 0 0 1px var(--g-blue) !important;
+  background: var(--g-surface) !important;
+}
+
+/* ------------------------------------------------------------------
+   13. DIALOGS / MODALS
+   ------------------------------------------------------------------ */
+.modal-backdrop { background: rgba(32, 33, 36, 0.5) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.modal-dialog {
+  border-radius: var(--g-radius-lg) !important;
+  border: none !important;
+  background: var(--g-surface) !important;
+  box-shadow: var(--g-shadow-3) !important;
+}
+.modal-header {
+  background: var(--g-surface) !important;
+  border-bottom: 1px solid var(--g-border-2) !important;
+  color: var(--g-text) !important;
+}
+.modal-footer { background: var(--g-surface) !important; border-top: 1px solid var(--g-border-2) !important; }
+
+/* ------------------------------------------------------------------
+   14. CODE / MISC
+   ------------------------------------------------------------------ */
+code {
+  background: var(--g-surface-2) !important;
+  color: var(--g-text) !important;
+  border-radius: 4px; padding: 1px 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12.5px;
+}
+html[data-theme="dark"] code { color: var(--g-text) !important; }
+
+.ux-empty {
+  border: 1px dashed var(--g-border) !important;
+  background: var(--g-surface) !important;
+  border-radius: var(--g-radius) !important;
+  color: var(--g-text-2) !important;
+}
+.ux-empty i { background: none !important; -webkit-text-fill-color: currentColor !important; color: var(--g-muted) !important; }
+
+.rc-release-item-card {
+  background: var(--g-surface) !important;
+  border: 1px solid var(--g-border-2) !important;
+  border-radius: var(--g-radius) !important;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.rc-release-item-card:hover {
+  transform: none !important;
+  border-color: var(--g-border) !important;
+  box-shadow: var(--g-shadow-1) !important;
+}
+
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #BDC1C6; border-radius: 999px; border: 3px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: #9AA0A6; background-clip: padding-box; }
+
+:focus-visible { outline: 2px solid var(--g-blue) !important; outline-offset: 2px; }
+.ux-skip-link { background: var(--g-text) !important; color: #fff !important; }
+
+/* ------------------------------------------------------------------
+   15. NOTIFICATIONS — Material toast
+   ------------------------------------------------------------------ */
+.ux-toasts { top: 72px; right: 20px; }
+.ux-toast {
+  border-radius: var(--g-radius) !important;
+  background: #323232 !important;
+  border: none !important;
+  color: #FFFFFF !important;
+  font-family: var(--g-font) !important;
+  font-size: 13.5px !important;
+  font-weight: 400 !important;
+  box-shadow: var(--g-shadow-2) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.ux-toast::before { display: none !important; }
+.ux-toast i { color: #FFFFFF !important; }
+.ux-toast-success i { color: #81C995 !important; }
+.ux-toast-warn i { color: #FDD663 !important; }
+.ux-toast-error i { color: #F28B82 !important; }
+
+/* ------------------------------------------------------------------
+   16. MOTION — restrained entrances
+   ------------------------------------------------------------------ */
+@keyframes pcsFadeUp { from { opacity: 0; } to { opacity: 1; } }
+#tab-overview.active .pcs-app-header,
+#tab-overview.active .rc-metric-card { animation: pcsFadeUp 0.24s ease-out both; }
+#tab-overview.active .ux-hero { animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  #tab-overview.active .pcs-app-header,
+  #tab-overview.active .rc-metric-card { animation: none !important; }
+}
+
+/* ------------------------------------------------------------------
+   17. RESPONSIVE
+   ------------------------------------------------------------------ */
+@media (max-width: 1024px) {
+  .app-main { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; }
+  .app-sidebar { width: 272px !important; box-shadow: var(--g-shadow-3) !important; }
+  .content-wrapper { padding: 16px !important; }
+}
+@media (max-width: 768px) {
+  .app-header { height: auto !important; min-height: 60px; padding: 10px 14px !important; flex-wrap: wrap; gap: 8px; }
+  .rc-search-bar { min-width: 0; flex: 1; }
+  .pcs-status-chip { display: none !important; }
+  .pcs-app-header { padding: 16px; gap: 16px; }
+  .pcs-app-meta { margin-left: 0; }
+  .pcs-app-icon { width: 48px; height: 48px; font-size: 15px; }
+  .pcs-app-name { font-size: 19px !important; }
+  .pcs-menu { right: 10px; left: 10px; min-width: 0; }
+  .ux-toasts { top: 62px; right: 12px; left: 12px; max-width: none; }
+}
+@media (max-width: 480px) {
+  .content-wrapper { padding: 12px !important; }
+  .pcs-app-header { padding: 14px; }
+}

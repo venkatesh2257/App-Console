@@ -2,12 +2,28 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 
+const os = require('os');
+
 const dbDir = path.join(__dirname, '../../data');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+const defaultDbPath = path.join(dbDir, 'console_multi_app.sqlite');
+const tmpDbPath = path.join(os.tmpdir(), 'console_multi_app.sqlite');
+
+let dbPath = process.env.DATABASE_PATH || tmpDbPath;
+if (!fs.existsSync(dbPath) && fs.existsSync(defaultDbPath)) {
+  try {
+    fs.copyFileSync(defaultDbPath, dbPath);
+    fs.chmodSync(dbPath, 0o666);
+  } catch (_) {}
+} else if (fs.existsSync(dbPath)) {
+  try {
+    fs.chmodSync(dbPath, 0o666);
+  } catch (_) {}
 }
 
-const dbPath = process.env.DATABASE_PATH || path.join(dbDir, 'console_multi_app.sqlite');
+
+
+
+
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('❌ Failed to connect to SQLite database:', err.message);
@@ -15,6 +31,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.log('✅ SQLite Connected successfully to:', dbPath);
   }
 });
+
 
 // Promisified helper methods
 const query = {
@@ -64,6 +81,12 @@ async function initSchema() {
       platform TEXT DEFAULT 'Android',       -- 'Android', 'iOS', 'Cross-Platform'
       api_key TEXT NOT NULL UNIQUE,          -- Secret key used by mobile apps for ingestion
       icon_color TEXT DEFAULT '#00F59B',     -- Hex accent color
+      icon_url TEXT DEFAULT NULL,
+      app_status TEXT DEFAULT 'Production',
+      update_status TEXT DEFAULT NULL,
+      installed_audience INTEGER DEFAULT 0,
+      is_pinned INTEGER DEFAULT 0,
+      last_updated_date TEXT DEFAULT NULL,
       description TEXT,
       is_active INTEGER DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -189,9 +212,77 @@ async function initSchema() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
     );
+
+    -- Play Store Pre-Deployment Setup & Questionnaire Declarations Table
+    CREATE TABLE IF NOT EXISTS playstore_declarations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      app_id TEXT NOT NULL UNIQUE,
+      app_name TEXT NOT NULL,
+      package_name TEXT NOT NULL,
+      default_language TEXT DEFAULT 'en-US',
+      app_type TEXT DEFAULT 'App',
+      pricing_type TEXT DEFAULT 'Free',
+      policy_confirmed INTEGER DEFAULT 1,
+      export_laws_accepted INTEGER DEFAULT 1,
+      privacy_policy_url TEXT DEFAULT '/privacy-policy.html',
+      app_access_restricted INTEGER DEFAULT 1,
+      sign_in_details TEXT, -- JSON array string
+      contains_ads INTEGER DEFAULT 0,
+      content_rating_category TEXT DEFAULT 'Government / Utility / Health',
+      target_age_group TEXT DEFAULT '18+',
+      violence_declared INTEGER DEFAULT 0,
+      sexual_content_declared INTEGER DEFAULT 0,
+      profanity_declared INTEGER DEFAULT 0,
+      location_sharing_declared INTEGER DEFAULT 1,
+      purchases_declared INTEGER DEFAULT 0,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `;
 
   await query.exec(schemaSQL);
+
+  // Column migrations for projects table
+  try { await query.run(`ALTER TABLE projects ADD COLUMN icon_url TEXT DEFAULT NULL`); } catch (_) {}
+  try { await query.run(`ALTER TABLE projects ADD COLUMN app_status TEXT DEFAULT 'Production'`); } catch (_) {}
+  try { await query.run(`ALTER TABLE projects ADD COLUMN update_status TEXT DEFAULT NULL`); } catch (_) {}
+  try { await query.run(`ALTER TABLE projects ADD COLUMN installed_audience INTEGER DEFAULT 0`); } catch (_) {}
+  try { await query.run(`ALTER TABLE projects ADD COLUMN is_pinned INTEGER DEFAULT 0`); } catch (_) {}
+  try { await query.run(`ALTER TABLE projects ADD COLUMN last_updated_date TEXT DEFAULT NULL`); } catch (_) {}
+
+  // Column migrations for app_versions table (Bundle details)
+  try { await query.run(`ALTER TABLE app_versions ADD COLUMN target_sdk INTEGER DEFAULT 36`); } catch (_) {}
+  try { await query.run(`ALTER TABLE app_versions ADD COLUMN min_sdk INTEGER DEFAULT 24`); } catch (_) {}
+  try { await query.run(`ALTER TABLE app_versions ADD COLUMN compliance_score INTEGER DEFAULT 100`); } catch (_) {}
+  try { await query.run(`ALTER TABLE app_versions ADD COLUMN verdict TEXT DEFAULT 'READY'`); } catch (_) {}
+  try { await query.run(`ALTER TABLE app_versions ADD COLUMN file_name TEXT DEFAULT NULL`); } catch (_) {}
+  try { await query.run(`ALTER TABLE app_versions ADD COLUMN file_size_bytes INTEGER DEFAULT NULL`); } catch (_) {}
+  try { await query.run(`ALTER TABLE app_versions ADD COLUMN release_track TEXT DEFAULT 'Production'`); } catch (_) {}
+
+  // Seed default declarations for core enterprise apps if not existing
+  const existingDeclarations = await query.all(`SELECT app_id FROM playstore_declarations`);
+  if (!existingDeclarations || existingDeclarations.length === 0) {
+    const defaultSignInsBtgs = JSON.stringify([
+      { name: 'Staff account (employee)', username: 'staff_pilot_99', password: '•••SecureOtp99•••', instructions: 'Enter mobile 9876543210. Use default testing OTP 123456 to log into Ground Staff portal.' },
+      { name: 'Employee ID tab', username: 'EMP-77012', password: '•••BavyaEmp77012•••', instructions: 'Select Employee ID sign-in tab, select Hyderabad Hub, bypass biometrics with Skip button.' },
+      { name: 'Manager account', username: 'mgr_dispatch_ops', password: '•••GroundOps2026•••', instructions: 'Full access supervisor account for testing dispatch and flight telemetry rosters.' }
+    ]);
+
+    const defaultSignIns1962 = JSON.stringify([
+      { name: 'Veterinary Doctor Account', username: 'doc_vas_bihar_01', password: '•••VasBiharDoc2026•••', instructions: 'Use Doctor portal tab. OTP auto-filled in staging mode for emergency dispatch.' },
+      { name: 'Ambulance Pilot / Driver', username: 'driver_mvu_88', password: '•••MvuDriver1962•••', instructions: 'Mobile Veterinary Unit vehicle driver dashboard with emergency GPS routing.' }
+    ]);
+
+    await query.run(`
+      INSERT OR IGNORE INTO playstore_declarations 
+      (app_id, app_name, package_name, default_language, app_type, pricing_type, policy_confirmed, export_laws_accepted, privacy_policy_url, app_access_restricted, sign_in_details, contains_ads, content_rating_category, target_age_group)
+      VALUES 
+      ('btgs', 'Travelite Ground Staff', 'com.bavya.btgs', 'en-US', 'App', 'Free', 1, 1, '/privacy-policy.html', 1, ?, 0, 'Government / Utility / Health', '18+'),
+      ('bh1962', 'BIHAR 1962 Ops', 'in.gov.bihar.vas1962', 'en-US', 'App', 'Free', 1, 1, '/privacy-policy.html', 1, ?, 0, 'Government / Utility / Health', '18+'),
+      ('ops108', '108 Emergency Ops', 'in.bhspl.ops108', 'en-US', 'App', 'Free', 1, 1, '/privacy-policy.html', 1, ?, 0, 'Emergency Services / Health', '18+'),
+      ('citizen104', '104 Health Grievance', 'in.bhspl.citizen104', 'en-US', 'App', 'Free', 1, 1, '/privacy-policy.html', 0, '[]', 0, 'Health & Medical', 'All Ages (3+)')
+    `, [defaultSignInsBtgs, defaultSignIns1962, defaultSignIns1962]);
+  }
+
   console.log('🏛️  Multi-Project Database schema initialized successfully');
 }
 

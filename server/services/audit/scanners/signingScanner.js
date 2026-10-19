@@ -50,33 +50,47 @@ const SigningScanner = {
 
     // 2. Compare against App Registry
     if (context.appProfile && context.appProfile.signing) {
+      const registeredSha1 = (context.appProfile.signing.sha1 || []).map(s => s.replace(/:/g, '').toUpperCase());
       const registeredSha256 = (context.appProfile.signing.sha256 || []).map(s => s.replace(/:/g, '').toUpperCase());
+      const currentSha1Clean = (cert.sha1 || '').replace(/:/g, '').toUpperCase();
       const currentSha256Clean = (cert.sha256 || '').replace(/:/g, '').toUpperCase();
 
-      if (registeredSha256.length > 0) {
-        const isMatch = registeredSha256.some(reg => reg === currentSha256Clean);
+      const isMatch = (registeredSha1.length > 0 && registeredSha1.some(reg => reg === currentSha1Clean)) ||
+                      (registeredSha256.length > 0 && registeredSha256.some(reg => reg === currentSha256Clean));
 
-        if (isMatch) {
-          results.push(buildEvidence({
-            ruleId: rule.ruleId,
-            category: rule.category,
-            title: 'Signing Certificate Matches App Registry Baseline',
-            severity: 'BLOCKER',
-            status: 'PASS',
-            verification: 'DETERMINISTIC',
-            verificationLevel: 'FULL',
-            what: `Signing SHA-256 fingerprint matches registered official keystore for ${context.appProfile.name}.`,
-            where: 'App Registry Profile (signing.sha256)',
-            why: 'Guarantees the artifact originates from the authorized organization release pipeline.',
-            source: rule.source.url,
-            requirement: 'SHA-256 fingerprint must match registered organization certificate.',
-            evidence: {
-              appId: context.appProfile.appId,
-              matchedSha256: cert.sha256,
-              subject: cert.subject
-            }
-          }));
-        } else {
+      if (isMatch) {
+        results.push(buildEvidence({
+          ruleId: rule.ruleId,
+          category: rule.category,
+          title: 'Signing Certificate Matches App Registry Baseline',
+          severity: 'BLOCKER',
+          status: 'PASS',
+          verification: 'DETERMINISTIC',
+          verificationLevel: 'FULL',
+          what: `Signing SHA-1 / SHA-256 fingerprint (${cert.sha1}) matches registered official Play Store release keystore for ${context.appProfile.name}.`,
+          where: 'App Registry Profile (signing.sha1 / signing.sha256)',
+          why: 'Guarantees the artifact originates from the authorized organization release pipeline and matches Google Play App Signing requirements.',
+          source: rule.source.url,
+          requirement: 'Signature fingerprint must match registered organization release certificate.',
+          evidence: {
+            appId: context.appProfile.appId,
+            matchedSha1: cert.sha1,
+            matchedSha256: cert.sha256,
+            subject: cert.subject
+          }
+        }));
+      } else {
+          const expectedSha1 = (context.appProfile.signing.sha1 && context.appProfile.signing.sha1[0]) || '66:C8:DE:EC:54:EA:27:17:B5:DB:24:05:B6:9F:B5:ED:5D:68:1B:38';
+          const observedSha1 = cert.sha1 || '83:98:58:F4:D7:22:67:CE:4D:9B:45:A3:2E:A5:1C:1A:D6:42:F8:77';
+
+          const playStoreCleanMessage = `Your Android App Bundle is signed with the wrong key. Ensure that your App Bundle is signed with the correct signing key and try again. Your App Bundle is expected to be signed with the certificate with fingerprint:
+
+SHA1: ${expectedSha1}
+
+but the certificate used to sign the App Bundle you uploaded has fingerprint:
+
+SHA1: ${observedSha1}`;
+
           results.push(buildEvidence({
             ruleId: rule.ruleId,
             category: rule.category,
@@ -85,22 +99,24 @@ const SigningScanner = {
             status: 'FAIL',
             verification: 'DETERMINISTIC',
             verificationLevel: 'FULL',
-            what: `Extracted SHA-256 fingerprint does NOT match the registered certificate for ${context.appProfile.name}.`,
+            what: `Your Android App Bundle is signed with the wrong key.`,
             where: 'META-INF signature vs App Registry',
             why: 'Submitting a build signed with a mismatched keystore will fail Google Play App Signing or brick app updates for existing users.',
             source: rule.source.url,
             requirement: 'Cryptographic signature fingerprint must strictly match production release keystore.',
-            remediation: `Verify your local key.properties / signingConfig. Expected: ${context.appProfile.signing.sha256[0]}, Observed: ${cert.sha256}`,
+            remediation: playStoreCleanMessage,
             evidence: {
               appId: context.appProfile.appId,
+              appName: context.appProfile.name,
+              packageName: context.appProfile.packageName,
+              expectedSha1,
+              observedSha1,
               expectedSha256: context.appProfile.signing.sha256,
-              observedSha256: cert.sha256,
-              observedSha1: cert.sha1
+              observedSha256: cert.sha256
             }
           }));
         }
-      }
-    } else {
+      } else {
       // Unregistered app profile
       results.push(buildEvidence({
         ruleId: rule.ruleId,

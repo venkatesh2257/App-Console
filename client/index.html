@@ -5,10 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ReleaseHub • Mobile Release Command Center</title>
   
-  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <!-- Google Fonts: Inter, JetBrains Mono & Plus Jakarta Sans (V2 headings) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- V4: Roboto (Google Play Console typography) -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- V5: Material Symbols (the icon set Google Play Console actually uses) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
+  <meta name="theme-color" content="#F8F9FA">
+  <!-- V4: Play Console is a light workspace — always light before first paint -->
+  <script>
+    (function () {
+      try {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,6 +30,19 @@
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/pipeline-stepper.css">
   <link rel="stylesheet" href="css/release-command-center.css">
+
+  <!-- V2 redesign layer (additive — delete these five lines to revert) -->
+  <link rel="stylesheet" href="css/v2-motion.css">
+  <link rel="stylesheet" href="css/v2-chrome.css">
+  <link rel="stylesheet" href="css/v2-layout.css">
+  <link rel="stylesheet" href="css/v2-theme.css">
+  <link rel="stylesheet" href="css/v2-dark.css">
+  <!-- V3 premium identity (authoritative — delete this line to revert the look) -->
+  <link rel="stylesheet" href="css/v3-premium.css">
+  <!-- V4 Google Play Console identity (authoritative — delete this line to revert) -->
+  <link rel="stylesheet" href="css/v4-playconsole.css">
+  <!-- V5 Material Symbols + Policy status (additive — delete this line to revert) -->
+  <link rel="stylesheet" href="css/v5-playconsole.css">
 </head>
 <body>
 
@@ -29,17 +55,17 @@
          ========================================== -->
     <aside class="app-sidebar">
       <div class="brand-header">
-        <div class="brand-logo" style="background: linear-gradient(135deg, #4F46E5, #6366F1); width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);">
-          <span>◈</span>
+        <div class="brand-logo" aria-hidden="true">
+          <i class="fa-solid fa-play"></i>
         </div>
         <div class="brand-info">
-          <h2 style="font-size: 15.5px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary);">ReleaseHub</h2>
-          <span style="font-size: 10.5px; font-weight: 700; color: #4F46E5; text-transform: uppercase; letter-spacing: 0.05em;">Release Command Center</span>
+          <h2>ReleaseHub</h2>
+          <span>Developer Console</span>
         </div>
       </div>
 
       <nav class="nav-menu">
-        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 12px 14px 4px 14px; letter-spacing: 0.07em;">Platform</div>
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 12px 14px 4px 14px; letter-spacing: 0.07em;">Dashboard</div>
         <a class="nav-item" data-tab="tab-overview">
           <i class="fa-solid fa-gauge" style="color: #0284C7;"></i>
           <span>Overview</span>
@@ -51,11 +77,11 @@
         </a>
         <a class="nav-item" data-tab="tab-projects">
           <i class="fa-solid fa-cubes" style="color: #8B5CF6;"></i>
-          <span>App Registry</span>
+          <span>All apps</span>
           <span class="badge-pill badge-cyan" style="margin-left: auto; font-size: 9.5px; padding: 2px 7px;">3 APPS</span>
         </a>
 
-        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Analysis & SAST</div>
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Quality</div>
         <a class="nav-item" data-tab="tab-engines">
           <i class="fa-solid fa-microchip" style="color: #0284C7;"></i>
           <span>Audit Engines</span>
@@ -70,10 +96,10 @@
           <span>Release Delta</span>
         </a>
 
-        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Governance</div>
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Policy and programs</div>
         <a class="nav-item" data-tab="tab-policies">
           <i class="fa-solid fa-scale-balanced" style="color: #059669;"></i>
-          <span>Policies & Declarations</span>
+          <span>Policy status</span>
         </a>
         <a class="nav-item" data-tab="tab-approvals">
           <i class="fa-solid fa-user-check" style="color: #4F46E5;"></i>
@@ -84,7 +110,7 @@
           <span>Canonical Evidence</span>
         </a>
 
-        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Reporting & Devices</div>
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); padding: 16px 14px 4px 14px; letter-spacing: 0.07em;">Reporting</div>
         <a class="nav-item" data-tab="tab-reports">
           <i class="fa-solid fa-file-invoice" style="color: #0284C7;"></i>
           <span>Executive Reports</span>
@@ -125,36 +151,35 @@
             <span class="rc-kbd">⌘ K</span>
           </div>
 
-          <!-- Live Top Bar Release HUD Pill -->
-          <div style="display: flex; align-items: center; gap: 8px; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 5px 14px; border-radius: 9999px; font-size: 12px; font-weight: 700; color: #059669; flex-shrink: 0;">
+          <!-- Live release-gate status chip -->
+          <div class="pcs-status-chip">
             <i class="fa-solid fa-circle-check"></i>
-            <span>Ready for Play Store</span>
-            <span style="color: #64748B; font-weight: 500; font-size: 11px; margin-left: 4px;">com.bavya.btgs • v41</span>
+            <span>Release gate ready</span>
+            <span class="pcs-status-meta">com.bavya.btgs &bull; v41</span>
           </div>
         </div>
 
-        <div class="header-actions" style="display: flex; align-items: center; gap: 12px;">
-          <!-- Quick Stage Switcher HUD Dropdown Button -->
-          <div style="display: flex; gap: 6px;">
-            <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.scanLocalSample('aab')" title="Quick Scan Sample AAB">
-              <i class="fa-solid fa-bolt" style="color: #4F46E5;"></i> Quick Scan
-            </button>
-          </div>
+        <div class="header-actions" style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.scanLocalSample('aab')" title="Scan a local sample bundle">
+            <i class="fa-solid fa-bolt"></i> Quick scan
+          </button>
 
-          <!-- Notification Bell -->
-          <button class="btn-cred btn-cred-outline btn-cred-sm" style="border-radius: 50%; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Release Notifications">
+          <!-- Help (keyboard shortcuts) -->
+          <button class="pcs-icon-btn" id="pcs-help-btn" type="button" aria-label="Help and keyboard shortcuts" aria-haspopup="true" aria-expanded="false" title="Help">
+            <i class="fa-regular fa-circle-question"></i>
+          </button>
+
+          <!-- Notifications -->
+          <button class="pcs-icon-btn" id="pcs-notif-btn" type="button" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" title="Notifications">
             <i class="fa-regular fa-bell"></i>
           </button>
 
-          <!-- Primary + New Release Action Button -->
           <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="ReleaseHubUI.openNewReleaseWizard()">
-            <i class="fa-solid fa-plus"></i> New Release
+            <i class="fa-solid fa-plus"></i> New release
           </button>
 
-          <!-- Admin Avatar -->
-          <div style="width: 34px; height: 34px; border-radius: 50%; background: #EEF2FF; border: 2px solid #4F46E5; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #4F46E5;" title="Venkatesh (Release Lead)">
-            V
-          </div>
+          <!-- Account -->
+          <button class="pcs-avatar" id="pcs-account-btn" type="button" aria-label="Account: Venkatesh, Release Lead" aria-haspopup="true" aria-expanded="false" title="Venkatesh (Release Lead)">V</button>
         </div>
       </header>
 
@@ -164,17 +189,28 @@
              TAB 1: MOBILE RELEASE COMMAND CENTER
              ========================================================= -->
         <section id="tab-overview" class="tab-content">
-          <!-- Command Center Header Banner -->
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
-            <div>
-              <h2 style="font-size: 24px; font-weight: 800; margin: 0 0 4px 0;">Release Command Center</h2>
-              <p style="font-size: 13.5px; color: var(--rc-text-secondary); margin: 0;">
-                Monitor mobile application release readiness, signing integrity, and gate approvals across your organization.
-              </p>
+          <!-- Play Console-style application header -->
+          <div class="pcs-app-header">
+            <div class="pcs-app-id">
+              <div class="pcs-app-icon" aria-hidden="true">BTG</div>
+              <div class="pcs-app-titles">
+                <div class="pcs-crumbs"><span>All apps</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span>BTGS Ops</span></div>
+                <h2 class="pcs-app-name">BTGS Ops</h2>
+                <div class="pcs-app-pkg">com.bavya.btgs</div>
+              </div>
             </div>
-            <div style="display: flex; gap: 10px;">
-              <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="ReleaseHubUI.openNewReleaseWizard()">
-                <i class="fa-solid fa-cloud-arrow-up"></i> + New Release Scan
+            <div class="pcs-app-meta" role="list" aria-label="Release summary">
+              <span class="pcs-meta-chip" role="listitem"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> Version 41 (build 41)</span>
+              <span class="pcs-meta-chip info" role="listitem"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Track: Production</span>
+              <span class="pcs-meta-chip ok" role="listitem"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Ready to review</span>
+              <span class="pcs-meta-chip" role="listitem"><i class="fa-regular fa-clock" aria-hidden="true"></i> Updated 17 Oct 2026</span>
+            </div>
+            <div class="pcs-app-actions">
+              <button class="btn-cred btn-cred-primary" onclick="ReleaseHubUI.openNewReleaseWizard()">
+                <i class="fa-solid fa-plus"></i> Create release
+              </button>
+              <button class="btn-cred btn-cred-outline" onclick="switchTab('tab-playstore-audit')">
+                <i class="fa-solid fa-list-check"></i> Release overview
               </button>
             </div>
           </div>
@@ -226,88 +262,8 @@
                 Application Release Readiness
               </div>
 
-              <!-- App Card 1: BTGS -->
-              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('btgs')">
-                <div style="display: flex; gap: 16px; align-items: center;">
-                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(37, 99, 235, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700;">
-                    <i class="fa-solid fa-plane-departure"></i>
-                  </div>
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <strong style="font-size: 15px;">Travelite Ground Staff (BTGS)</strong>
-                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v41 (Code 7)</span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
-                      <code>com.bavya.btgs</code> • Target SDK 36 • 16 KB Page Aligned ✓
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <span class="rc-badge-ready"><i class="fa-solid fa-circle-check"></i> READY FOR SUBMISSION</span>
-                </div>
-              </div>
-
-              <!-- App Card 2: VAS 1962 -->
-              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('bh1962')">
-                <div style="display: flex; gap: 16px; align-items: center;">
-                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(22, 163, 74, 0.1); color: #22c55e; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                    <i class="fa-solid fa-shield-heart"></i>
-                  </div>
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <strong style="font-size: 15px;">VAS 1962 Veterinary Ops</strong>
-                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v18 (Code 12)</span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
-                      <code>in.gov.telangana.vas1962</code> • Target SDK 36 • 2 Policy Disclosures Pending
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <span class="rc-badge-review"><i class="fa-solid fa-triangle-exclamation"></i> REVIEW REQUIRED</span>
-                </div>
-              </div>
-
-              <!-- App Card 3: 108 Emergency Ops -->
-              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('ops108')">
-                <div style="display: flex; gap: 16px; align-items: center;">
-                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(220, 38, 38, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                    <i class="fa-solid fa-truck-medical"></i>
-                  </div>
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <strong style="font-size: 15px;">108 Emergency Ambulance Ops</strong>
-                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v27 (Code 29)</span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
-                      <code>in.bhspl.ops108</code> • 2 Blockers: 16 KB alignment & Signing Keystore mismatch
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <span class="rc-badge-blocked"><i class="fa-solid fa-ban"></i> RELEASE BLOCKED</span>
-                </div>
-              </div>
-
-              <!-- App Card 4: 104 Grievance -->
-              <div class="rc-release-item-card" onclick="ReleaseHubUI.viewAppRelease('citizen104')">
-                <div style="display: flex; gap: 16px; align-items: center;">
-                  <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(162, 89, 255, 0.1); color: #a855f7; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                    <i class="fa-solid fa-heart-pulse"></i>
-                  </div>
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <strong style="font-size: 15px;">104 Health Grievance System</strong>
-                      <span style="font-size: 12px; color: var(--rc-text-muted); font-family: var(--rc-font-mono);">v12 (Code 15)</span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--rc-text-secondary); margin-top: 2px;">
-                      <code>in.bhspl.citizen104</code> • Target SDK 36 • 0 Open Defects
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <span class="rc-badge-ready"><i class="fa-solid fa-circle-check"></i> READY FOR SUBMISSION</span>
-                </div>
+              <div id="rc-app-releases-list" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Dynamically rendered from real database projects -->
               </div>
             </div>
 
@@ -431,21 +387,293 @@
         </section>
 
         <!-- =========================================================
-             TAB 2: APP CATALOG (20+ PROJECTS)
+             TAB 2: GOOGLE PLAY CONSOLE - ALL APPS FLEET
              ========================================================= -->
         <section id="tab-projects" class="tab-content">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <div>
-              <h2 style="font-size: 24px;">Enterprise Mobile Apps Catalog</h2>
-              <p class="text-secondary" style="font-size: 13px;">Manage all company mobile applications, API credentials, and global telemetry endpoints.</p>
+          <!-- Google Play Top Action Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <h2 style="font-size: 24px; font-weight: 700; color: #0F172A; margin: 0;">All apps</h2>
+              <span id="playstore-apps-count" style="font-size: 12px; font-weight: 600; background: #EEF2FF; color: #4338CA; padding: 3px 10px; border-radius: 12px; border: 1px solid #C7D2FE;">
+                11 apps
+              </span>
             </div>
-            <button class="btn-cred btn-cred-primary" onclick="openModal('modal-create-project')">
-              <i class="fa-solid fa-plus"></i> Register New App
+            
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <!-- Live Search Filter -->
+              <div style="position: relative; min-width: 260px;">
+                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94A3B8; font-size: 13px;"></i>
+                <input type="text" id="playstore-apps-search-input" placeholder="Search apps and games..." style="width: 100%; padding: 8px 12px 8px 34px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; outline: none; background: #FFFFFF; color: #1E293B;" oninput="Projects.handleSearch(this.value)">
+              </div>
+
+              <!-- Status Filter Dropdown -->
+              <select id="playstore-status-filter" style="padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; background: #FFFFFF; color: #334155; outline: none;" onchange="Projects.handleStatusFilter(this.value)">
+                <option value="all">Status: All</option>
+                <option value="production">Status: Production</option>
+                <option value="in_review">Status: In review</option>
+                <option value="draft">Status: Draft</option>
+              </select>
+
+              <!-- + Create App Button (Google Play Style) -->
+              <button class="btn-cred btn-cred-primary" style="background: #1A73E8; border-color: #1A73E8; font-weight: 600; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;" onclick="openModal('modal-create-project')">
+                <i class="fa-solid fa-plus"></i> Create app
+              </button>
+            </div>
+          </div>
+
+          <!-- Google Play Apps Table Card Container -->
+          <div class="cred-card" style="padding: 0; overflow: hidden; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); background: #FFFFFF;" id="playstore-apps-table-container">
+            <!-- Injected dynamically via Projects.renderPlayStoreAppsTable() -->
+          </div>
+        </section>
+
+        <!-- =========================================================
+             TAB: GOOGLE PLAY CONSOLE - SPECIFIC APP SCREEN
+             ========================================================= -->
+        <section id="tab-app-screen" class="tab-content">
+          <!-- Back to All Apps Breadcrumb -->
+          <div style="margin-bottom: 14px;">
+            <button type="button" onclick="switchTab('tab-projects')" style="background: none; border: none; color: #1A73E8; font-weight: 600; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 4px 0;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+              <i class="fa-solid fa-arrow-left"></i> All apps
             </button>
           </div>
 
-          <div class="grid-projects" id="grid-projects-cards">
-            <!-- Injected via JS -->
+          <!-- App Top Header Banner -->
+          <div class="cred-card" style="padding: 16px 20px; margin-bottom: 20px; border: 1px solid #E2E8F0; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div id="app-screen-icon-container">
+                  <!-- App Icon -->
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <h2 id="app-screen-name" style="font-size: 22px; font-weight: 700; color: #0F172A; margin: 0;">Travelite Ground Staff (BTGS)</h2>
+                    <span id="app-screen-status-badge" style="font-size: 11.5px; font-weight: 600; background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; padding: 2px 8px; border-radius: 12px;">
+                      Production
+                    </span>
+                  </div>
+                  <div id="app-screen-pkg" style="font-size: 13px; color: #64748B; font-family: var(--font-mono, monospace); margin-top: 2px;">
+                    com.bavya.btgs
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Action Buttons -->
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-cred btn-cred-outline btn-cred-sm" type="button" onclick="Projects.launchAuditForCurrentApp()" style="border-color: #059669; color: #059669; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-shield-halved"></i> Pre-Submission Audit
+                </button>
+                <button class="btn-cred btn-cred-outline btn-cred-sm" type="button" onclick="Projects.triggerUploadBundle()" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Upload App Bundle
+                </button>
+                <button class="btn-cred btn-cred-primary btn-cred-sm" type="button" onclick="openModal('modal-create-version')" style="background: #1A73E8; border-color: #1A73E8; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-plus"></i> Create new release
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Google Play App Layout: Sidebar + Main Content -->
+          <div style="display: grid; grid-template-columns: 240px 1fr; gap: 20px; align-items: start;">
+            <!-- Google Play Left App Navigation Menu -->
+            <div class="cred-card" style="padding: 12px 8px; border: 1px solid #E2E8F0; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <a href="javascript:void(0)" onclick="Projects.switchAppSubTab('releases')" class="app-sidebar-link active" id="app-nav-releases" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #1A73E8; background: #E8F0FE; text-decoration: none;">
+                  <i class="fa-solid fa-cubes" style="font-size: 14px;"></i>
+                  <span>Latest releases & bundles</span>
+                </a>
+
+                <div style="font-size: 11px; font-weight: 800; color: #94A3B8; text-transform: uppercase; padding: 14px 14px 6px 14px; letter-spacing: 0.05em;">Test and release</div>
+                
+                <a href="javascript:void(0)" onclick="Projects.switchAppSubTab('production')" class="app-sidebar-link" id="app-nav-production" style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 8px; font-size: 13px; color: #475569; text-decoration: none;">
+                  <i class="fa-solid fa-globe" style="font-size: 14px; color: #64748B;"></i>
+                  <span>Production</span>
+                </a>
+                <a href="javascript:void(0)" onclick="Projects.switchAppSubTab('testing')" class="app-sidebar-link" id="app-nav-testing" style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 8px; font-size: 13px; color: #475569; text-decoration: none;">
+                  <i class="fa-solid fa-flask" style="font-size: 14px; color: #64748B;"></i>
+                  <span>Testing</span>
+                </a>
+                <a href="javascript:void(0)" onclick="Projects.switchAppSubTab('integrity')" class="app-sidebar-link" id="app-nav-integrity" style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 8px; font-size: 13px; color: #475569; text-decoration: none;">
+                  <i class="fa-solid fa-key" style="font-size: 14px; color: #64748B;"></i>
+                  <span>App integrity</span>
+                </a>
+                <a href="javascript:void(0)" onclick="Projects.launchAuditForCurrentApp()" class="app-sidebar-link" style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 8px; font-size: 13px; color: #059669; text-decoration: none; font-weight: 600;">
+                  <i class="fa-solid fa-shield-halved" style="font-size: 14px; color: #059669;"></i>
+                  <span>7-Stage Release Gate</span>
+                </a>
+
+                <div style="font-size: 11px; font-weight: 800; color: #94A3B8; text-transform: uppercase; padding: 14px 14px 6px 14px; letter-spacing: 0.05em;">Store Presence</div>
+                
+                <a href="javascript:void(0)" onclick="Projects.switchAppSubTab('declarations')" class="app-sidebar-link" id="app-nav-declarations" style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 8px; font-size: 13px; color: #475569; text-decoration: none;">
+                  <i class="fa-solid fa-clipboard-list" style="font-size: 14px; color: #64748B;"></i>
+                  <span>App Content & Policies</span>
+                </a>
+
+                <div style="font-size: 11px; font-weight: 800; color: #94A3B8; text-transform: uppercase; padding: 14px 14px 6px 14px; letter-spacing: 0.05em;">Monitor and improve</div>
+                <a href="javascript:void(0)" onclick="switchTab('tab-crashlytics')" class="app-sidebar-link" style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 8px; font-size: 13px; color: #475569; text-decoration: none;">
+                  <i class="fa-solid fa-bug" style="font-size: 14px; color: #E11D48;"></i>
+                  <span>Crashlytics Telemetry</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Google Play Main App Screen Content -->
+            <div style="min-width: 0;">
+              <!-- View 1: Latest releases and bundles -->
+              <div id="app-subview-releases" style="display: block;">
+                <!-- Main Header -->
+                <div style="margin-bottom: 20px;">
+                  <h2 style="font-size: 24px; font-weight: 700; color: #0F172A; margin: 0 0 6px 0;">Latest releases and bundles</h2>
+                  <div style="font-size: 13.5px; color: #64748B;">
+                    See an overview of all of your releases and app bundles across different tracks. <a href="javascript:void(0)" style="color: #1A73E8; text-decoration: none;">Show more</a>
+                  </div>
+                </div>
+
+                <!-- Section 1: Latest releases -->
+                <div class="cred-card" style="padding: 0; overflow: hidden; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); background: #FFFFFF; margin-bottom: 24px;">
+                  <div style="padding: 14px 16px; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="font-weight: 700; font-size: 15px; color: #0F172A; display: flex; align-items: center; gap: 8px;">
+                      <span>Latest releases</span>
+                      <i class="fa-regular fa-circle-question" style="color: #94A3B8; font-size: 13px;" title="Releases deployed to production or testing tracks"></i>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <button type="button" style="background: none; border: 1px solid #CBD5E1; border-radius: 6px; padding: 6px 12px; font-size: 12.5px; color: #475569; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <i class="fa-solid fa-filter" style="font-size: 11px;"></i> Add filter
+                      </button>
+                      <div style="position: relative;">
+                        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94A3B8; font-size: 12px;"></i>
+                        <input type="text" placeholder="Search releases" style="padding: 6px 10px 6px 30px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12.5px; outline: none; background: #FFFFFF; width: 180px;">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Releases Table -->
+                  <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+                      <thead>
+                        <tr style="border-bottom: 1px solid #E2E8F0; color: #64748B; font-weight: 600; font-size: 12px; background: #F8FAFC;">
+                          <th style="padding: 10px 16px; min-width: 120px;">Release</th>
+                          <th style="padding: 10px 16px; min-width: 110px;">Latest version</th>
+                          <th style="padding: 10px 16px; min-width: 110px;">Track</th>
+                          <th style="padding: 10px 16px; min-width: 160px;">Release status</th>
+                          <th style="padding: 10px 16px; min-width: 140px;">Last updated</th>
+                          <th style="padding: 10px 16px; min-width: 130px;">Countries / regions</th>
+                          <th style="padding: 10px 16px; text-align: right; min-width: 100px;">Install base</th>
+                          <th style="padding: 10px 16px; width: 40px;"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="app-screen-releases-tbody">
+                        <!-- Dynamic releases rows -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Section 2: Latest app bundles -->
+                <div class="cred-card" style="padding: 0; overflow: hidden; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); background: #FFFFFF;">
+                  <div style="padding: 14px 16px; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="font-weight: 700; font-size: 15px; color: #0F172A;">
+                      Latest app bundles
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                      <button type="button" style="background: none; border: 1px solid #CBD5E1; border-radius: 6px; padding: 6px 12px; font-size: 12.5px; color: #475569; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <i class="fa-solid fa-filter" style="font-size: 11px;"></i> Add filter
+                      </button>
+                      <div style="position: relative;">
+                        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94A3B8; font-size: 12px;"></i>
+                        <input type="text" placeholder="Search by version code or name" style="padding: 6px 10px 6px 30px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12.5px; outline: none; background: #FFFFFF; width: 220px;">
+                      </div>
+                      <a href="javascript:void(0)" onclick="Projects.triggerUploadBundle()" style="color: #1A73E8; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Upload bundle
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Bundles Table -->
+                  <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+                      <thead>
+                        <tr style="border-bottom: 1px solid #E2E8F0; color: #64748B; font-weight: 600; font-size: 12px; background: #F8FAFC;">
+                          <th style="padding: 10px 16px; min-width: 100px;">Version code</th>
+                          <th style="padding: 10px 16px; min-width: 110px;">Version name</th>
+                          <th style="padding: 10px 16px; min-width: 140px;">File type</th>
+                          <th style="padding: 10px 16px; min-width: 150px;">Uploaded</th>
+                          <th style="padding: 10px 16px; min-width: 100px;">Install base</th>
+                          <th style="padding: 10px 16px; min-width: 120px;">Release status</th>
+                          <th style="padding: 10px 16px; text-align: right; min-width: 120px;">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="app-screen-bundles-tbody">
+                        <!-- Dynamic bundle rows -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- View 2: App Integrity & Keystore Signing -->
+              <div id="app-subview-integrity" style="display: none;">
+                <div style="margin-bottom: 20px;">
+                  <h2 style="font-size: 24px; font-weight: 700; color: #0F172A; margin: 0 0 6px 0;">App integrity & signing certificates</h2>
+                  <div style="font-size: 13.5px; color: #64748B;">
+                    Verify Google Play App Signing key fingerprints and keystore certificates.
+                  </div>
+                </div>
+
+                <div class="cred-card" style="padding: 20px; border: 1px solid #E2E8F0; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <h4 style="font-size: 16px; font-weight: 700; color: #0F172A; margin: 0; display: flex; align-items: center; gap: 8px;">
+                      <i class="fa-solid fa-key" style="color: #1A73E8;"></i> App Signing Key Certificate
+                    </h4>
+                    <button type="button" class="btn-cred btn-cred-primary btn-cred-sm" onclick="Projects.openEditSigningKeyModal()" style="font-size: 12px;">
+                      <i class="fa-solid fa-key"></i> Add / Edit Signing Key
+                    </button>
+                  </div>
+                  <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
+                    Your app bundle is verified against this registered release certificate fingerprint prior to Play Store distribution.
+                  </p>
+
+                  <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px;">
+                    <div style="margin-bottom: 12px;">
+                      <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase;">SHA-1 Certificate Fingerprint</div>
+                      <div id="app-screen-sha1" style="font-family: var(--font-mono, monospace); font-size: 13px; font-weight: 600; color: #0F172A; margin-top: 4px; word-break: break-all;">
+                        83:98:58:F4:D7:22:67:CE:4D:9B:45:A3:2E:A5:1C:1A:D6:42:F8:77 (Play Signing: 66:C8:DE:EC:54:EA:27:17:B5:DB:24:05:B6:9F:B5:ED:5D:68:1B:38)
+                      </div>
+                    </div>
+                    <div>
+                      <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase;">SHA-256 Certificate Fingerprint</div>
+                      <div id="app-screen-sha256" style="font-family: var(--font-mono, monospace); font-size: 13px; font-weight: 600; color: #0F172A; margin-top: 4px; word-break: break-all;">
+                        3B:5A:F2:78:E1:6D:9C:12:4A:8B:0C:5E:7F:3A:9D:2B:1C:8E:4F:7A:0B:3D:6E:9F:2A:5C:8B:1D:4E:7F:0A:3C
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- View 3: App Declarations & Policies -->
+              <div id="app-subview-declarations" style="display: none;">
+                <div style="margin-bottom: 20px;">
+                  <h2 style="font-size: 24px; font-weight: 700; color: #0F172A; margin: 0 0 6px 0;">App content & Play Store policies</h2>
+                  <div style="font-size: 13.5px; color: #64748B;">
+                    Review declared target audience, permissions, login instructions, and privacy disclosures.
+                  </div>
+                </div>
+
+                <div class="cred-card" style="padding: 20px; border: 1px solid #E2E8F0; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h4 style="font-size: 16px; font-weight: 700; color: #0F172A; margin: 0;">5 Play Store Deployment Questionnaire Declarations</h4>
+                    <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="switchTab('tab-policies')">
+                      <i class="fa-solid fa-pen-to-square"></i> Edit Declarations
+                    </button>
+                  </div>
+                  <div id="app-screen-declarations-summary" style="font-size: 13px; color: #475569; line-height: 1.6;">
+                    Loading policy declarations...
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -610,14 +838,36 @@
                STAGE 1: INTAKE & APP PROFILE
                ========================================== -->
           <div class="pipeline-stage-view active" id="stage-view-1">
-            <!-- App Profile & Verification Mode Selector -->
-            <div class="cred-card" style="margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
-                <div>
-                  <span class="badge-pill badge-emerald" style="margin-bottom: 4px;"><i class="fa-solid fa-id-card"></i> Organization App Registry</span>
-                  <h3 style="font-size: 18px; margin: 0;">Select Target App Profile & Inspection Mode</h3>
+            <!-- Stage 1 Context Banner -->
+            <div class="stage-context-banner stage-banner-1">
+              <div class="stage-context-inner">
+                <div class="stage-context-heading">
+                  <span class="stage-number-pill pill-stage-1">Stage 1 of 7</span>
+                  <div>
+                    <h3 class="stage-title-text">Binary Intake & Chain of Custody Lock</h3>
+                    <p class="stage-subtitle-text">Validates archive structure (AAB/APK), locks SHA-256 binary hash, and resolves App Profile catalog.</p>
+                  </div>
                 </div>
-                <div style="display: flex; gap: 10px;">
+                <span class="engine-tag engine-tag-bundletool"><i class="fa-brands fa-google"></i> Google bundletool</span>
+              </div>
+            </div>
+
+            <!-- App Profile & Verification Mode Selector -->
+            <div class="audit-card card-theme-intake" style="margin-bottom: 20px;">
+              <div class="audit-card-header">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-intake">
+                    <i class="fa-solid fa-id-card"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 1 • APP REGISTRY</div>
+                    <h3 class="audit-card-title">Select Target App Profile & Inspection Mode</h3>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                  <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.openQuestionnaireModal()" style="border-color: #0284C7; color: #0284C7; font-weight: 600; background: #F0F9FF;">
+                    <i class="fa-solid fa-list-check"></i> Play Store Setup &amp; Questionnaire
+                  </button>
                   <span class="badge-pill badge-violet" id="badge-selected-mode">Mode: AAB Only (Partial Source)</span>
                 </div>
               </div>
@@ -626,6 +876,7 @@
                 <div>
                   <label class="form-label" for="select-app-profile">Application Registry Profile</label>
                   <select class="form-control" id="select-app-profile" onchange="PlayStoreAuditor.handleAppProfileSelect(event)">
+                    <option value="auto" selected>✨ Auto-Detect from Uploaded Binary (Dynamic)</option>
                     <option value="btgs">Travelite Ground Staff (BTGS) - com.bavya.btgs</option>
                     <option value="bh1962">VAS 1962 Veterinary Operations - in.gov.telangana.vas1962</option>
                     <option value="ops108">108 Emergency Ambulance Ops - in.bhspl.ops108</option>
@@ -664,7 +915,7 @@
             </div>
 
             <!-- Drop Zone when no file is loaded or re-uploading -->
-            <div class="cred-card" style="margin-bottom: 24px; text-align: center; padding: 40px 20px; border: 2px dashed var(--border-card); cursor: pointer; transition: all 0.2s ease;" id="playstore-drop-zone">
+            <div class="cred-card" style="margin-bottom: 24px; text-align: center; padding: 40px 20px; border: 2px dashed var(--border-card); transition: all 0.2s ease;" id="playstore-drop-zone">
               <input type="file" id="playstore-file-input" style="display: none;" onchange="PlayStoreAuditor.handleFileInputChange(event)">
               <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 245, 155, 0.1); color: var(--cred-emerald); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px auto;">
                 <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -673,22 +924,35 @@
               <p class="text-muted" style="font-size: 13px; max-width: 480px; margin: 0 auto 18px auto;">
                 Supports Android App Bundles (<code>.aab</code>) and Release APKs (<code>.apk</code>). The engine extracts package attributes, locks SHA-256 hash, and initiates 7-stage gating.
               </p>
-              <label for="playstore-file-input" class="btn-cred btn-cred-primary btn-cred-sm" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
-                <i class="fa-solid fa-folder-open"></i> Browse Release File
-              </label>
+              <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
+                <label for="playstore-file-input" class="btn-cred btn-cred-primary btn-cred-sm" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <i class="fa-solid fa-folder-open"></i> Browse Release File
+                </label>
+                <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.scanLocalSample('aab')">
+                  <i class="fa-solid fa-bolt text-cyan"></i> Load Sample AAB
+                </button>
+                <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.scanLocalSample('apk')">
+                  <i class="fa-solid fa-box text-violet"></i> Load Sample APK
+                </button>
+              </div>
             </div>
 
             <!-- Stage 1 Extracted Binary Details Card -->
-            <div class="cred-card glow-bundletool" id="stage1-binary-card" style="display: none; margin-bottom: 24px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
-                <div>
-                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-                    <span class="engine-tag engine-tag-bundletool"><i class="fa-brands fa-google"></i> Google bundletool</span>
-                    <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> SHA-256 Hash Locked</span>
+            <div class="audit-card card-theme-intake glow-bundletool" id="stage1-binary-card" style="display: none; margin-bottom: 24px;">
+              <div class="audit-card-header">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-intake">
+                    <i class="fa-solid fa-box-open"></i>
                   </div>
-                  <h3 style="font-size: 22px; margin: 0;" id="st1-pkg-name">com.bavya.btgs</h3>
-                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;" id="st1-file-info">app-release.aab (44.6 MB)</p>
-                  <p style="font-family: monospace; font-size: 11px; color: var(--text-muted); margin: 4px 0 0 0;" id="st1-hash-info">SHA-256: --</p>
+                  <div>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                      <span class="audit-card-stage-tag">STAGE 1 • EXTRACTED ARTIFACT</span>
+                      <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> SHA-256 Hash Locked</span>
+                    </div>
+                    <h3 style="font-size: 22px; margin: 0;" id="st1-pkg-name">com.bavya.btgs</h3>
+                    <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;" id="st1-file-info">app-release.aab (44.6 MB)</p>
+                    <p style="font-family: monospace; font-size: 11px; color: var(--text-muted); margin: 4px 0 0 0;" id="st1-hash-info">SHA-256: --</p>
+                  </div>
                 </div>
                 <div style="display: flex; gap: 10px;">
                   <label for="playstore-file-input" class="btn-cred btn-cred-outline btn-cred-sm" style="cursor: pointer;">
@@ -701,21 +965,21 @@
               </div>
 
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; padding-top: 16px; border-top: 1px solid var(--border-card);">
-                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
-                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Version</div>
-                  <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);" id="st1-version">v6.0.1 (Code: 7)</div>
+                <div class="audit-metric-box">
+                  <div class="audit-metric-box-label">Version Name & Code</div>
+                  <div class="audit-metric-box-val" id="st1-version">v6.0.1 (Code: 7)</div>
                 </div>
-                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
-                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Target SDK Level</div>
-                  <div style="font-size: 16px; font-weight: 700; color: var(--cred-emerald);" id="st1-target-sdk">SDK 36 (Android 16)</div>
+                <div class="audit-metric-box">
+                  <div class="audit-metric-box-label">Target SDK Level</div>
+                  <div class="audit-metric-box-val" style="color: var(--cred-emerald);" id="st1-target-sdk">SDK 36 (Android 16)</div>
                 </div>
-                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
-                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Min SDK</div>
-                  <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);" id="st1-min-sdk">SDK 24 (Android 7.0)</div>
+                <div class="audit-metric-box">
+                  <div class="audit-metric-box-label">Minimum SDK</div>
+                  <div class="audit-metric-box-val" id="st1-min-sdk">SDK 24 (Android 7.0)</div>
                 </div>
-                <div style="background: var(--bg-black); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
-                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Native Architectures</div>
-                  <div style="font-size: 14px; font-weight: 600; color: var(--cred-violet);" id="st1-archs">arm64-v8a, armeabi-v7a</div>
+                <div class="audit-metric-box">
+                  <div class="audit-metric-box-label">Native Architectures</div>
+                  <div class="audit-metric-box-val" style="color: var(--cred-violet);" id="st1-archs">arm64-v8a, armeabi-v7a</div>
                 </div>
               </div>
 
@@ -733,36 +997,43 @@
                STAGE 2: STATIC ANDROID & BINARY ANALYSIS
                ========================================== -->
           <div class="pipeline-stage-view" id="stage-view-2">
-            <div class="cred-card glow-16kb" style="margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <div>
-                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                    <span class="engine-tag engine-tag-16kb"><i class="fa-solid fa-bolt"></i> 16 KB Native ELF Engine</span>
-                    <span class="badge-pill badge-neutral">Stage 2: Static Analysis</span>
+            <!-- Stage 2 Context Banner -->
+            <div class="stage-context-banner stage-banner-2">
+              <div class="stage-context-inner">
+                <div class="stage-context-heading">
+                  <span class="stage-number-pill pill-stage-2">Stage 2 of 7</span>
+                  <div>
+                    <h3 class="stage-title-text">Static Android & 16 KB Binary Analysis</h3>
+                    <p class="stage-subtitle-text">Enforces Target SDK 36 (Android 16), 16 KB ELF memory segment alignment, keystore match, and 64-bit ABIs.</p>
                   </div>
-                  <h3 style="font-size: 20px; margin: 0;">Play Store Static Gates & 16 KB Alignment Checklist</h3>
-                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
-                    Deep multi-layer verification: <strong>16 KB Memory Page Alignment</strong>, <strong>Target SDK 36</strong>, <strong>App Registry Signing Key Matching</strong>, <strong>64-Bit ABIs</strong>, and <strong>Component Security</strong>.
-                  </p>
                 </div>
+                <span class="engine-tag engine-tag-16kb"><i class="fa-solid fa-bolt"></i> 16 KB Native ELF Engine</span>
               </div>
             </div>
 
-            <!-- Status Cards Grid -->
+            <!-- Status Cards Grid (4 Distinct Modules) -->
             <div class="grid-two-col" style="gap: 16px; margin-bottom: 20px;">
-              <div class="cred-card" id="audit-16kb-status-box" style="margin-bottom: 0;"></div>
-              <div class="cred-card" id="audit-signing-status-box" style="margin-bottom: 0;"></div>
+              <div class="audit-card card-theme-16kb" id="audit-16kb-status-box" style="margin-bottom: 0;"></div>
+              <div class="audit-card card-theme-signing" id="audit-signing-status-box" style="margin-bottom: 0;"></div>
             </div>
 
             <div class="grid-two-col" style="gap: 16px; margin-bottom: 20px;">
-              <div class="cred-card" id="audit-64bit-status-box" style="margin-bottom: 0;"></div>
-              <div class="cred-card" id="audit-manifest-status-box" style="margin-bottom: 0;"></div>
+              <div class="audit-card card-theme-abi" id="audit-64bit-status-box" style="margin-bottom: 0;"></div>
+              <div class="audit-card card-theme-manifest" id="audit-manifest-status-box" style="margin-bottom: 0;"></div>
             </div>
 
             <!-- Detailed 16 KB Per-Library Table -->
-            <div class="cred-card" id="audit-16kb-libs-card" style="display: none; margin-bottom: 20px;">
-              <div class="card-header" style="margin-bottom: 12px;">
-                <h3 style="font-size: 15px;"><i class="fa-solid fa-microchip text-emerald"></i> 16 KB Native Shared Libraries (.so) Inspection Breakdown</h3>
+            <div class="audit-card card-theme-16kb" id="audit-16kb-libs-card" style="display: none; margin-bottom: 20px;">
+              <div class="audit-card-header" style="margin-bottom: 12px;">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-16kb">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 2 • ELF PT_LOAD BREAKDOWN</div>
+                    <h4 class="audit-card-title">16 KB Native Shared Libraries (.so) Inspection Breakdown</h4>
+                  </div>
+                </div>
                 <span id="audit-16kb-libs-summary-badge" class="badge-pill badge-emerald">0 Libraries Checked</span>
               </div>
               <div class="table-responsive">
@@ -796,33 +1067,23 @@
                STAGE 3: SOURCE & SBOM DEPENDENCY ANALYSIS
                ========================================== -->
           <div class="pipeline-stage-view" id="stage-view-3">
-            <div class="cred-card glow-mobsf" style="margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <div>
-                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                    <span class="engine-tag engine-tag-mobsf"><i class="fa-solid fa-shield-halved"></i> MobSF Security SAST</span>
-                    <span class="badge-pill badge-neutral">Stage 3: Source & SBOM</span>
+            <!-- Stage 3 Context Banner -->
+            <div class="stage-context-banner stage-banner-3">
+              <div class="stage-context-inner">
+                <div class="stage-context-heading">
+                  <span class="stage-number-pill pill-stage-3">Stage 3 of 7</span>
+                  <div>
+                    <h3 class="stage-title-text">Source & SBOM Dependency Scanner</h3>
+                    <p class="stage-subtitle-text">Inspects third-party SDK dependencies, ProGuard/R8 code shrinking rules, and mapping files.</p>
                   </div>
-                  <h3 style="font-size: 20px; margin: 0;">Dependency Bill of Materials & R8 Verification</h3>
-                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
-                    Attribution of native libraries to third-party SDKs and code shrinking/deobfuscation verification.
-                  </p>
                 </div>
+                <span class="engine-tag engine-tag-mobsf"><i class="fa-solid fa-shield-halved"></i> MobSF Security SAST</span>
               </div>
             </div>
 
             <div class="grid-two-col" style="gap: 16px; margin-bottom: 20px;">
-              <div class="cred-card" id="audit-proguard-status-box" style="margin-bottom: 0;"></div>
-              <div class="cred-card" id="audit-sbom-summary-box" style="margin-bottom: 0;">
-                <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Software Bill of Materials</div>
-                <h4 style="font-size: 16px; margin: 4px 0 8px 0;">Third-Party SDK Inventory</h4>
-                <div style="font-size: 13px; color: var(--text-secondary);" id="sbom-inventory-details">
-                  • Flutter Engine Framework (16 KB Compatible)<br>
-                  • AndroidX Core KTX / Lifecycle<br>
-                  • Google Play Location & Maps Services<br>
-                  • OkHttp 4.x / Retrofit Networking
-                </div>
-              </div>
+              <div class="audit-card card-theme-r8" id="audit-proguard-status-box" style="margin-bottom: 0;"></div>
+              <div class="audit-card card-theme-sbom" id="audit-sbom-summary-box" style="margin-bottom: 0;"></div>
             </div>
 
             <!-- Stage 3 Navigation -->
@@ -840,22 +1101,34 @@
                STAGE 4: POLICY & DISCLOSURE CONSISTENCY
                ========================================== -->
           <div class="pipeline-stage-view" id="stage-view-4">
-            <div class="cred-card glow-greenlight" style="margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
-                <div>
-                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                    <span class="engine-tag engine-tag-greenlight"><i class="fa-solid fa-traffic-light"></i> RevylAI Greenlight Engine</span>
-                    <span class="badge-pill badge-neutral">Stage 4: Disclosure Consistency</span>
+            <!-- Stage 4 Context Banner -->
+            <div class="stage-context-banner stage-banner-4">
+              <div class="stage-context-inner">
+                <div class="stage-context-heading">
+                  <span class="stage-number-pill pill-stage-4">Stage 4 of 7</span>
+                  <div>
+                    <h3 class="stage-title-text">Policy & Data Safety Consistency Engine</h3>
+                    <p class="stage-subtitle-text">Cross-compares declared manifest permissions with published privacy policy disclosures.</p>
                   </div>
-                  <h3 style="font-size: 20px; margin: 0;">Privacy Policy & Data Safety Consistency Engine</h3>
-                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
-                    Heuristic cross-verification of declared binary permissions against published privacy policy disclosures.
-                  </p>
+                </div>
+                <span class="engine-tag engine-tag-greenlight"><i class="fa-solid fa-traffic-light"></i> RevylAI Greenlight</span>
+              </div>
+            </div>
+
+            <!-- Privacy Policy Input Box -->
+            <div class="audit-card card-theme-policy" style="margin-bottom: 20px;">
+              <div class="audit-card-header" style="margin-bottom: 12px;">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-policy">
+                    <i class="fa-solid fa-shield-halved"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 4 • DISCLOSURE RESOLVER</div>
+                    <h4 class="audit-card-title">Privacy Policy Document Source</h4>
+                  </div>
                 </div>
               </div>
-
-              <!-- Privacy Policy Input Box -->
-              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px;">
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
                 <div style="flex: 1; min-width: 320px;">
                   <label class="form-label" for="input-privacy-policy-source">Privacy Policy URL or Document Path</label>
                   <input type="text" class="form-control" id="input-privacy-policy-source" value="/privacy-policy.html" placeholder="https://ops.bhspl.in/privacy-policy or /privacy-policy.html">
@@ -867,10 +1140,16 @@
                   <i class="fa-solid fa-bookmark"></i> Master Preset
                 </button>
               </div>
+              <!-- Real-time URL Accessibility Status Badge -->
+              <div id="policy-accessibility-badge-container" style="margin-top: 14px; display: none;"></div>
             </div>
 
             <!-- Side-by-Side Comparison Table -->
-            <div class="matrix-card" style="margin-bottom: 20px;">
+            <div class="audit-card card-theme-policy" style="margin-bottom: 20px; padding: 0; overflow: hidden;">
+              <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-card);">
+                <div class="audit-card-stage-tag">STAGE 4 • DATA SAFETY CROSS-COMPARISON MATRIX</div>
+                <h4 class="audit-card-title">Manifest Permissions vs Privacy Policy Disclosures</h4>
+              </div>
               <div class="table-responsive">
                 <table class="comparison-table" id="table-comparison-matrix">
                   <thead>
@@ -888,7 +1167,7 @@
             </div>
 
             <!-- REQUEST_INSTALL_PACKAGES Human Justification Card -->
-            <div class="cred-card" id="card-install-packages-review" style="display: none; margin-bottom: 20px; border-left: 4px solid #ff8a00;">
+            <div class="audit-card card-theme-manifest" id="card-install-packages-review" style="display: none; margin-bottom: 20px; border-left: 4px solid #ff8a00;">
               <div style="font-weight: 700; color: #ff8a00; margin-bottom: 8px;">
                 <i class="fa-solid fa-triangle-exclamation"></i> REQUEST_INSTALL_PACKAGES Policy Justification Form
               </div>
@@ -916,50 +1195,75 @@
                STAGE 5: RUNTIME SMOKE TESTING
                ========================================== -->
           <div class="pipeline-stage-view" id="stage-view-5">
-            <div class="cred-card glow-16kb" style="margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <div>
-                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                    <span class="engine-tag engine-tag-16kb"><i class="fa-solid fa-bolt"></i> 16 KB Runtime Simulation Engine</span>
-                    <span class="badge-pill badge-neutral">Stage 5: Runtime Testing</span>
+            <!-- Stage 5 Context Banner -->
+            <div class="stage-context-banner stage-banner-5">
+              <div class="stage-context-inner">
+                <div class="stage-context-heading">
+                  <span class="stage-number-pill pill-stage-5">Stage 5 of 7</span>
+                  <div>
+                    <h3 class="stage-title-text">Runtime Smoke Testing & Crash Verification</h3>
+                    <p class="stage-subtitle-text">Simulates package installation, cold launch, critical user flows, and 16 KB memory stability.</p>
                   </div>
-                  <h3 style="font-size: 20px; margin: 0;">Application-Specific Runtime Smoke Test Profiles</h3>
-                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
-                    Simulates installation, cold launch, critical path navigation, and 16 KB memory crash/ANR detection.
-                  </p>
                 </div>
+                <span class="engine-tag engine-tag-16kb"><i class="fa-solid fa-bolt"></i> 16 KB Runtime Simulation</span>
               </div>
             </div>
 
             <!-- 2-Column Runtime Layout: Tests & Logs Left, Device Mockup Right -->
             <div class="grid-stage5-runtime">
               <div>
-                <div class="cred-card" style="margin-bottom: 16px;">
-                  <div class="card-header" style="margin-bottom: 16px;">
-                    <h3 style="font-size: 16px;" id="runtime-profile-title">Active Profile: btgs-smoke-v1</h3>
-                    <span class="badge-pill badge-emerald" id="runtime-status-badge"><i class="fa-solid fa-circle-check"></i> 7/7 Smoke Tests Passed</span>
+                <div class="audit-card card-theme-runtime" style="margin-bottom: 16px;">
+                  <div class="audit-card-header" style="margin-bottom: 14px;">
+                    <div class="audit-card-title-group" style="align-items: center;">
+                      <button type="button" class="btn-play-run" id="btn-run-smoke-icon" onclick="PlayStoreAuditor.runManualSmokeTest()" title="Execute Manual Smoke Test Suite on 16 KB Kernel">
+                        <i class="fa-solid fa-play"></i> Run Tests
+                      </button>
+                      <div>
+                        <div class="audit-card-stage-tag">STAGE 5 • AUTOMATED SMOKE SUITE</div>
+                        <h4 class="audit-card-title" id="runtime-profile-title">Active Profile: btgs-smoke-v1</h4>
+                      </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                      <button type="button" class="btn-cred btn-cred-primary btn-cred-sm" id="btn-trigger-smoke" onclick="PlayStoreAuditor.runManualSmokeTest()">
+                        <i class="fa-solid fa-bolt"></i> Run Smoke Tests
+                      </button>
+                      <span class="badge-pill badge-emerald" id="runtime-status-badge"><i class="fa-solid fa-circle-check"></i> 7/7 Smoke Tests Passed</span>
+                    </div>
                   </div>
+
+                  <!-- Reviewer Credential Binding Status Banner -->
+                  <div id="runtime-auth-cred-banner" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 12.5px;">
+                    <div id="runtime-auth-cred-text" style="color: #334155; display: flex; align-items: center; gap: 8px;">
+                      <i class="fa-solid fa-key text-cyan"></i>
+                      <span><strong>Reviewer Sign-In:</strong> Staff account (staff_pilot_99) • Credentials bound from Store Questionnaire</span>
+                    </div>
+                    <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.openQuestionnaireModal()" style="font-size: 11px; padding: 3px 8px;">
+                      <i class="fa-solid fa-pen"></i> Edit Test Accounts
+                    </button>
+                  </div>
+
                   <div id="runtime-tests-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;"></div>
                 </div>
 
                 <!-- Live Test Telemetry Terminal -->
-                <div class="cred-card">
+                <div class="audit-card card-theme-runtime">
                   <div class="card-header" style="margin-bottom: 10px;">
                     <div style="font-size: 12px; font-weight: 700; color: var(--rc-text-muted); text-transform: uppercase;">
                       <i class="fa-solid fa-terminal text-cyan"></i> Runtime Execution Stream (Level A + Level B)
                     </div>
                     <span class="badge-pill" style="font-size: 10px;">Android 16 Emulator (16KB Kernel)</span>
                   </div>
-                  <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 12px 14px; font-family: var(--rc-font-mono); font-size: 11.5px; color: #475569; max-height: 180px; overflow-y: auto; line-height: 1.6;">
+                  <div id="runtime-terminal-logs" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 12px 14px; font-family: var(--rc-font-mono); font-size: 11.5px; color: #475569; max-height: 180px; overflow-y: auto; line-height: 1.6;">
                     <div><span style="color: #0D9488; font-weight: 600;">[00:00.12]</span> INIT: Booting Pixel 9 Emulator (API 36, arm64-v8a, 16KB page kernel)...</div>
                     <div><span style="color: #0D9488; font-weight: 600;">[00:00.45]</span> ADB: Installing base-master.apk + split_config.arm64_v8a.apk...</div>
                     <div><span style="color: #0D9488; font-weight: 600;">[00:00.89]</span> TEST: cold_launch package=com.bavya.btgs (Launch time: 650ms, 0 frames dropped)</div>
-                    <div><span style="color: #0D9488; font-weight: 600;">[00:01.32]</span> TEST: auth_flow - Verified token storage & biometrics hook</div>
+                    <div><span style="color: #0D9488; font-weight: 600;">[00:01.32]</span> TEST: auth_flow - Logged in with Reviewer Account: staff_pilot_99</div>
                     <div><span style="color: #0D9488; font-weight: 600;">[00:01.85]</span> TEST: gps_flow - Granted ACCESS_FINE_LOCATION & ACCESS_BACKGROUND_LOCATION</div>
                     <div><span style="color: #0D9488; font-weight: 600;">[00:02.10]</span> MEMCHECK: 0 native page alignment segfaults, 0 SIGSEGV, 0 SIGBUS</div>
-                    <div><span style="color: #3B8FF3; font-weight: 600;">[00:02.40]</span> SUCCESS: All 7 runtime smoke validations exited with code 0</div>
+                    <div><span style="color: #3B8FF3; font-weight: 600;">[00:02.40]</span> SUCCESS: All runtime smoke validations exited with code 0</div>
                   </div>
                 </div>
+
               </div>
 
               <!-- Right: Interactive Device Frame Mockup -->
@@ -967,7 +1271,7 @@
                 <div class="rc-device-mockup">
                   <div class="rc-device-notch"></div>
                   <div class="rc-device-screen">
-                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: #64748B; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: #64748B; margin-bottom: 12px;">
                       <span>09:41</span>
                       <div style="display: flex; gap: 4px;">
                         <i class="fa-solid fa-signal"></i>
@@ -976,26 +1280,30 @@
                       </div>
                     </div>
 
-                    <div style="text-align: center; margin-top: 40px; margin-bottom: 24px;">
-                      <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, var(--rh-brand-primary, #F29F67), var(--rh-teal, #0D9488)); margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FFFFFF; box-shadow: 0 2px 10px var(--rh-brand-primary-glow, rgba(242,159,103,0.3));">
-                        ◈
+                    <!-- Dynamic Phone Screen Simulation Body -->
+                    <div id="phone-screen-body" style="display: flex; flex-direction: column; flex: 1; height: calc(100% - 24px); justify-content: space-between;">
+                      <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, var(--rh-brand-primary, #F29F67), var(--rh-teal, #0D9488)); margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FFFFFF; box-shadow: 0 2px 10px var(--rh-brand-primary-glow, rgba(242,159,103,0.3));">
+                          ◈
+                        </div>
+                        <div style="font-weight: 700; font-size: 15px; color: #1E1E2C;" id="phone-app-title">Travelite Ground Staff</div>
+                        <div style="font-size: 11px; color: #64748B; font-family: var(--rc-font-mono);" id="phone-app-pkg">com.bavya.btgs • v41</div>
                       </div>
-                      <div style="font-weight: 700; font-size: 15px; color: #1E1E2C;">Travelite Ground Staff</div>
-                      <div style="font-size: 11px; color: #64748B; font-family: var(--rc-font-mono);">com.bavya.btgs • v41</div>
-                    </div>
 
-                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
-                      <div style="font-size: 10px; color: #0D9488; font-weight: 700; text-transform: uppercase;">Runtime Gating Status</div>
-                      <div style="font-size: 12px; font-weight: 600; color: #1E1E2C; margin-top: 2px;">0 ANRs • 0 Crashes</div>
-                      <div style="font-size: 10px; color: #64748B; margin-top: 2px;">16 KB Kernel Compatibility Verified</div>
-                    </div>
+                      <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-bottom: 12px;" id="phone-status-card">
+                        <div style="font-size: 10px; color: #0D9488; font-weight: 700; text-transform: uppercase;" id="phone-status-title">Runtime Gating Status</div>
+                        <div style="font-size: 12px; font-weight: 600; color: #1E1E2C; margin-top: 2px;" id="phone-status-metric">0 ANRs • 0 Crashes</div>
+                        <div style="font-size: 10px; color: #64748B; margin-top: 2px;" id="phone-status-sub">16 KB Kernel Compatibility Verified</div>
+                      </div>
 
-                    <div style="margin-top: auto; padding: 8px; background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.25); border-radius: 6px; text-align: center;">
-                      <span style="color: #0D9488; font-size: 11px; font-weight: 600;"><i class="fa-solid fa-circle-check"></i> Smoke Test Passed</span>
+                      <div id="phone-action-footer" style="margin-top: auto; padding: 8px; background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.25); border-radius: 6px; text-align: center;">
+                        <span style="color: #0D9488; font-size: 11px; font-weight: 600;" id="phone-footer-text"><i class="fa-solid fa-circle-check"></i> Smoke Test Ready</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
 
             <!-- Stage 5 Navigation -->
@@ -1013,8 +1321,22 @@
                STAGE 6: RELEASE GATE DECISION & DELTA MATRIX
                ========================================== -->
           <div class="pipeline-stage-view" id="stage-view-6">
+            <!-- Stage 6 Context Banner -->
+            <div class="stage-context-banner stage-banner-6">
+              <div class="stage-context-inner">
+                <div class="stage-context-heading">
+                  <span class="stage-number-pill pill-stage-6">Stage 6 of 7</span>
+                  <div>
+                    <h3 class="stage-title-text">Authoritative Release Gate Decision & Delta Matrix</h3>
+                    <p class="stage-subtitle-text">Computes release scorecard, release-to-release delta matrix, and actionable remediation checklist.</p>
+                  </div>
+                </div>
+                <span class="engine-tag engine-tag-greenlight"><i class="fa-solid fa-traffic-light"></i> RevylAI Greenlight Arbiter</span>
+              </div>
+            </div>
+
             <!-- Scorecard Hero Banner -->
-            <div class="cred-card glow-greenlight" style="margin-bottom: 20px;">
+            <div class="audit-card card-theme-decision glow-greenlight" style="margin-bottom: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
                 <div style="display: flex; gap: 20px; align-items: center;">
                   <div style="width: 85px; height: 85px; border-radius: var(--radius-md); background: var(--bg-black); border: 2px solid var(--border-card); display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -1065,18 +1387,34 @@
             </div>
 
             <!-- Release-to-Release Delta Comparison -->
-            <div class="cred-card" style="margin-bottom: 20px;">
-              <div class="card-header" style="margin-bottom: 12px;">
-                <h3 style="font-size: 16px;"><i class="fa-solid fa-code-compare text-violet"></i> Release-to-Release Delta Matrix (v40 ➔ v41)</h3>
+            <div class="audit-card card-theme-decision" style="margin-bottom: 20px;">
+              <div class="audit-card-header" style="margin-bottom: 12px;">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-decision">
+                    <i class="fa-solid fa-code-compare"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 6 • BASELINE COMPARISON</div>
+                    <h3 class="audit-card-title">Release-to-Release Delta Matrix (v40 ➔ v41)</h3>
+                  </div>
+                </div>
                 <span class="badge-pill badge-emerald" id="delta-summary-badge">No Critical Regressions</span>
               </div>
               <div id="delta-items-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
             </div>
 
             <!-- Actionable Developer Checklist -->
-            <div class="cred-card" style="margin-bottom: 20px;">
-              <div class="card-header" style="margin-bottom: 16px;">
-                <h3 style="font-size: 16px;">Actionable Release Gate Remediation</h3>
+            <div class="audit-card card-theme-decision" style="margin-bottom: 20px;">
+              <div class="audit-card-header" style="margin-bottom: 16px;">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-decision">
+                    <i class="fa-solid fa-list-check"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 6 • ACTION PLAN</div>
+                    <h3 class="audit-card-title">Actionable Release Gate Remediation</h3>
+                  </div>
+                </div>
               </div>
               <div id="audit-final-remediation-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
             </div>
@@ -1096,17 +1434,15 @@
                STAGE 7: CANONICAL AUDIT & EVIDENCE PACKAGE
                ========================================== -->
           <div class="pipeline-stage-view" id="stage-view-7">
-            <div class="cred-card glow-bundletool" style="margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <div>
-                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                    <span class="engine-tag engine-tag-bundletool"><i class="fa-brands fa-google"></i> Google bundletool & Release Sign-Off</span>
-                    <span class="badge-pill badge-neutral">Stage 7: Canonical Audit</span>
+            <!-- Stage 7 Context Banner -->
+            <div class="stage-context-banner stage-banner-7">
+              <div class="stage-context-inner">
+                <div class="stage-context-heading">
+                  <span class="stage-number-pill pill-stage-7">Stage 7 of 7</span>
+                  <div>
+                    <h3 class="stage-title-text">Canonical Audit & Evidence Package</h3>
+                    <p class="stage-subtitle-text">Immutable release audit package, full verified evidence drawer, and Google Play requirement horizon.</p>
                   </div>
-                  <h3 style="font-size: 20px; margin: 0;">Release Gate Evidence Package & Sign-Off</h3>
-                  <p class="text-secondary" style="font-size: 13px; margin: 4px 0 0 0;">
-                    Immutable canonical report artifact with full evidence logs, reasonings, and sign-offs.
-                  </p>
                 </div>
                 <div style="display: flex; gap: 10px;">
                   <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.exportReport()">
@@ -1119,18 +1455,140 @@
               </div>
             </div>
 
+            <!-- Stage 7: Release Readiness & Compliance Pie Chart Overview -->
+            <div class="audit-card card-theme-evidence" style="margin-bottom: 20px; padding: 22px 24px;">
+              <div class="audit-card-header" style="margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-evidence" style="background: rgba(16, 185, 129, 0.12); color: #10B981;">
+                    <i class="fa-solid fa-chart-pie"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 7 • RELEASE READINESS ANALYTICS</div>
+                    <h3 class="audit-card-title">Release Readiness &amp; Compliance Distribution</h3>
+                  </div>
+                </div>
+                <div id="stage7-release-status-badge">
+                  <span class="badge-pill badge-emerald" style="padding: 6px 14px; font-size: 12px; font-weight: 700;">
+                    <i class="fa-solid fa-circle-check"></i> READY FOR RELEASE
+                  </span>
+                </div>
+              </div>
+
+              <!-- Grid with Pie Chart and Breakdown KPIs -->
+              <div style="display: grid; grid-template-columns: minmax(280px, 320px) 1fr; gap: 24px; align-items: center;">
+                <!-- Left: Pie / Doughnut Chart Container -->
+                <div style="background: #ffffff; border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                  <div style="position: relative; width: 200px; height: 200px;">
+                    <canvas id="chart-evidence-readiness"></canvas>
+                    <!-- Center overlay text inside doughnut -->
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                      <div id="pie-readiness-percent" style="font-size: 32px; font-weight: 800; line-height: 1; color: #10B981; font-family: 'Inter', sans-serif;">100%</div>
+                      <div style="font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #64748B; margin-top: 4px;">Ready</div>
+                    </div>
+                  </div>
+                  <div style="margin-top: 10px; font-size: 11.5px; color: #64748B; font-weight: 500; text-align: center;">
+                    Google Play Release Readiness
+                  </div>
+                </div>
+
+                <!-- Right: High-Impact Breakdown Statistics -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                    <!-- Passed Metric -->
+                    <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s ease;" onclick="PlayStoreAuditor.filterEvidence('PASS')">
+                      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">Compliant &amp; Passed</span>
+                        <i class="fa-solid fa-circle-check" style="color: #16A34A; font-size: 13px;"></i>
+                      </div>
+                      <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span id="stat-evidence-passed" style="font-size: 22px; font-weight: 800; color: #15803D;">0</span>
+                        <span id="stat-evidence-passed-pct" style="font-size: 12.5px; font-weight: 600; color: #16A34A;">(0%)</span>
+                      </div>
+                      <div style="font-size: 11px; color: #166534; margin-top: 2px;">Satisfies Google Play policy baseline</div>
+                    </div>
+
+                    <!-- Blockers Metric -->
+                    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s ease;" onclick="PlayStoreAuditor.filterEvidence('FAIL')">
+                      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #991B1B; text-transform: uppercase; letter-spacing: 0.5px;">Technical Blockers</span>
+                        <i class="fa-solid fa-circle-xmark" style="color: #DC2626; font-size: 13px;"></i>
+                      </div>
+                      <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span id="stat-evidence-blockers" style="font-size: 22px; font-weight: 800; color: #B91C1C;">0</span>
+                        <span id="stat-evidence-blockers-pct" style="font-size: 12.5px; font-weight: 600; color: #DC2626;">(0%)</span>
+                      </div>
+                      <div style="font-size: 11px; color: #991B1B; margin-top: 2px;">Immediate rejection risk if submitted</div>
+                    </div>
+
+                    <!-- Review Required / Warnings Metric -->
+                    <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s ease;" onclick="PlayStoreAuditor.filterEvidence('REVIEW')">
+                      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #92400E; text-transform: uppercase; letter-spacing: 0.5px;">Review / Warnings</span>
+                        <i class="fa-solid fa-triangle-exclamation" style="color: #D97706; font-size: 13px;"></i>
+                      </div>
+                      <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span id="stat-evidence-review" style="font-size: 22px; font-weight: 800; color: #B45309;">0</span>
+                        <span id="stat-evidence-review-pct" style="font-size: 12.5px; font-weight: 600; color: #D97706;">(0%)</span>
+                      </div>
+                      <div style="font-size: 11px; color: #92400E; margin-top: 2px;">Requires declaration or review</div>
+                    </div>
+
+                    <!-- Total Rules Metric -->
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s ease;" onclick="PlayStoreAuditor.filterEvidence('ALL')">
+                      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px;">Total Rules Scanned</span>
+                        <i class="fa-solid fa-shield-halved" style="color: #64748B; font-size: 13px;"></i>
+                      </div>
+                      <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span id="stat-evidence-total" style="font-size: 22px; font-weight: 800; color: #1E293B;">0</span>
+                        <span style="font-size: 11.5px; font-weight: 500; color: #64748B;">Rules Verified</span>
+                      </div>
+                      <div style="font-size: 11px; color: #64748B; margin-top: 2px;">Target SDK 36, 16KB ELF &amp; Policies</div>
+                    </div>
+                  </div>
+
+                  <!-- Quick Filter Row -->
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border-subtle, #E2E8F0); flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 12px; font-weight: 600; color: #475569;">Filter Evidence By Result:</span>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="evidence-filter-buttons">
+                      <button type="button" class="btn-cred btn-cred-sm btn-cred-primary" onclick="PlayStoreAuditor.filterEvidence('ALL')" id="btn-filter-evidence-ALL">All (<span id="btn-count-all">0</span>)</button>
+                      <button type="button" class="btn-cred btn-cred-sm btn-cred-outline" onclick="PlayStoreAuditor.filterEvidence('FAIL')" id="btn-filter-evidence-FAIL" style="color: #DC2626; border-color: #FECACA;">Blockers (<span id="btn-count-fail">0</span>)</button>
+                      <button type="button" class="btn-cred btn-cred-sm btn-cred-outline" onclick="PlayStoreAuditor.filterEvidence('REVIEW')" id="btn-filter-evidence-REVIEW" style="color: #D97706; border-color: #FDE68A;">Review Required (<span id="btn-count-review">0</span>)</button>
+                      <button type="button" class="btn-cred btn-cred-sm btn-cred-outline" onclick="PlayStoreAuditor.filterEvidence('PASS')" id="btn-filter-evidence-PASS" style="color: #16A34A; border-color: #BBF7D0;">Passed (<span id="btn-count-pass">0</span>)</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Evidence Inspector Drawer -->
-            <div class="cred-card" style="margin-bottom: 20px;">
-              <div class="card-header" style="margin-bottom: 16px;">
-                <h3 style="font-size: 16px;">Full Evidence Drawer (<span id="evidence-count">0</span> Verified Rules)</h3>
+            <div class="audit-card card-theme-evidence" style="margin-bottom: 20px;">
+              <div class="audit-card-header" style="margin-bottom: 16px;">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-evidence">
+                    <i class="fa-solid fa-box-archive"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 7 • AUDIT EVIDENCE DRAWER</div>
+                    <h3 class="audit-card-title">Full Evidence Drawer (<span id="evidence-count">0</span> Verified Rules)</h3>
+                  </div>
+                </div>
               </div>
               <div id="evidence-drawer-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
             </div>
 
             <!-- Upcoming Google Play Requirements Horizon -->
-            <div class="cred-card" style="margin-bottom: 20px; background: rgba(162, 89, 255, 0.05); border: 1px solid rgba(162, 89, 255, 0.2);">
-              <div class="card-header" style="margin-bottom: 12px;">
-                <h3 style="font-size: 15px; color: var(--cred-violet);"><i class="fa-solid fa-calendar-check"></i> Upcoming Google Play Requirement Horizon</h3>
+            <div class="audit-card card-theme-signing" style="margin-bottom: 20px; background: rgba(162, 89, 255, 0.03); border: 1px solid rgba(162, 89, 255, 0.2);">
+              <div class="audit-card-header" style="margin-bottom: 12px;">
+                <div class="audit-card-title-group">
+                  <div class="audit-card-icon-badge icon-badge-signing">
+                    <i class="fa-solid fa-calendar-check"></i>
+                  </div>
+                  <div>
+                    <div class="audit-card-stage-tag">STAGE 7 • COMPLIANCE ROADMAP</div>
+                    <h3 class="audit-card-title" style="color: var(--cred-violet);">Upcoming Google Play Requirement Horizon</h3>
+                  </div>
+                </div>
               </div>
               <div id="upcoming-requirements-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
             </div>
@@ -1563,34 +2021,8 @@
              TAB: POLICIES GOVERNANCE
              ========================================================= -->
         <section id="tab-policies" class="tab-content">
-          <div class="cred-card" style="margin-bottom: 24px;">
-            <span class="badge-pill badge-emerald" style="margin-bottom: 6px;"><i class="fa-solid fa-shield-halved"></i> Policy Registry 2026.09</span>
-            <h2 style="font-size: 24px; margin-bottom: 6px;">Google Play Compliance Policy Catalog</h2>
-            <p class="text-secondary" style="font-size: 13.5px; margin: 0;">
-              Active enforcement rules and upcoming horizon deadlines versioned for the organization.
-            </p>
-          </div>
-
-          <div class="cred-card" style="margin-bottom: 20px;">
-            <div class="card-header" style="margin-bottom: 16px;">
-              <h3 style="font-size: 16px;">Active Enforced Policies (Version 2026.09)</h3>
-              <span class="badge-pill badge-emerald">Enforced</span>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
-                <strong>Target SDK 36 (Android 16):</strong> Releases targeting production must target API level &gt;= 36.
-              </div>
-              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
-                <strong>16 KB Page Size Alignment:</strong> All 64-bit ELF LOAD segments must have <code>p_align &gt;= 0x4000</code>.
-              </div>
-              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
-                <strong>Production Signing Certificate:</strong> Must match registered keystore SHA-256 fingerprint; debug keys strictly blocked.
-              </div>
-              <div style="background: var(--rc-bg-subtle); padding: 12px 16px; border-radius: 6px; border-left: 3px solid var(--rc-pass); font-size: 13px;">
-                <strong>Privacy Policy Disclosures:</strong> Explicit clauses required for GPS location, camera, microphone, and account deletion.
-              </div>
-            </div>
-          </div>
+          <!-- V5: dynamic Google Play policy pre-audit (rendered by js/v5-policy.js) -->
+          <div id="policy-status-root"></div>
         </section>
 
         <!-- =========================================================
@@ -1729,6 +2161,10 @@
                 <option value="Cross-Platform">Cross-Platform (Flutter)</option>
               </select>
             </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">App Logo / Icon Image URL (Optional)</label>
+            <input type="text" id="proj-icon-url" class="form-control" placeholder="e.g. https://domain.com/logo.png or leave empty for auto-generated brand logo">
           </div>
           <div class="form-group">
             <label class="form-label">Description</label>
@@ -2040,6 +2476,636 @@
     </div>
   </div>
 
+  <!-- =========================================================
+       MODAL: GOOGLE PLAY STORE PRE-DEPLOYMENT QUESTIONNAIRE & STORE SETUP
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-playstore-questionnaire" style="display: none;">
+    <div class="modal-questionnaire-dialog">
+      <!-- Modal Header -->
+      <div class="modal-header" style="padding: 16px 24px; border-bottom: 1px solid #E2E8F0; background: #FFFFFF; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: #E0F2FE; color: #0284C7; display: flex; align-items: center; justify-content: center; font-size: 17px;">
+            <i class="fa-brands fa-google-play"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 17px; font-weight: 800; margin: 0; color: #1E293B;">Google Play Deployment Questionnaire &amp; Store Listing Setup</h3>
+            <p style="font-size: 12px; color: #64748B; margin: 2px 0 0 0;">Pre-submission configuration verified against binary artifact and store policies</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <select id="q-select-app" class="form-control" style="font-size: 12.5px; padding: 6px 10px; width: auto;" onchange="PlayStoreAuditor.handleQuestionnaireAppChange(event)">
+            <option value="btgs">Travelite Ground Staff (BTGS)</option>
+            <option value="bh1962">BIHAR 1962 Ops</option>
+            <option value="ops108">108 Emergency Ops</option>
+            <option value="citizen104">104 Health Grievance</option>
+          </select>
+          <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.closeQuestionnaireModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs (5 Play Store Screens) -->
+      <div class="questionnaire-nav-tabs">
+        <button class="q-tab-btn active" id="btn-qtab-1" onclick="PlayStoreAuditor.switchQuestionnaireTab(1)">
+          <i class="fa-solid fa-mobile-screen"></i> 1. App Details &amp; Declarations
+        </button>
+        <button class="q-tab-btn" id="btn-qtab-2" onclick="PlayStoreAuditor.switchQuestionnaireTab(2)">
+          <i class="fa-solid fa-key"></i> 2. App Access &amp; Sign-In
+        </button>
+        <button class="q-tab-btn" id="btn-qtab-3" onclick="PlayStoreAuditor.switchQuestionnaireTab(3)">
+          <i class="fa-solid fa-rectangle-ad"></i> 3. Ads Declaration
+        </button>
+        <button class="q-tab-btn" id="btn-qtab-4" onclick="PlayStoreAuditor.switchQuestionnaireTab(4)">
+          <i class="fa-solid fa-shield-halved"></i> 4. Content Ratings (IARC)
+        </button>
+        <button class="q-tab-btn" id="btn-qtab-5" onclick="PlayStoreAuditor.switchQuestionnaireTab(5)">
+          <i class="fa-solid fa-file-contract"></i> 5. Privacy Policy URL
+        </button>
+      </div>
+
+      <!-- Tab Content Panes -->
+      <div style="flex: 1; overflow-y: auto;">
+        
+        <!-- ==========================================
+             TAB 1: APP DETAILS & DECLARATIONS (Screen 1)
+             ========================================== -->
+        <div class="q-tab-pane active" id="pane-qtab-1">
+          <div style="margin-bottom: 16px;">
+            <h4 style="font-size: 16px; font-weight: 700; margin: 0 0 4px 0; color: #1E293B;">Create App &amp; Core Declarations</h4>
+            <p style="font-size: 12.5px; color: #64748B; margin: 0;">Configure how your application appears on Google Play and confirm mandatory export and policy declarations.</p>
+          </div>
+
+          <!-- App Name -->
+          <div class="play-field-container">
+            <div class="play-field-header">
+              <label class="play-field-label" for="q-app-name">App name</label>
+              <span class="play-field-counter" id="q-app-name-count">14 / 30</span>
+            </div>
+            <input type="text" class="form-control" id="q-app-name" maxlength="30" value="BIHAR 1962 Ops" oninput="PlayStoreAuditor.handleAppNameInput(event)">
+            <div class="play-field-helper">This is how your app will appear on Google Play (Maximum 30 characters enforced).</div>
+          </div>
+
+          <!-- Package Name -->
+          <div class="play-field-container">
+            <div class="play-field-header">
+              <label class="play-field-label" for="q-package-name">Package name</label>
+              <span class="play-field-counter" id="q-package-name-count">20 / 150</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" class="form-control" id="q-package-name" maxlength="150" value="in.gov.bihar.vas1962" oninput="PlayStoreAuditor.handlePkgNameInput(event)">
+              <button class="btn-cred btn-cred-outline btn-cred-sm" type="button" onclick="PlayStoreAuditor.checkPackageAvailability()">Check availability</button>
+            </div>
+            <div class="play-field-helper" id="q-pkg-helper">Must match <code>AndroidManifest.xml</code> package identifier and follow standard Java package naming.</div>
+          </div>
+
+          <!-- Default Language -->
+          <div class="play-field-container">
+            <label class="play-field-label" for="q-default-language">Default language</label>
+            <select class="form-control" id="q-default-language">
+              <option value="en-US" selected>English (United States) – en-US</option>
+              <option value="en-IN">English (India) – en-IN</option>
+              <option value="hi-IN">Hindi (India) – hi-IN</option>
+              <option value="te-IN">Telugu (India) – te-IN</option>
+            </select>
+          </div>
+
+          <!-- App or Game -->
+          <div class="play-field-container">
+            <label class="play-field-label">App or game</label>
+            <div style="font-size: 12px; color: #64748B; margin-bottom: 8px;">You can change this later in Store settings</div>
+            <div style="display: flex; gap: 24px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px;">
+                <input type="radio" name="q-app-type" value="App" id="q-app-type-app" checked> App
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px;">
+                <input type="radio" name="q-app-type" value="Game" id="q-app-type-game"> Game
+              </label>
+            </div>
+          </div>
+
+          <!-- Free or Paid -->
+          <div class="play-field-container">
+            <label class="play-field-label">Free or paid</label>
+            <div style="font-size: 12px; color: #64748B; margin-bottom: 8px;">You can edit this on the App pricing page up until you publish your app. Once you've published, you can't change a free app to paid.</div>
+            <div style="display: flex; gap: 24px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px;">
+                <input type="radio" name="q-pricing-type" value="Free" id="q-pricing-free" checked> Free
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px;">
+                <input type="radio" name="q-pricing-type" value="Paid" id="q-pricing-paid"> Paid
+              </label>
+            </div>
+          </div>
+
+          <!-- Declarations Box -->
+          <div class="play-declaration-box">
+            <h5 style="font-size: 13px; font-weight: 800; text-transform: uppercase; color: #64748B; margin: 0 0 12px 0;">Mandatory Declarations</h5>
+            
+            <label class="play-checkbox-label">
+              <input type="checkbox" id="q-policy-confirmed" checked>
+              <div>
+                <strong>Confirm app meets the Developer Program Policies</strong>
+                <p style="font-size: 11.5px; color: #64748B; margin: 2px 0 0 0;">The application meets Google Play Developer Program Policies to avoid common reasons for app suspension.</p>
+              </div>
+            </label>
+
+            <label class="play-checkbox-label">
+              <input type="checkbox" id="q-export-accepted" checked>
+              <div>
+                <strong>Accept US export laws</strong>
+                <p style="font-size: 11.5px; color: #64748B; margin: 2px 0 0 0;">I acknowledge that my software application may be subject to United States export laws regardless of my location or nationality.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB 2: APP ACCESS & SIGN-IN DETAILS (Screen 3)
+             ========================================== -->
+        <div class="q-tab-pane" id="pane-qtab-2">
+          <div style="margin-bottom: 16px;">
+            <h4 style="font-size: 16px; font-weight: 700; margin: 0 0 4px 0; color: #1E293B;">App Access &amp; Reviewer Credentials</h4>
+            <p style="font-size: 12.5px; color: #64748B; margin: 0;">To review your app, Google Play reviewers must be able to access all parts of it using sign-in details. If reviewers cannot gain full access, the app will be rejected in review.</p>
+          </div>
+
+          <div class="play-field-container">
+            <label class="play-field-label" style="font-size: 14px; margin-bottom: 10px; display: block;">Is any part of your app restricted?</label>
+            
+            <label class="play-radio-card" id="card-restricted-yes" onclick="PlayStoreAuditor.setAppRestricted(true)">
+              <input type="radio" name="q-restricted-radio" id="q-restricted-yes" value="yes" checked>
+              <div>
+                <div class="play-radio-card-title">Yes, some or all parts of my app are restricted</div>
+                <div class="play-radio-card-desc">
+                  If your app includes any of the following: account sign in details (username/password, Google Sign-in, SSO), memberships, referral codes, one-time PINs / 2-step verification, biometric authentication.
+                </div>
+              </div>
+            </label>
+
+            <label class="play-radio-card" id="card-restricted-no" onclick="PlayStoreAuditor.setAppRestricted(false)">
+              <input type="radio" name="q-restricted-radio" id="q-restricted-no" value="no">
+              <div>
+                <div class="play-radio-card-title">No, all functionality is available without special access</div>
+                <div class="play-radio-card-desc">Users can freely access every feature and screen without logging in or providing test credentials.</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Sign-In Details List Table -->
+          <div id="q-signin-details-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 8px;">
+              <h5 style="font-size: 14px; font-weight: 700; margin: 0; color: #1E293B;">Sign in details (<span id="q-signin-count">3</span>)</h5>
+              <button type="button" class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.openAddSignInModal()">
+                <i class="fa-solid fa-plus"></i> Add details
+              </button>
+            </div>
+
+            <div class="sign-in-table-wrapper">
+              <table class="sign-in-table" id="table-q-signin-details">
+                <thead>
+                  <tr>
+                    <th style="width: 30%;">Name</th>
+                    <th style="width: 55%;">Sign in details</th>
+                    <th style="width: 15%; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-q-signin-details"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB 3: ADS DECLARATION (Screen 4)
+             ========================================== -->
+        <div class="q-tab-pane" id="pane-qtab-3">
+          <div style="margin-bottom: 16px;">
+            <h4 style="font-size: 16px; font-weight: 700; margin: 0 0 4px 0; color: #1E293B;">Ads Policy Declaration</h4>
+            <p style="font-size: 12.5px; color: #64748B; margin: 0;">Let us know whether your app contains ads. This includes ads delivered by third party ad networks. Make sure this information is accurate and kept up to date.</p>
+          </div>
+
+          <div class="play-field-container">
+            <label class="play-field-label" style="font-size: 14px; margin-bottom: 10px; display: block;">Does your app contain ads?</label>
+
+            <label class="play-radio-card" id="card-ads-no" onclick="PlayStoreAuditor.setContainsAds(false)">
+              <input type="radio" name="q-ads-radio" id="q-ads-no" value="no" checked>
+              <div>
+                <div class="play-radio-card-title">No, my app does not contain ads</div>
+                <div class="play-radio-card-desc">My app does not contain third-party banner, interstitial, rewarded, or native advertising SDKs.</div>
+              </div>
+            </label>
+
+            <label class="play-radio-card" id="card-ads-yes" onclick="PlayStoreAuditor.setContainsAds(true)">
+              <input type="radio" name="q-ads-radio" id="q-ads-yes" value="yes">
+              <div>
+                <div class="play-radio-card-title">Yes, my app contains ads</div>
+                <div class="play-radio-card-desc">The 'Contains ads' label will be shown next to your app on Google Play.</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Automated Binary Cross-Verification Status -->
+          <div id="q-ads-scanner-box" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px 18px; margin-top: 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 6px;">
+              <i class="fa-solid fa-microchip text-emerald"></i> Automated Binary Scanner Cross-Check:
+            </div>
+            <div id="q-ads-scanner-feedback" style="font-size: 13px; color: #059669;">
+              <i class="fa-solid fa-circle-check"></i> 0 ad network SDKs detected in binary bytecode. "No Ads" declaration is consistent.
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB 4: CONTENT RATINGS (IARC) (Screen 5)
+             ========================================== -->
+        <div class="q-tab-pane" id="pane-qtab-4">
+          <div style="margin-bottom: 16px;">
+            <h4 style="font-size: 16px; font-weight: 700; margin: 0 0 4px 0; color: #1E293B;">Content Ratings (IARC Questionnaire)</h4>
+            <p style="font-size: 12.5px; color: #64748B; margin: 0;">Receive ratings for your app from official rating authorities (IARC). Ratings are displayed on Google Play to help users identify whether your app is suitable for them.</p>
+          </div>
+
+          <div class="play-field-container">
+            <label class="play-field-label" for="q-content-category">App Category</label>
+            <select class="form-control" id="q-content-category">
+              <option value="Government / Utility / Health" selected>Government / Utility / Health / Emergency</option>
+              <option value="Enterprise / Productivity">Enterprise / Business Productivity</option>
+              <option value="Education">Education / Reference</option>
+              <option value="Social / Communication">Social &amp; Communication</option>
+              <option value="Entertainment">Entertainment</option>
+            </select>
+          </div>
+
+          <div class="play-field-container">
+            <label class="play-field-label" for="q-target-age">Target Audience &amp; Age Group</label>
+            <select class="form-control" id="q-target-age">
+              <option value="18+" selected>18+ (Enterprise Staff, Drivers &amp; Doctors)</option>
+              <option value="13+">13+ (General Audience)</option>
+              <option value="All Ages (3+)">All Ages (3+ Family Friendly)</option>
+            </select>
+          </div>
+
+          <!-- IARC Checklist -->
+          <div class="play-declaration-box">
+            <h5 style="font-size: 13px; font-weight: 800; text-transform: uppercase; color: #64748B; margin: 0 0 12px 0;">Content Suitability Questionnaire</h5>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #E2E8F0; font-size: 13px;">
+              <span>Does the app contain violence or realistic depictions of injury?</span>
+              <span class="badge-pill" style="background:#F1F5F9; color:#475569;">NO</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #E2E8F0; font-size: 13px;">
+              <span>Does the app contain sexual content or offensive profanity?</span>
+              <span class="badge-pill" style="background:#F1F5F9; color:#475569;">NO</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #E2E8F0; font-size: 13px;">
+              <span>Does the app share user physical location in real-time?</span>
+              <span class="badge-pill badge-emerald">YES (Operational Dispatch)</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px;">
+              <span>Does the app allow digital in-app purchases or subscriptions?</span>
+              <span class="badge-pill" style="background:#F1F5F9; color:#475569;">NO</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB 5: PRIVACY POLICY URL (Screen 2)
+             ========================================== -->
+        <div class="q-tab-pane" id="pane-qtab-5">
+          <div style="margin-bottom: 16px;">
+            <h4 style="font-size: 16px; font-weight: 700; margin: 0 0 4px 0; color: #1E293B;">Privacy Policy URL</h4>
+            <p style="font-size: 12.5px; color: #64748B; margin: 0;">Add a privacy policy to your store listing to help provide transparency about how you treat sensitive user and device data. Check the User Data policy to avoid common violations.</p>
+          </div>
+
+          <div class="play-field-container">
+            <label class="play-field-label" for="q-privacy-policy-url">Privacy policy URL</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" class="form-control" id="q-privacy-policy-url" value="/privacy-policy.html" placeholder="https://example.com/privacy">
+              <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.useMasterPolicyPresetInModal()">Master Preset</button>
+            </div>
+            <div class="play-field-helper">Enter a valid URL (e.g. <code>https://ops.bhspl.in/privacy-policy</code> or local document <code>/privacy-policy.html</code>).</div>
+          </div>
+
+          <!-- Quick NLP Disclosure Summary Box -->
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px 18px; margin-top: 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 6px;">
+              <i class="fa-solid fa-magnifying-glass text-cyan"></i> Privacy Policy NLP Extracted Disclosures:
+            </div>
+            <div id="q-policy-nlp-summary" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+              <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> GPS Location Disclosed</span>
+              <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> Background Location Disclosed</span>
+              <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> Camera Disclosed</span>
+              <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> Account Deletion Link</span>
+              <span class="badge-pill badge-emerald"><i class="fa-solid fa-check"></i> HTTPS / TLS Encryption</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" style="padding: 14px 24px; background: #F8FAFC; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn-cred btn-cred-outline btn-cred-sm" type="button" onclick="PlayStoreAuditor.validateCurrentQuestionnaire()">
+          <i class="fa-solid fa-circle-check text-emerald"></i> Validate Store Declarations
+        </button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-cred btn-cred-outline btn-cred-sm" type="button" onclick="PlayStoreAuditor.closeQuestionnaireModal()">Cancel</button>
+          <button class="btn-cred btn-cred-primary btn-cred-sm" type="button" onclick="PlayStoreAuditor.saveCurrentQuestionnaire()">
+            <i class="fa-solid fa-floppy-disk"></i> Save &amp; Apply Declarations
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: APP DETAILS DRAWER (BUILDS, API KEYS & AUDIT)
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-app-details-drawer" style="display: none; z-index: 10000;">
+    <div class="modal-dialog" style="max-width: 680px; background: #FFFFFF; border-radius: 12px; border: 1px solid #CBD5E1; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);">
+      <div class="modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div id="drawer-app-icon-container" style="cursor: pointer;" onclick="Projects.openEditLogoModal(Projects.currentDrawerProjectId)" title="Click to change or upload logo"></div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h3 style="font-size: 18px; font-weight: 700; margin: 0; color: #0F172A;" id="drawer-app-name">Application Name</h3>
+              <span class="badge-pill badge-emerald" id="drawer-app-status">Production</span>
+            </div>
+            <div style="font-size: 12.5px; color: #64748B; font-family: var(--font-mono, monospace); margin-top: 3px;" id="drawer-app-pkg">
+              com.example.app
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="Projects.openEditLogoModal(Projects.currentDrawerProjectId)" title="Change or Upload App Logo" style="font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-image"></i> Change Logo
+          </button>
+          <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-app-details-drawer')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body" style="padding: 24px; max-height: 75vh; overflow-y: auto;">
+        
+        <!-- App Description -->
+        <div style="font-size: 13px; color: #475569; margin-bottom: 20px; line-height: 1.5;" id="drawer-app-desc">
+          Enterprise mobile application.
+        </div>
+
+        <!-- 3-KPI Quick Stats -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px;">
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748B; margin-bottom: 4px;">Installed Audience</div>
+            <div style="font-size: 20px; font-weight: 800; color: #059669;" id="drawer-app-installs">0</div>
+          </div>
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748B; margin-bottom: 4px;">Active Build &amp; Version</div>
+            <div style="font-size: 16px; font-weight: 700; color: #0F172A;" id="drawer-app-version">v1.0.0 (Build 1)</div>
+          </div>
+        </div>
+
+        <!-- API Key Box -->
+        <div style="margin-bottom: 20px;">
+          <label style="font-size: 12px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span>SDK Secret Ingestion Key</span>
+            <span style="font-size: 11px; color: #0284C7; font-weight: 600;">Flutter &amp; Android Telemetry</span>
+          </label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="drawer-app-apikey" readonly style="flex: 1; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12.5px; font-family: var(--font-mono, monospace); background: #F8FAFC; color: #1E293B; outline: none;">
+            <button class="btn-cred btn-cred-primary btn-cred-sm" style="padding: 0 16px; display: inline-flex; align-items: center; gap: 6px;" onclick="Projects.copyApiKey(document.getElementById('drawer-app-apikey').value)">
+              <i class="fa-regular fa-copy"></i> Copy Key
+            </button>
+          </div>
+        </div>
+
+        <!-- Saved Bundles & Version Releases Repository -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <label style="font-size: 12px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-boxes-stacked" style="color: #4F46E5;"></i> Saved Bundles &amp; Versions (<span id="drawer-bundles-count">0</span>)
+            </label>
+            <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" style="font-size: 11.5px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px;" onclick="Projects.triggerDrawerBundleUpload()">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Upload New Bundle
+            </button>
+          </div>
+          <input type="file" id="drawer-bundle-file-input" accept=".aab,.apk" style="display: none;" onchange="Projects.handleDrawerFileUpload(event)">
+          
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+              <thead>
+                <tr style="background: #F1F5F9; border-bottom: 1px solid #E2E8F0; color: #475569; font-weight: 600;">
+                  <th style="padding: 8px 12px;">Version</th>
+                  <th style="padding: 8px 12px;">Build / Code</th>
+                  <th style="padding: 8px 12px;">Target SDK</th>
+                  <th style="padding: 8px 12px;">Compliance</th>
+                  <th style="padding: 8px 12px; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="drawer-bundles-tbody">
+                <!-- Dynamically loaded -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Action Quick Buttons -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button class="btn-cred btn-cred-primary" id="drawer-btn-launch-audit" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px; font-weight: 700; background: linear-gradient(135deg, #4F46E5, #6366F1); border: none; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);">
+            <i class="fa-solid fa-rocket"></i> Run Google Play Store Pre-Submission Audit
+          </button>
+          <button class="btn-cred btn-cred-outline" id="drawer-btn-open-dash" style="width: 100%; justify-content: center; padding: 10px; font-size: 13px;">
+            <i class="fa-solid fa-chart-line"></i> Open App Telemetry &amp; Crashlytics Dashboard
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: CUSTOMIZE / UPLOAD APP LOGO
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-edit-app-logo" style="display: none; z-index: 10002;">
+    <div class="modal-dialog" style="max-width: 520px; background: #FFFFFF; border-radius: 12px; border: 1px solid #CBD5E1; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);">
+      <div class="modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <h4 style="font-size: 16px; font-weight: 700; margin: 0; color: #0F172A; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-image" style="color: #4F46E5;"></i> Customize App Logo &amp; Identity
+        </h4>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-edit-app-logo')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <input type="hidden" id="edit-logo-project-id" value="">
+        
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px;">
+          <div id="edit-logo-preview" style="width: 56px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"></div>
+          <div>
+            <div id="edit-logo-app-name" style="font-size: 15px; font-weight: 700; color: #0F172A;">Travelite BTGS</div>
+            <div id="edit-logo-app-pkg" style="font-size: 12px; color: #64748B; font-family: var(--font-mono, monospace);">com.bavya.btgs</div>
+          </div>
+        </div>
+
+        <!-- Option 1: File Upload -->
+        <div style="margin-bottom: 18px;">
+          <label style="font-size: 12.5px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block;">
+            Upload Logo Image (PNG, JPG, SVG, WebP)
+          </label>
+          <div style="border: 2px dashed #CBD5E1; border-radius: 8px; padding: 16px; text-align: center; background: #FFFFFF; cursor: pointer;" onclick="document.getElementById('input-app-logo-file').click()">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; color: #4F46E5; margin-bottom: 6px;"></i>
+            <div style="font-size: 13px; font-weight: 600; color: #1E293B;">Click to select or upload image</div>
+            <div style="font-size: 11.5px; color: #94A3B8; margin-top: 2px;">Square aspect ratio (512x512 recommended for Play Store)</div>
+            <input type="file" id="input-app-logo-file" accept="image/*" style="display: none;" onchange="Projects.handleLogoFileUpload(event)">
+          </div>
+        </div>
+
+        <!-- Option 2: Image URL -->
+        <div style="margin-bottom: 18px;">
+          <label class="form-label" for="input-app-logo-url">Or Enter Direct Image URL</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" class="form-control" id="input-app-logo-url" placeholder="https://example.com/logo.png" oninput="Projects.previewCustomLogoUrl(this.value)">
+            <button class="btn-cred btn-cred-outline btn-cred-sm" type="button" onclick="Projects.previewCustomLogoUrl(document.getElementById('input-app-logo-url').value)">Preview</button>
+          </div>
+        </div>
+
+        <!-- Option 3: Presets -->
+        <div>
+          <label style="font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 8px; display: block;">
+            Or Select Built-in Organization Logo Presets:
+          </label>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            <button type="button" class="btn-cred btn-cred-outline" style="padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px;" onclick="Projects.applyLogoPreset('btgs')">
+              <span style="font-size: 16px;">✈️</span>
+              <span>BTGS Aero</span>
+            </button>
+            <button type="button" class="btn-cred btn-cred-outline" style="padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px;" onclick="Projects.applyLogoPreset('1962')">
+              <span style="font-size: 16px;">🐄</span>
+              <span>1962 Vet</span>
+            </button>
+            <button type="button" class="btn-cred btn-cred-outline" style="padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px;" onclick="Projects.applyLogoPreset('108')">
+              <span style="font-size: 16px;">🚑</span>
+              <span>108 Emer</span>
+            </button>
+            <button type="button" class="btn-cred btn-cred-outline" style="padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px;" onclick="Projects.applyLogoPreset('104')">
+              <span style="font-size: 16px;">🩺</span>
+              <span>104 Health</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer" style="border-top: 1px solid #E2E8F0; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn-cred btn-cred-outline btn-cred-sm" type="button" onclick="Projects.resetAppLogoToDefault()">Reset to Default</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-edit-app-logo')">Cancel</button>
+          <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="Projects.saveEditedAppLogo()">
+            <i class="fa-solid fa-floppy-disk"></i> Save Logo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: ADD / EDIT APP SIGNING KEY FINGERPRINTS
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-edit-signing-key" style="display: none; z-index: 10001;">
+    <div class="modal-dialog" style="max-width: 580px; background: #FFFFFF; border-radius: 12px; border: 1px solid #CBD5E1;">
+      <div class="modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 34px; height: 34px; border-radius: 8px; background: #EEF2FF; color: #4F46E5; display: flex; align-items: center; justify-content: center; font-size: 15px;">
+            <i class="fa-solid fa-key"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 16px; font-weight: 700; margin: 0; color: #1E293B;">App Signing Key Certificate</h4>
+            <p style="font-size: 12px; color: #64748B; margin: 2px 0 0 0;" id="modal-signing-app-name">Configure cryptographic signing keys</p>
+          </div>
+        </div>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-edit-signing-key')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 12.5px; color: #475569; line-height: 1.45;">
+          <i class="fa-solid fa-circle-info" style="color: #4F46E5;"></i> Each mobile project maintains its own isolated release keystore fingerprints. Enter or paste your Google Play App Signing key or Upload key below.
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" for="input-signing-sha1" style="font-weight: 700; font-size: 12.5px;">SHA-1 Certificate Fingerprint (Hex-colon separated)</label>
+          <input type="text" class="form-control" id="input-signing-sha1" placeholder="e.g. 49:07:E4:89:1C:B3:68:81:80:8C:00:6A:A3:60:D9:B0:0C:83:50:5E" style="font-family: var(--font-mono, monospace); font-size: 12.5px;">
+          <div style="font-size: 11px; color: #64748B; margin-top: 4px;">Used for verifying Google Play upload key and release keystores.</div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" for="input-signing-sha256" style="font-weight: 700; font-size: 12.5px;">SHA-256 Certificate Fingerprint (Optional)</label>
+          <input type="text" class="form-control" id="input-signing-sha256" placeholder="e.g. 7A:0B:3D:6E:9F:2A:5C:8B:1D:4E:7F:0A:3C:3B:5A:F2:78..." style="font-family: var(--font-mono, monospace); font-size: 12.5px;">
+        </div>
+
+        <div style="border-top: 1px dashed #E2E8F0; padding-top: 12px; margin-top: 8px;">
+          <div style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 8px;">Quick Presets</div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" style="font-size: 11px; padding: 3px 8px;" onclick="Projects.fillSigningPreset('ops108_play')">
+              108 Play Key (49:07:E4...)
+            </button>
+            <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" style="font-size: 11px; padding: 3px 8px;" onclick="Projects.fillSigningPreset('btgs_play')">
+              BTGS Play Key (66:C8:DE...)
+            </button>
+            <button type="button" class="btn-cred btn-cred-outline btn-cred-sm" style="font-size: 11px; padding: 3px 8px;" onclick="Projects.fillSigningPreset('1962_mvu')">
+              1962 Key (4D:5E:6F...)
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="border-top: 1px solid #E2E8F0; padding: 14px 20px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="closeModal('modal-edit-signing-key')">Cancel</button>
+        <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="Projects.saveEditedSigningKey()">
+          <i class="fa-solid fa-floppy-disk"></i> Save &amp; Register Key
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SUB-MODAL: ADD / EDIT REVIEWER SIGN-IN CREDENTIAL
+       ========================================================= -->
+  <div class="modal-backdrop" id="modal-add-signin-detail" style="display: none; z-index: 10001;">
+    <div class="modal-dialog" style="max-width: 520px; background: #FFFFFF; border-radius: 12px; border: 1px solid #CBD5E1;">
+      <div class="modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 14px 20px;">
+        <h4 style="font-size: 16px; font-weight: 700; margin: 0; color: #1E293B;" id="modal-signin-title">Add Reviewer Sign-In Details</h4>
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.closeAddSignInModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <input type="hidden" id="modal-signin-index" value="-1">
+        
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="input-signin-name">Account Name / Role</label>
+          <input type="text" class="form-control" id="input-signin-name" placeholder="e.g. Staff account (employee), Manager account, Doctor account">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="input-signin-username">Username / Phone Number / Email</label>
+          <input type="text" class="form-control" id="input-signin-username" placeholder="e.g. staff_pilot_99 or 9876543210">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="input-signin-password">Password / Security PIN</label>
+          <input type="text" class="form-control" id="input-signin-password" placeholder="e.g. •••SecureOtp99•••">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-signin-instructions">Reviewer Access Instructions</label>
+          <textarea class="form-control" id="input-signin-instructions" rows="3" placeholder="e.g. Select Ground Staff tab, enter phone number, use test OTP 123456 to log into portal."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="border-top: 1px solid #E2E8F0; padding: 12px 20px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn-cred btn-cred-outline btn-cred-sm" onclick="PlayStoreAuditor.closeAddSignInModal()">Cancel</button>
+        <button class="btn-cred btn-cred-primary btn-cred-sm" onclick="PlayStoreAuditor.saveSignInDetail()">Save Credential</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/api.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/projects.js"></script>
@@ -2048,5 +3114,19 @@
   <script src="js/playstore-auditor.js"></script>
   <script src="js/release-hub-ui.js"></script>
   <script src="js/app.js"></script>
+  <!-- V2 motion engine: cursor, scroll reveals, magnetic, ripple, count-up -->
+  <script src="js/ux-motion.js" defer></script>
+  <!-- V2 accessibility layer: labels, roles, headings, table scopes -->
+  <script src="js/a11y.js" defer></script>
+  <!-- V2 theme engine: light/dark toggle + chart recolouring -->
+  <script src="js/theme.js" defer></script>
+  <!-- V3 premium toast notifications (replaces native alert) -->
+  <script src="js/ux-toast.js" defer></script>
+  <!-- V4 Play Console shell (header menus + light-first theming) -->
+  <script src="js/v4-playconsole.js" defer></script>
+  <!-- V5 Material Symbols icon converter (Font Awesome → Google Material Symbols) -->
+  <script src="js/v5-icons.js" defer></script>
+  <!-- V5 Google Play policy pre-audit engine ("Policy status" tab) -->
+  <script src="js/v5-policy.js" defer></script>
 </body>
 </html>

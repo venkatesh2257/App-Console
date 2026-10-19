@@ -113,16 +113,23 @@ const App = {
       const { kpis, projects_distribution = [], version_distribution = [], recent_crashes = [] } = overviewRes.data;
 
       // Update KPI Cards
-      document.getElementById('kpi-total-installs').textContent = kpis.total_installations.toLocaleString();
-      document.getElementById('kpi-installs-today').textContent = `+${kpis.installs_today} Today`;
-      document.getElementById('kpi-active-dau').textContent = `${kpis.dau} DAU`;
-      document.getElementById('kpi-active-mau').textContent = `MAU: ${kpis.mau}`;
-      document.getElementById('kpi-crash-free').textContent = `${kpis.crash_free_users_percent}%`;
-      document.getElementById('kpi-open-crashes').textContent = `${kpis.open_crash_issues} open issues`;
-      document.getElementById('kpi-total-apps').textContent = kpis.total_apps_count || activeProjectsList.length;
-
+      // These legacy kpi-* ids were removed in the ReleaseHub redesign; the
+      // Overview metric cards are now populated by ReleaseHubUI's rc-stat-*.
+      // Guarded so a missing element cannot abort charts + crash rendering.
       const isSingleApp = selectedProjectId !== 'all';
-      document.getElementById('kpi-app-scope-label').textContent = isSingleApp ? 'Selected App' : 'Across Fleet';
+      try {
+        document.getElementById('kpi-total-installs').textContent = kpis.total_installations.toLocaleString();
+        document.getElementById('kpi-installs-today').textContent = `+${kpis.installs_today} Today`;
+        document.getElementById('kpi-active-dau').textContent = `${kpis.dau} DAU`;
+        document.getElementById('kpi-active-mau').textContent = `MAU: ${kpis.mau}`;
+        document.getElementById('kpi-crash-free').textContent = `${kpis.crash_free_users_percent}%`;
+        document.getElementById('kpi-open-crashes').textContent = `${kpis.open_crash_issues} open issues`;
+        document.getElementById('kpi-total-apps').textContent = kpis.total_apps_count || activeProjectsList.length;
+
+        document.getElementById('kpi-app-scope-label').textContent = isSingleApp ? 'Selected App' : 'Across Fleet';
+      } catch (legacyKpiError) {
+        console.debug('Legacy KPI block skipped:', legacyKpiError.message);
+      }
 
       // Update Charts
       Charts.initActivityChart(timeseriesRes.data.installations || []);
@@ -258,16 +265,31 @@ function switchTab(tabId) {
 
   if (targetTab) targetTab.classList.add('active');
   if (targetNav) targetNav.classList.add('active');
+
+  // Trigger live updates for the active tab
+  if (tabId === 'tab-release-hub' && window.ReleaseHubUI) {
+    window.ReleaseHubUI.loadCommandCenterStats();
+  } else if (tabId === 'tab-projects' && window.Projects) {
+    window.Projects.loadProjects();
+  } else if (tabId === 'tab-overview' && window.App) {
+    window.App.loadOverviewData();
+  }
 }
 
 function openModal(modalId) {
   const m = document.getElementById(modalId);
-  if (m) m.classList.add('show');
+  if (m) {
+    m.style.display = 'flex';
+    m.classList.add('show');
+  }
 }
 
 function closeModal(modalId) {
   const m = document.getElementById(modalId);
-  if (m) m.classList.remove('show');
+  if (m) {
+    m.classList.remove('show');
+    m.style.display = 'none';
+  }
 }
 
 function debounce(func, wait) {

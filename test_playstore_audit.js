@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const crypto = require('crypto');
 const zlib = require('zlib');
 const ReleaseGateEngine = require('./server/services/audit/engine');
@@ -17,6 +18,8 @@ const ManifestScanner = require('./server/services/audit/scanners/manifestScanne
 const PermissionScanner = require('./server/services/audit/scanners/permissionScanner');
 const PrivacyScanner = require('./server/services/audit/scanners/privacyScanner');
 const RuntimeScanner = require('./server/services/audit/scanners/runtimeScanner');
+const QuestionnaireScanner = require('./server/services/audit/scanners/questionnaireScanner');
+
 
 /**
  * Helper: Build a minimal valid in-memory ZIP / AAB / APK buffer
@@ -210,6 +213,34 @@ async function runAllPlayStoreAuditTests() {
       manifestRes.results.some(r => r.status === 'PASS' && r.ruleId === 'ANDROID-SECURITY-DEBUG-001'),
       'Stage 2.7: Manifest production flags verification (non-debuggable)'
     );
+
+    // Test 2.8: Stalkerware & Monitoring Applications - Missing isMonitoringTool Flag Detection
+    const monitoringMissingContext = {
+      metadata: {
+        rawManifest: '<application android:debuggable="false"><service android:name=".TrackingService"/></application>',
+        isMonitoringApp: true
+      },
+      declarations: { isMonitoringApp: true }
+    };
+    const monitoringMissingRes = await ManifestScanner.run(monitoringMissingContext);
+    assert(
+      monitoringMissingRes.results.some(r => r.ruleId === 'ANDROID-STALKERWARE-001' && r.status === 'FAIL' && r.severity === 'BLOCKER'),
+      'Stage 2.8: Flag missing "isMonitoringTool" flag on monitoring/tracking applications with BLOCKER severity'
+    );
+
+    // Test 2.9: Stalkerware & Monitoring Applications - Valid isMonitoringTool Flag Declared
+    const monitoringDeclaredContext = {
+      metadata: {
+        rawManifest: '<application android:debuggable="false"><meta-data android:name="android.app.isMonitoringTool" android:value="enterprise_management"/></application>',
+        isMonitoringApp: true
+      },
+      declarations: { isMonitoringApp: true }
+    };
+    const monitoringDeclaredRes = await ManifestScanner.run(monitoringDeclaredContext);
+    assert(
+      monitoringDeclaredRes.results.some(r => r.ruleId === 'ANDROID-STALKERWARE-001' && r.status === 'PASS'),
+      'Stage 2.9: Verification of declared "android.app.isMonitoringTool" metadata flag'
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -278,7 +309,7 @@ async function runAllPlayStoreAuditTests() {
         </body>
       </html>
     `;
-    const tempPolicyPath = path.join(__dirname, 'temp_test_policy.html');
+    const tempPolicyPath = path.join(os.tmpdir(), 'temp_test_policy.html');
     fs.writeFileSync(tempPolicyPath, mockPolicyHtml);
 
     const resolvedPolicy = await ReleaseGateEngine.resolvePrivacyPolicy(tempPolicyPath);
@@ -308,25 +339,103 @@ async function runAllPlayStoreAuditTests() {
       privacyRes.results.some(r => r.status === 'PASS' && r.ruleId === 'PRIVACY-DISCLOSURE-LOCATION'),
       'Stage 4.4: Cross-consistency between binary permissions and privacy disclosures'
     );
+
+    // Test 4.5: Photo & Video Permissions Policy - Broad READ_MEDIA_IMAGES / READ_MEDIA_VIDEO triggers BLOCKER
+    const broadMediaContext = {
+      appProfile: getAppProfile('btgs'),
+      metadata: {
+        targetSdk: 36,
+        permissions: [
+          'android.permission.INTERNET',
+          'android.permission.READ_MEDIA_IMAGES',
+          'android.permission.READ_MEDIA_VIDEO'
+        ]
+      }
+    };
+    const broadMediaRes = await PermissionScanner.run(broadMediaContext);
+    assert(
+      broadMediaRes.results.some(r => r.ruleId === 'ANDROID-PHOTO-VIDEO-PERM-001' && r.status === 'FAIL' && r.severity === 'BLOCKER'),
+      'Stage 4.5: Detect broad READ_MEDIA_IMAGES/VIDEO permissions on Android 13+ and enforce Photo Picker migration'
+    );
+
+    // Test 4.6: Photo & Video Permissions Policy - Compliant App without broad media permissions passes
+    const photoPickerCompliantContext = {
+      appProfile: getAppProfile('btgs'),
+      metadata: {
+        targetSdk: 36,
+        permissions: [
+          'android.permission.INTERNET',
+          'android.permission.CAMERA'
+        ]
+      }
+    };
+    const photoPickerCompliantRes = await PermissionScanner.run(photoPickerCompliantContext);
+    assert(
+      !photoPickerCompliantRes.results.some(r => r.ruleId === 'ANDROID-PHOTO-VIDEO-PERM-001' && r.status === 'FAIL'),
+      'Stage 4.6: Verify clean permission manifest compliant with Android Photo Picker mandate'
+    );
   }
 
   // ---------------------------------------------------------------------------
-  // STAGE 5: Runtime Smoke Testing & Crash Verification
+  // STAGE 5: Runtime Smoke Testing & Authentication Verification
   // ---------------------------------------------------------------------------
-  console.log('\n📌 STAGE 5: Runtime Smoke Testing & Crash Verification');
+  console.log('\n📌 STAGE 5: Runtime Smoke Testing & Authentication Verification');
   {
-    const runtimeContext = {
+    // Test 5.1: Restricted app with valid reviewer credentials passes login
+    const runtimeWithCredsContext = {
       appProfile: getAppProfile('btgs'),
       metadata: { packageName: 'com.bavya.btgs', versionName: '6.0.1' },
+      declarations: {
+        accessRestricted: true,
+        reviewerCredentials: [
+          { name: 'Staff account', username: 'staff_user_01', password: 'secret_password_123' }
+        ]
+      },
       page16KbAlignment: { allAligned: true }
     };
-    const runtimeRes = await RuntimeScanner.run(runtimeContext);
+    const runtimeWithCredsRes = await RuntimeScanner.run(runtimeWithCredsContext);
     assert(
-      runtimeRes.results.some(r => r.status === 'PASS' && r.ruleId === 'RUNTIME-SMOKE-PROFILE-001') &&
-      runtimeRes.runtimeTests.length >= 5,
-      'Stage 5.1: 16 KB runtime smoke simulation and critical path validation'
+      runtimeWithCredsRes.results.some(r => r.status === 'PASS' && r.ruleId === 'RUNTIME-SMOKE-PROFILE-001') &&
+      runtimeWithCredsRes.runtimeTests.find(t => t.testId === 'login' && t.status === 'PASS'),
+      'Stage 5.1: Runtime smoke authenticates with valid reviewer credentials from questionnaire'
+    );
+
+    // Test 5.2: Restricted app with missing credentials fails login and blocks protected flows
+    const runtimeNoCredsContext = {
+      appProfile: getAppProfile('btgs'),
+      metadata: { packageName: 'com.bavya.btgs', versionName: '6.0.1', permissions: ['android.permission.INTERNET'] },
+      declarations: {
+        accessRestricted: true,
+        reviewerCredentials: []
+      },
+      page16KbAlignment: { allAligned: true }
+    };
+    const runtimeNoCredsRes = await RuntimeScanner.run(runtimeNoCredsContext);
+    assert(
+      runtimeNoCredsRes.results.some(r => r.ruleId === 'RUNTIME-AUTH-CREDS-001' && r.status === 'FAIL' && r.severity === 'BLOCKER') &&
+      runtimeNoCredsRes.runtimeTests.some(t => t.testId === 'login' && t.status === 'FAIL') &&
+      runtimeNoCredsRes.runtimeTests.some(t => t.testId === 'dashboard' && t.status === 'BLOCKED'),
+      'Stage 5.2: Detect and BLOCK runtime execution when login credentials are missing for restricted app'
+    );
+
+    // Test 5.3: Public unauthenticated app executes in public access mode
+    const runtimePublicContext = {
+      appProfile: getAppProfile('citizen104'),
+      metadata: { packageName: 'in.gov.bihar.citizen104', versionName: '1.0.0' },
+      declarations: {
+        accessRestricted: false,
+        reviewerCredentials: []
+      },
+      page16KbAlignment: { allAligned: true }
+    };
+    const runtimePublicRes = await RuntimeScanner.run(runtimePublicContext);
+    assert(
+      runtimePublicRes.results.some(r => r.status === 'PASS') &&
+      runtimePublicRes.runtimeTests.every(t => t.status === 'PASS'),
+      'Stage 5.3: Public unauthenticated app passes runtime smoke in public mode'
     );
   }
+
 
   // ---------------------------------------------------------------------------
   // STAGE 6: Authoritative Release Gate Decision & Delta Matrix
@@ -435,8 +544,112 @@ async function runAllPlayStoreAuditTests() {
   }
 
   // ---------------------------------------------------------------------------
+  // STAGE 1 / QUESTIONNAIRE: Play Store Deployment Questionnaire & Store Setup
+  // ---------------------------------------------------------------------------
+  console.log('\n📌 PLAY STORE DEPLOYMENT QUESTIONNAIRE & STORE SETUP (5 SCREENS)');
+  {
+    // Test Q.1: App Name <= 30 chars passes
+    const validQContext = {
+      questionnaire: {
+        appName: 'BIHAR 1962 Ops',
+        packageName: 'in.gov.bihar.vas1962',
+        developerProgramPoliciesConfirmed: true,
+        usExportLawsAccepted: true,
+        accessRestricted: true,
+        reviewerCredentials: [
+          { name: 'Doctor account', username: 'doc_user_01', password: 'doc_password' }
+        ],
+        containsAds: false,
+        contentCategory: 'Government / Utility / Health',
+        targetAgeGroup: '18+',
+        privacyPolicyUrl: 'https://ops.bhspl.in/privacy-policy'
+      },
+      metadata: {
+        packageName: 'in.gov.bihar.vas1962',
+        adSdks: []
+      }
+    };
+    const validQRes = await QuestionnaireScanner.run(validQContext);
+    assert(
+      validQRes.results.every(r => r.status === 'PASS'),
+      'Questionnaire 1.1: Valid declarations pass all 5 Google Play deployment screens'
+    );
+
+    // Test Q.2: App Name > 30 characters triggers BLOCKER
+    const longNameQContext = {
+      questionnaire: {
+        appName: 'This App Name Exceeds The Maximum Allowed Google Play 30 Char Limit',
+        packageName: 'in.gov.bihar.vas1962',
+        developerProgramPoliciesConfirmed: true,
+        usExportLawsAccepted: true
+      },
+      metadata: { packageName: 'in.gov.bihar.vas1962' }
+    };
+    const longNameQRes = await QuestionnaireScanner.run(longNameQContext);
+    assert(
+      longNameQRes.results.some(r => r.ruleId === 'RULE-PLAY-APP-NAME-002' && r.status === 'FAIL' && r.severity === 'BLOCKER'),
+      'Questionnaire 1.2: Enforce strict 30-character App Name limit with BLOCKER severity'
+    );
+
+    // Test Q.3: Package Name mismatch with AndroidManifest.xml triggers BLOCKER
+    const mismatchPkgContext = {
+      questionnaire: {
+        appName: 'Valid App Name',
+        packageName: 'com.declared.package',
+        developerProgramPoliciesConfirmed: true,
+        usExportLawsAccepted: true
+      },
+      metadata: { packageName: 'com.actual.binary.package' }
+    };
+    const mismatchPkgRes = await QuestionnaireScanner.run(mismatchPkgContext);
+    assert(
+      mismatchPkgRes.results.some(r => r.ruleId === 'RULE-PLAY-PKG-002' && r.status === 'FAIL' && r.severity === 'BLOCKER'),
+      'Questionnaire 1.3: Package Name mismatch between Store Setup and Binary triggers BLOCKER'
+    );
+
+    // Test Q.4: Restricted App with missing Reviewer Credentials triggers BLOCKER
+    const noCredsContext = {
+      questionnaire: {
+        appName: 'Restricted App',
+        packageName: 'com.bavya.btgs',
+        developerProgramPoliciesConfirmed: true,
+        usExportLawsAccepted: true,
+        accessRestricted: true,
+        reviewerCredentials: []
+      },
+      metadata: { packageName: 'com.bavya.btgs' }
+    };
+    const noCredsRes = await QuestionnaireScanner.run(noCredsContext);
+    assert(
+      noCredsRes.results.some(r => r.ruleId === 'RULE-PLAY-APP-ACCESS-001' && r.status === 'FAIL' && r.severity === 'BLOCKER'),
+      'Questionnaire 1.4: Restricted app with missing reviewer credentials triggers BLOCKER'
+    );
+
+    // Test Q.5: Discrepancy between "No Ads" declaration and embedded ad SDK in binary
+    const adDiscrepancyContext = {
+      questionnaire: {
+        appName: 'Ad Free App',
+        packageName: 'com.bavya.btgs',
+        developerProgramPoliciesConfirmed: true,
+        usExportLawsAccepted: true,
+        containsAds: false
+      },
+      metadata: {
+        packageName: 'com.bavya.btgs',
+        adSdks: ['com.google.android.gms.ads', 'com.facebook.ads']
+      }
+    };
+    const adDiscrepancyRes = await QuestionnaireScanner.run(adDiscrepancyContext);
+    assert(
+      adDiscrepancyRes.results.some(r => r.ruleId === 'RULE-PLAY-ADS-DISCREPANCY-001' && r.status === 'FAIL' && r.severity === 'BLOCKER'),
+      'Questionnaire 1.5: Cross-check flags BLOCKER if "No Ads" is declared but ad SDKs exist in binary'
+    );
+  }
+
+  // ---------------------------------------------------------------------------
   // App Registry Catalog Checks
   // ---------------------------------------------------------------------------
+
   console.log('\n📌 App Registry & Profile Resolution');
   {
     const allApps = getAllApps();
@@ -447,6 +660,39 @@ async function runAllPlayStoreAuditTests() {
 
     const policyVer = getPolicyVersion();
     assert(policyVer.includes('2026'), 'Policy Registry: Returns active Play Store policy baseline version');
+
+    // Test Dynamic Per-App Signing Key Registration
+    const { registerAppSigningKey } = require('./server/services/audit/appRegistry/appRegistry');
+    const ops108Profile = getAppProfile('in.bhspl.ops108');
+    assert(
+      ops108Profile.signing.sha1.includes('49:07:E4:89:1C:B3:68:81:80:8C:00:6A:A3:60:D9:B0:0C:83:50:5E'),
+      'App Registry: ops108 has official Google Play Store release key registered'
+    );
+
+    // Dynamic Registration Test for new key
+    const customTestKey = 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD';
+    registerAppSigningKey('in.bhspl.ops108', customTestKey);
+    const updatedOps108 = getAppProfile('in.bhspl.ops108');
+    assert(
+      updatedOps108.signing.sha1.includes(customTestKey),
+      'App Registry: Dynamic per-project signing key registration succeeds'
+    );
+
+    // Verify SigningScanner accepts registered ops108 key
+    const opsContext = {
+      appProfile: updatedOps108,
+      signingCertificate: {
+        isProductionKey: true,
+        sha1: '49:07:E4:89:1C:B3:68:81:80:8C:00:6A:A3:60:D9:B0:0C:83:50:5E',
+        sha256: '7A:0B:3D:6E:9F:2A:5C:8B:1D:4E:7F:0A:3C:3B:5A:F2:78:E1:6D:9C:12:4A:8B:0C:5E:7F:3A:9D:2B:1C:8E:4F',
+        subject: 'CN=108 Emergency Ambulance Release Key, O=Bavya Health Services, C=IN'
+      }
+    };
+    const signingCheck = await SigningScanner.run(opsContext);
+    assert(
+      signingCheck.results.some(r => r.ruleId === 'ANDROID-SIGNING-001' && r.status === 'PASS'),
+      'Stage 2.3b: SigningScanner PASS for ops108 with official Play Store release key'
+    );
   }
 
   console.log('\n================================================================================');

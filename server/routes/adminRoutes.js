@@ -12,6 +12,10 @@ const playStoreAuditController = require('../controllers/playStoreAuditControlle
 router.get('/projects', projectController.getAllProjects);
 router.post('/projects', projectController.createProject);
 router.get('/projects/:id', projectController.getProjectDetails);
+router.put('/projects/:id', projectController.updateProject);
+router.patch('/projects/:id', projectController.updateProject);
+router.patch('/projects/:id/pin', projectController.togglePinProject);
+router.delete('/projects/:id', projectController.deleteProject);
 
 // 💻 2. Overview KPIs & Timeseries Analytics
 router.get('/overview', reportsController.getOverviewKPIs);
@@ -36,10 +40,17 @@ router.get('/devices/:deviceId/logs', deviceController.getDeviceLogs);
 router.post('/playstore-audit/scan', playStoreAuditController.runMasterAuditScan);
 router.post('/playstore-audit/upload', playStoreAuditController.auditUploadedFile);
 router.post('/playstore-audit/scan-path', playStoreAuditController.auditLocalFile);
+router.get('/playstore-audit/local-samples', playStoreAuditController.getLocalSamples);
 router.post('/playstore-audit/analyze-policy', playStoreAuditController.analyzePolicy);
 router.post('/playstore-audit/compare-policy', playStoreAuditController.comparePolicyWithBinary);
 router.get('/playstore-audit/app-registry', playStoreAuditController.getAppRegistry);
 router.get('/playstore-audit/history', playStoreAuditController.getAuditHistory);
+router.get('/playstore-audit/declarations/:appId', playStoreAuditController.getDeclarations);
+router.post('/playstore-audit/declarations', playStoreAuditController.saveDeclarations);
+router.post('/playstore-audit/register-signing-key', playStoreAuditController.registerSigningKey);
+router.post('/playstore-audit/validate-questionnaire', playStoreAuditController.validateQuestionnaire);
+router.post('/playstore-audit/run-smoke-test', playStoreAuditController.runSmokeTest);
 
 module.exports = router;
+
 

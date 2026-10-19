@@ -138,8 +138,69 @@ const ManifestScanner = {
       }
     }
 
+    // 4. Stalkerware & Monitoring Applications Policy (isMonitoringTool Flag)
+    const ruleStalkerware = getPolicyRule('ANDROID-STALKERWARE-001') || {
+      ruleId: 'ANDROID-STALKERWARE-001',
+      category: 'SECURITY_MANIFEST',
+      source: { url: 'https://support.google.com/googleplay/android-developer/answer/9888380#commercial-spyware' }
+    };
+
+    const hasMonitoringFlag = manifestStr.includes('isMonitoringTool') || 
+                              manifestStr.includes('android.app.isMonitoringTool') ||
+                              (context.metadata && context.metadata.isMonitoringToolDeclared);
+    const isMonitoringApp = (context.declarations && (context.declarations.isMonitoringApp || context.declarations.isMonitoringTool)) ||
+                            (context.appProfile && (context.appProfile.isMonitoringApp || context.appProfile.isMonitoringTool)) ||
+                            (context.metadata && context.metadata.isMonitoringApp);
+
+    if (hasMonitoringFlag) {
+      const match = manifestStr.match(/android\.app\.isMonitoringTool["'\s]+(?:android:value=["']|value=["'])([^"'>\s]+)/i) ||
+                    manifestStr.match(/android:name="android\.app\.isMonitoringTool"\s+android:value="([^"]+)"/i) ||
+                    manifestStr.match(/android:value="([^"]+)"\s+android:name="android\.app\.isMonitoringTool"/i);
+      const val = match ? match[1] : (context.metadata && context.metadata.monitoringToolType) || 'declared';
+
+      results.push(buildEvidence({
+        ruleId: ruleStalkerware.ruleId,
+        category: ruleStalkerware.category,
+        title: 'Monitoring Application Flag (isMonitoringTool) Declared',
+        severity: 'BLOCKER',
+        status: 'PASS',
+        verification: 'DETERMINISTIC',
+        verificationLevel: 'FULL',
+        what: `Application declares android.app.isMonitoringTool meta-data flag with value: "${val}".`,
+        where: 'AndroidManifest.xml (<meta-data android:name="android.app.isMonitoringTool">)',
+        why: 'Satisfies Google Play Stalkerware and Monitoring Applications policy requirement.',
+        source: ruleStalkerware.source.url,
+        requirement: '<meta-data android:name="android.app.isMonitoringTool" android:value="child_monitoring|enterprise_management|other" />',
+        evidence: {
+          isMonitoringToolDeclared: true,
+          monitoringToolType: val
+        }
+      }));
+    } else if (isMonitoringApp) {
+      results.push(buildEvidence({
+        ruleId: ruleStalkerware.ruleId,
+        category: ruleStalkerware.category,
+        title: 'Missing "isMonitoringTool" Flag for Monitoring Application',
+        severity: 'BLOCKER',
+        status: 'FAIL',
+        verification: 'DETERMINISTIC',
+        verificationLevel: 'FULL',
+        what: 'App is configured/identified as a monitoring application, but the "isMonitoringTool" flag is not declared in AndroidManifest.xml.',
+        where: 'AndroidManifest.xml (<application>)',
+        why: 'Google Play Stalkerware and Monitoring Applications policy requires all monitoring tools to declare the "android.app.isMonitoringTool" meta-data flag in the manifest.',
+        source: ruleStalkerware.source.url,
+        requirement: 'Declare <meta-data android:name="android.app.isMonitoringTool" android:value="child_monitoring" /> or "enterprise_management".',
+        remediation: 'Add <meta-data android:name="android.app.isMonitoringTool" android:value="enterprise_management" /> inside <application> in AndroidManifest.xml.',
+        evidence: {
+          isMonitoringApp: true,
+          isMonitoringToolDeclared: false
+        }
+      }));
+    }
+
     return { results };
   }
 };
 
 module.exports = ManifestScanner;
+
