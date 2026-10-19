@@ -1,0 +1,471 @@
+/* ==========================================================================
+   RELEASEHUB V2 — MOTION SYSTEM
+   Cursor FX · Scroll Reveals · Ambient Canvas · Micro-interactions
+   Non-destructive layer: additive only, safe to delete entirely.
+   ========================================================================== */
+
+/* -------------------------------------------------------------
+   1. MOTION TOKENS
+   ------------------------------------------------------------- */
+:root {
+  /* Curves */
+  --ux-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ux-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ux-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ux-ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Durations */
+  --ux-d-1: 0.12s;
+  --ux-d-2: 0.2s;
+  --ux-d-3: 0.32s;
+  --ux-d-4: 0.48s;
+  --ux-d-5: 0.72s;
+  --ux-d-6: 1.1s;
+
+  /* Stagger step applied per index via --i */
+  --ux-stagger: 0.055s;
+}
+
+/* -------------------------------------------------------------
+   2. AMBIENT CANVAS — drifting aurora + engineering grid
+   ------------------------------------------------------------- */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Fine technical grid */
+body::before {
+  background-image:
+    linear-gradient(rgba(79, 70, 229, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 70, 229, 0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 62%);
+  -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 62%);
+  opacity: 0.5;
+  animation: uxGridDrift 40s linear infinite;
+}
+
+/* Drifting aurora blobs */
+body::after {
+  background:
+    radial-gradient(38rem 38rem at 12% 8%, rgba(79, 70, 229, 0.16), transparent 62%),
+    radial-gradient(32rem 32rem at 88% 22%, rgba(255, 107, 107, 0.13), transparent 62%),
+    radial-gradient(36rem 36rem at 62% 92%, rgba(2, 132, 199, 0.13), transparent 62%),
+    radial-gradient(28rem 28rem at 24% 78%, rgba(139, 92, 246, 0.11), transparent 62%);
+  filter: blur(6px);
+  animation: uxAurora 26s var(--ux-ease-in-out) infinite alternate;
+}
+
+@keyframes uxGridDrift {
+  to { background-position: 64px 64px, 64px 64px; }
+}
+
+@keyframes uxAurora {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-2.5%, 2%, 0) scale(1.06); }
+  100% { transform: translate3d(2.5%, -2%, 0) scale(1.03); }
+}
+
+/* Content sits above the ambient canvas */
+.app-container { position: relative; z-index: 1; }
+
+/* -------------------------------------------------------------
+   3. CUSTOM CURSOR — dot + lagging ring (fine pointers only)
+   Native cursor is only hidden once JS confirms it is running.
+   ------------------------------------------------------------- */
+.ux-cursor-dot,
+.ux-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0;
+  will-change: transform;
+}
+
+.ux-cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #4F46E5;
+  box-shadow: 0 0 10px rgba(79, 70, 229, 0.9);
+  transition: opacity var(--ux-d-2) ease, transform var(--ux-d-1) ease;
+}
+
+.ux-cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(79, 70, 229, 0.55);
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.1), transparent 68%);
+  transition:
+    opacity var(--ux-d-2) ease,
+    width var(--ux-d-3) var(--ux-ease-spring),
+    height var(--ux-d-3) var(--ux-ease-spring),
+    margin var(--ux-d-3) var(--ux-ease-spring),
+    border-color var(--ux-d-2) ease,
+    background var(--ux-d-2) ease;
+}
+
+/* Cursor is alive and visible */
+.ux-cursor-on .ux-cursor-dot,
+.ux-cursor-on .ux-cursor-ring { opacity: 1; }
+
+/* Hovering something interactive: ring grows, tightens, glows */
+.ux-cursor-on .ux-cursor-ring.is-active {
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border-color: rgba(255, 107, 107, 0.75);
+  background: radial-gradient(circle, rgba(255, 107, 107, 0.16), transparent 70%);
+}
+
+.ux-cursor-on .ux-cursor-dot.is-active {
+  transform: scale(0.35);
+}
+
+/* Pressing */
+.ux-cursor-on .ux-cursor-ring.is-pressed {
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border-color: rgba(79, 70, 229, 0.9);
+}
+
+/* Native cursor removed only when FX layer is confirmed active */
+.ux-cursor-on,
+.ux-cursor-on * { cursor: none !important; }
+
+/* Safety: never hide the cursor for people who move it off-screen */
+.ux-cursor-on .ux-cursor-dot.is-dormant,
+.ux-cursor-on .ux-cursor-ring.is-dormant { opacity: 0; }
+
+/* -------------------------------------------------------------
+   4. SCROLL REVEALS
+   JS opt-in per element (.ux-reveal-ready) — if JS never runs,
+   nothing is ever hidden. Progressive enhancement by design.
+   ------------------------------------------------------------- */
+.ux-reveal-ready {
+  opacity: 0;
+  transition:
+    opacity var(--ux-d-5) var(--ux-ease-out),
+    transform var(--ux-d-5) var(--ux-ease-out),
+    filter var(--ux-d-5) var(--ux-ease-out);
+  transition-delay: calc(var(--i, 0) * var(--ux-stagger));
+  will-change: transform, opacity;
+}
+
+.ux-reveal-ready.ux-reveal-hidden { opacity: 0; }
+
+/* Variants */
+.ux-r-up    { transform: translate3d(0, 34px, 0); }
+.ux-r-down  { transform: translate3d(0, -26px, 0); }
+.ux-r-left  { transform: translate3d(-40px, 0, 0); }
+.ux-r-right { transform: translate3d(40px, 0, 0); }
+.ux-r-scale { transform: scale(0.94); }
+.ux-r-tilt  { transform: perspective(900px) rotateX(7deg) translate3d(0, 30px, 0); }
+.ux-r-blur  { transform: translate3d(0, 20px, 0); filter: blur(10px); }
+
+.ux-reveal-ready.ux-is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* -------------------------------------------------------------
+   5. SCROLL PROGRESS + HEADER CONDENSE
+   ------------------------------------------------------------- */
+.ux-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  z-index: 9999;
+  background: linear-gradient(90deg, #4F46E5, #6366F1, #FF6B6B, #F59E0B);
+  background-size: 300% 100%;
+  box-shadow: 0 0 14px rgba(79, 70, 229, 0.55);
+  animation: uxProgressFlow 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes uxProgressFlow {
+  to { background-position: 300% 0; }
+}
+
+.app-header.ux-condensed {
+  height: 58px;
+  box-shadow: 0 10px 34px -12px rgba(15, 23, 42, 0.24);
+  background: rgba(255, 255, 255, 0.97);
+}
+
+/* -------------------------------------------------------------
+   6. BUTTON MICRO-INTERACTIONS
+   ------------------------------------------------------------- */
+
+/* Sweep of light across the button on hover */
+.rh-btn, .btn-cred {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+.rh-btn::after, .btn-cred::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform var(--ux-d-5) var(--ux-ease-out);
+  pointer-events: none;
+}
+
+.rh-btn:hover::after, .btn-cred:hover::after { transform: translateX(120%); }
+
+.rh-btn:active, .btn-cred:active {
+  transform: scale(0.97) !important;
+  transition-duration: var(--ux-d-1);
+}
+
+/* Magnetic buttons move on the independent `translate` property so they
+   never fight the CSS `transform` used by hover/active states. */
+.ux-magnetic {
+  translate: var(--ux-mx, 0px) var(--ux-my, 0px);
+}
+
+/* Click ripple — negative z-index keeps it behind the label */
+.ux-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 72%);
+  transform: scale(0);
+  pointer-events: none;
+  animation: uxRipple 0.62s var(--ux-ease-out) forwards;
+  z-index: -1;
+}
+
+@keyframes uxRipple {
+  to { transform: scale(2.6); opacity: 0; }
+}
+
+/* -------------------------------------------------------------
+   7. CARD SPOTLIGHT — radial glow that tracks the pointer
+   isolation creates a stacking context so the glow (z-index:-1)
+   paints above the card background but never above its content.
+   ------------------------------------------------------------- */
+.rh-card, .cred-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.rh-card::before, .cred-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    300px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(79, 70, 229, 0.13),
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity var(--ux-d-3) ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.rh-card:hover::before, .cred-card:hover::before { opacity: 1; }
+
+/* -------------------------------------------------------------
+   8. STAGGERED NAV INDICATOR — morphing active pill
+   ------------------------------------------------------------- */
+.nav-menu { position: relative; }
+
+.nav-item { position: relative; overflow: hidden; z-index: 1; }
+
+/* Sweeping sheen on hover */
+.nav-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0.16), transparent 70%);
+  transform: translateX(-100%);
+  transition: transform var(--ux-d-4) var(--ux-ease-out);
+  z-index: -1;
+  border-radius: inherit;
+}
+
+.nav-item:hover::before { transform: translateX(0); }
+
+/* Left accent bar */
+.nav-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #4F46E5, #FF6B6B);
+  transform: translateY(-50%);
+  transition: height var(--ux-d-3) var(--ux-ease-spring);
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.6);
+}
+
+.nav-item:hover::after { height: 42%; }
+
+.nav-item.active::after { height: 62%; }
+
+.nav-item i {
+  transition: transform var(--ux-d-3) var(--ux-ease-spring), color var(--ux-d-2) ease;
+}
+
+.nav-item:hover i { transform: translateX(3px) scale(1.12); }
+
+.nav-item.active i { transform: scale(1.1); }
+
+.nav-item span { transition: transform var(--ux-d-3) var(--ux-ease-out); }
+.nav-item:hover span { transform: translateX(2px); }
+
+/* -------------------------------------------------------------
+   9. TAB TRANSITION — cinematic content handoff
+   ------------------------------------------------------------- */
+.tab-content.active {
+  animation: uxCinemaIn 0.5s var(--ux-ease-out) both;
+}
+
+@keyframes uxCinemaIn {
+  0%   { opacity: 0; transform: translate3d(0, 18px, 0) scale(0.995); filter: blur(6px); }
+  100% { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* -------------------------------------------------------------
+   10. SKELETON / SHIMMER LOADING
+   ------------------------------------------------------------- */
+.ux-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #EEF2F7;
+  border-radius: var(--radius-sm);
+  color: transparent !important;
+}
+
+.ux-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  transform: translateX(-100%);
+  animation: uxShimmer 1.35s infinite;
+}
+
+@keyframes uxShimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* -------------------------------------------------------------
+   11. FLOATING AMBIENT ELEMENTS (parallax targets)
+   ------------------------------------------------------------- */
+.ux-float {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(48px);
+  opacity: 0.5;
+  z-index: 0;
+  animation: uxFloatY 12s var(--ux-ease-in-out) infinite alternate;
+}
+
+@keyframes uxFloatY {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -34px, 0); }
+}
+
+/* -------------------------------------------------------------
+   12. NUMBER COUNT-UP
+   ------------------------------------------------------------- */
+.kpi-value, [data-ux-count] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* -------------------------------------------------------------
+   13. TABLE ROW MOTION
+   ------------------------------------------------------------- */
+.ux-row-enter { animation: uxRowIn 0.44s var(--ux-ease-out) both; }
+
+@keyframes uxRowIn {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+.rh-table tbody tr, .cred-table tbody tr {
+  transition: background var(--ux-d-2) ease, transform var(--ux-d-2) ease;
+}
+
+.rh-table tbody tr:hover, .cred-table tbody tr:hover {
+  transform: translateX(3px);
+}
+
+/* -------------------------------------------------------------
+   14. TOAST / SUCCESS PULSE
+   ------------------------------------------------------------- */
+@keyframes uxPopIn {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.96); }
+  60%  { opacity: 1; transform: translateY(-3px) scale(1.01); }
+  100% { opacity: 1; transform: none; }
+}
+
+.ux-pop { animation: uxPopIn 0.44s var(--ux-ease-out) both; }
+
+@keyframes uxBadgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.5); }
+  50%      { box-shadow: 0 0 0 7px rgba(5, 150, 105, 0); }
+}
+
+.ux-pulse { animation: uxBadgePulse 2.4s ease-out infinite; }
+
+/* -------------------------------------------------------------
+   15. FOCUS-VISUAL — keyboard accessibility (was previously none)
+   ------------------------------------------------------------- */
+:focus-visible {
+  outline: 2.5px solid #4F46E5 !important;
+  outline-offset: 3px !important;
+  border-radius: var(--radius-xs);
+}
+
+.ux-cursor-on :focus-visible { outline-color: #FF6B6B !important; }
+
+/* -------------------------------------------------------------
+   16. REDUCED MOTION — respect the user, always
+   ------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ux-reveal-ready { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .ux-cursor-dot, .ux-cursor-ring, .ux-scroll-progress, .ux-float { display: none !important; }
+  body::before, body::after { animation: none !important; }
+}
+
+/* Touch devices: no custom cursor, no hover-only affordances */
+@media (hover: none), (pointer: coarse) {
+  .ux-cursor-dot, .ux-cursor-ring { display: none !important; }
+  .rh-card::before, .cred-card::before { display: none; }
+}

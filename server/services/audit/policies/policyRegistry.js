@@ -152,6 +152,76 @@ const POLICY_DATABASE = {
         url: 'https://support.google.com/googleplay/android-developer/answer/17134731'
       },
       description: 'All sensitive hardware permissions and data access must have consistent disclosures in the Privacy Policy and Data Safety form.'
+    },
+
+    // 10. Stalkerware & Monitoring Applications Policy
+    'ANDROID-STALKERWARE-001': {
+      ruleId: 'ANDROID-STALKERWARE-001',
+      name: 'Stalkerware & Monitoring Applications Policy (isMonitoringTool Flag)',
+      category: 'SECURITY_MANIFEST',
+      version: '2026.09',
+      effectiveDate: '2022-11-01',
+      source: {
+        organization: 'Google Play Developer Policy',
+        url: 'https://support.google.com/googleplay/android-developer/answer/9888380#commercial-spyware'
+      },
+      description: 'Apps with monitoring or tracking capabilities (e.g. child monitoring, enterprise management) must declare the android.app.isMonitoringTool metadata flag in AndroidManifest.xml and provide persistent user notification.'
+    },
+
+    // 11. Photo and Video Permissions Policy
+    'ANDROID-PHOTO-VIDEO-PERM-001': {
+      ruleId: 'ANDROID-PHOTO-VIDEO-PERM-001',
+      name: 'Photo and Video Permissions Policy (System Photo Picker Mandate)',
+      category: 'PERMISSIONS',
+      version: '2026.09',
+      effectiveDate: '2024-08-31',
+      source: {
+        organization: 'Google Play Developer Policy',
+        url: 'https://developer.android.com/training/data-storage/shared/photopicker'
+      },
+      description: 'Apps targeting Android 13+ (API 33+) must use the Android Photo Picker or system picker instead of broad READ_MEDIA_IMAGES and READ_MEDIA_VIDEO permissions unless technically insufficient for core functionality.'
+    },
+
+    // 12. Package Visibility Policy (QUERY_ALL_PACKAGES)
+    'ANDROID-QUERY-ALL-PKG-001': {
+      ruleId: 'ANDROID-QUERY-ALL-PKG-001',
+      name: 'Package Visibility Policy (QUERY_ALL_PACKAGES)',
+      category: 'PERMISSIONS',
+      version: '2026.09',
+      effectiveDate: '2021-04-01',
+      source: {
+        organization: 'Google Play Developer Policy',
+        url: 'https://support.google.com/googleplay/android-developer/answer/10158779'
+      },
+      description: 'QUERY_ALL_PACKAGES is restricted to device search, antivirus, and launchers. All other apps must use targeted <queries> declarations in AndroidManifest.xml.'
+    },
+
+    // 13. Exact Alarm Policy (SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM)
+    'ANDROID-EXACT-ALARM-001': {
+      ruleId: 'ANDROID-EXACT-ALARM-001',
+      name: 'Exact Alarm Policy (SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM)',
+      category: 'PERMISSIONS',
+      version: '2026.09',
+      effectiveDate: '2023-08-31',
+      source: {
+        organization: 'Android Developers',
+        url: 'https://developer.android.com/about/versions/14/changes/schedule-exact-alarms'
+      },
+      description: 'Apps targeting Android 13+ or 14+ must only use SCHEDULE_EXACT_ALARM or USE_EXACT_ALARM if core functionality requires time-sensitive user actions (e.g. alarm clock, calendar).'
+    },
+
+    // 14. Full-Screen Intent Policy (USE_FULL_SCREEN_INTENT)
+    'ANDROID-FULL-SCREEN-INTENT-001': {
+      ruleId: 'ANDROID-FULL-SCREEN-INTENT-001',
+      name: 'Full-Screen Intent Policy (USE_FULL_SCREEN_INTENT)',
+      category: 'PERMISSIONS',
+      version: '2026.09',
+      effectiveDate: '2024-05-31',
+      source: {
+        organization: 'Android Developers',
+        url: 'https://developer.android.com/about/versions/14/changes/full-screen-intents'
+      },
+      description: 'USE_FULL_SCREEN_INTENT permission is restricted to calling and alarm apps on Android 14+ devices.'
     }
   },
 

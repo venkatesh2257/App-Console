@@ -1,3 +1,14 @@
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+const tempDb = path.join(os.tmpdir(), 'test_console_multi_app.sqlite');
+const srcDb = path.join(__dirname, 'data', 'console_multi_app.sqlite');
+if (fs.existsSync(srcDb)) {
+  try { fs.copyFileSync(srcDb, tempDb); } catch (_) {}
+}
+process.env.DATABASE_PATH = tempDb;
+
 const { initSchema, query } = require('./server/config/db');
 const { seedDatabaseIfEmpty } = require('./server/services/seedDataService');
 const projectController = require('./server/controllers/projectController');

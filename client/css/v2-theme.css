@@ -1,0 +1,340 @@
+/* ==========================================================================
+   RELEASEHUB V2 — THEME / IDENTITY LAYER  (new look)
+   Dark floating navigation · floating header · new brand palette · new type
+
+   Loads LAST. Content stays light on purpose so the app's many inline
+   light-coloured styles remain valid — only the chrome is reinvented.
+   Delete this file + its <link> to revert the identity.
+   ========================================================================== */
+
+/* -------------------------------------------------------------
+   1. NEW BRAND PALETTE & GEOMETRY
+   ------------------------------------------------------------- */
+:root {
+  /* Electric indigo primary, warm apricot accent, cool mint success */
+  --rh-brand-primary: #5B4BFF;
+  --rh-brand-primary-hover: #4A3AE8;
+  --rh-brand-primary-glow: rgba(91, 75, 255, 0.34);
+  --rh-brand-primary-subtle: rgba(91, 75, 255, 0.10);
+
+  --rh-brand-accent: #FF8A4C;
+  --rh-brand-accent-glow: rgba(255, 138, 76, 0.30);
+
+  --rh-teal: #12B981;
+  --rh-teal-hover: #0EA271;
+  --rh-blue: #0EA5E9;
+  --rh-amber: #F59E0B;
+  --rh-coral: #F43F5E;
+  --rh-purple: #8B5CF6;
+
+  /* Neutral ink ramp */
+  --ux-ink: #0C1222;
+  --ux-body: #55607A;
+  --ux-muted: #93A0B4;
+  --ux-line: #E9ECF5;
+  --ux-line-strong: #DFE4EF;
+  --ux-canvas: #F6F7FC;
+  --ux-surface: #FFFFFF;
+
+  /* Softer, larger geometry */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+  --sidebar-width: 288px;
+  --header-height: 68px;
+
+  --font-heading: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* -------------------------------------------------------------
+   PALETTE TUNING
+   The app ships three parallel token families (--rh-*, --bg-*/--text-* and
+   --rc-*). Point the command-centre family at the V2 brand so the whole
+   product uses one accent, and cool/quiet the neutral ramp for readability.
+   ------------------------------------------------------------- */
+:root {
+  --rc-primary: var(--rh-brand-primary);
+  --rc-primary-glow: var(--rh-brand-primary-glow);
+  --rc-primary-subtle: var(--rh-brand-primary-subtle);
+  --rc-violet: var(--rh-brand-primary);
+  --rc-violet-glow: var(--rh-brand-primary-glow);
+  --rc-violet-subtle: var(--rh-brand-primary-subtle);
+  --rc-border-focus: var(--rh-brand-primary);
+
+  --ux-ink: #0A1020;
+  --ux-body: #4E5A70;
+  --ux-muted: #8A96AB;
+}
+
+body {
+  background: linear-gradient(180deg, #F8F9FE 0%, #F3F5FB 100%);
+  color: var(--ux-ink);
+}
+
+/* Leftover modal backdrops cause a few px of horizontal scroll on small
+   screens. `clip` (not `hidden`) keeps the sticky header working. */
+html, body { overflow-x: clip; }
+
+/* Retint the ambient aurora to the new identity */
+body::after {
+  background:
+    radial-gradient(38rem 38rem at 10% 4%, rgba(91, 75, 255, 0.16), transparent 62%),
+    radial-gradient(34rem 34rem at 92% 18%, rgba(255, 138, 76, 0.13), transparent 62%),
+    radial-gradient(36rem 36rem at 66% 96%, rgba(14, 165, 233, 0.12), transparent 62%),
+    radial-gradient(28rem 28rem at 22% 82%, rgba(139, 92, 246, 0.11), transparent 62%);
+  opacity: 0.55 !important;
+}
+
+/* New heading voice */
+h1, h2, h3, h4, h5, h6,
+.brand-info h2,
+.kpi-value,
+.rc-metric-value {
+  font-family: var(--font-heading);
+  letter-spacing: -0.028em;
+}
+
+/* -------------------------------------------------------------
+   2. FLOATING DARK NAVIGATION RAIL
+   Scoped variables let the markup's inline styles adapt automatically.
+   ------------------------------------------------------------- */
+.app-sidebar {
+  --text-primary: #F7F9FF;
+  --text-secondary: #A9B4CC;
+  --text-muted: #78859E;
+  --border-subtle: rgba(255, 255, 255, 0.09);
+  --border-card: rgba(255, 255, 255, 0.12);
+
+  top: 14px;
+  left: 14px;
+  bottom: 14px;
+  width: 260px;
+  padding: 20px 14px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(91, 75, 255, 0.22), transparent 60%),
+    linear-gradient(180deg, #151D33 0%, #0C1322 100%);
+  box-shadow:
+    0 24px 60px -24px rgba(8, 12, 24, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.app-sidebar::after { display: none; }
+
+.brand-header { padding: 4px 8px 20px 8px; }
+.brand-header::after {
+  background: linear-gradient(90deg, rgba(91, 75, 255, 0.85), rgba(255, 138, 76, 0.5), transparent);
+  opacity: 0.7;
+}
+
+/* Inline gradient on the logo needs !important to be repainted */
+.brand-logo {
+  background: linear-gradient(135deg, #5B4BFF 0%, #8B5CF6 100%) !important;
+  box-shadow: 0 8px 22px -8px rgba(91, 75, 255, 0.85) !important;
+}
+
+.brand-info span { color: rgba(255, 255, 255, 0.48) !important; }
+
+/* Group overlines */
+.nav-menu > div { color: rgba(255, 255, 255, 0.38) !important; }
+
+/* Nav rows on dark */
+.nav-item { color: #A9B4CC; }
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #FFFFFF;
+}
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(91, 75, 255, 0.42), rgba(91, 75, 255, 0.12));
+  color: #FFFFFF;
+  border-color: rgba(91, 75, 255, 0.45) !important;
+  box-shadow: 0 6px 20px -10px rgba(91, 75, 255, 0.9);
+}
+.nav-item.active i { color: #C7C4FF !important; }
+.nav-item::after { background: #8B7BFF; }
+.nav-item:hover i { filter: brightness(1.25) saturate(1.1); }
+
+/* Sidebar badges: translucent, quiet */
+.nav-item .badge-pill,
+.nav-item .rh-badge {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #C9D2E8 !important;
+  border: none !important;
+}
+
+.sidebar-footer { border-top-color: rgba(255, 255, 255, 0.08); }
+.system-status-indicator { color: rgba(255, 255, 255, 0.55); }
+
+/* Dark, slim scrollbar inside the rail */
+.app-sidebar ::-webkit-scrollbar-thumb,
+.nav-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* -------------------------------------------------------------
+   3. FLOATING HEADER PANEL
+   ------------------------------------------------------------- */
+.app-main {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  max-width: calc(100% - var(--sidebar-width));
+}
+
+.app-header {
+  top: 14px;
+  margin: 14px 14px 0;
+  height: var(--header-height);
+  padding: 0 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  box-shadow:
+    0 16px 40px -28px rgba(12, 18, 34, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.app-header::after { display: none; }
+
+.app-header.ux-condensed {
+  top: 8px;
+  margin-top: 8px;
+  height: 60px;
+  border-color: rgba(223, 228, 239, 0.9);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 44px -26px rgba(12, 18, 34, 0.55);
+}
+
+/* Command palette: calmer, flatter */
+.rc-search-bar {
+  background: #F5F7FC;
+  border-color: #E6EAF3;
+  border-radius: 14px;
+}
+.rc-search-bar:hover {
+  background: #FFFFFF;
+  border-color: #D8DEF0;
+  box-shadow: 0 6px 18px -12px rgba(12, 18, 34, 0.4);
+}
+
+/* -------------------------------------------------------------
+   4. CONTENT ALIGNED TO THE FLOATING PANELS
+   ------------------------------------------------------------- */
+.content-wrapper { padding: 24px 36px 72px; }
+
+/* -------------------------------------------------------------
+   5. SURFACES IN THE NEW IDENTITY
+   ------------------------------------------------------------- */
+.rh-card, .cred-card {
+  border-radius: 22px;
+  border-color: var(--ux-line);
+  box-shadow:
+    0 1px 2px rgba(12, 18, 34, 0.03),
+    0 12px 32px -28px rgba(12, 18, 34, 0.35);
+}
+
+.rh-card:hover, .cred-card:hover {
+  border-color: #DDE3F0;
+  box-shadow: 0 24px 50px -30px rgba(12, 18, 34, 0.42);
+}
+
+.rc-metric-card {
+  border-radius: 20px !important;
+  box-shadow: 0 1px 2px rgba(12, 18, 34, 0.03), 0 12px 32px -28px rgba(12, 18, 34, 0.35) !important;
+}
+
+/* Buttons: rounder, with the new gradient */
+.rh-btn, .btn-cred { border-radius: 14px; }
+
+.rh-btn-primary, .btn-cred-primary {
+  background: linear-gradient(135deg, #5B4BFF 0%, #7C5CFF 55%, #8B5CF6 100%);
+  box-shadow: 0 6px 18px -8px rgba(91, 75, 255, 0.75);
+}
+.rh-btn-primary:hover, .btn-cred-primary:hover {
+  box-shadow: 0 12px 28px -10px rgba(91, 75, 255, 0.85);
+}
+
+.rh-btn-danger, .btn-cred-coral { background: linear-gradient(135deg, #F43F5E, #FB7185); }
+
+/* Focus ring follows the new primary */
+:focus-visible { outline-color: #5B4BFF !important; }
+
+.form-control:focus {
+  border-color: #5B4BFF;
+  box-shadow: 0 0 0 4px rgba(91, 75, 255, 0.14);
+}
+
+/* Scroll progress in brand colours */
+.ux-scroll-progress {
+  background: linear-gradient(90deg, #5B4BFF, #8B5CF6, #FF8A4C, #12B981);
+  background-size: 300% 100%;
+  height: 3px;
+}
+
+/* Cursor matches the identity */
+.ux-cursor-dot { background: #5B4BFF; box-shadow: 0 0 10px rgba(91, 75, 255, 0.95); }
+.ux-cursor-ring { border-color: rgba(91, 75, 255, 0.6); }
+.ux-cursor-on .ux-cursor-ring.is-active { border-color: rgba(255, 138, 76, 0.8); }
+
+/* -------------------------------------------------------------
+   6. HEADER CONTENT MUST NEVER WRAP OUT OF ITS CONTROL
+   ------------------------------------------------------------- */
+.rc-search-bar { overflow: hidden; }
+.rc-search-bar > span:not(.rc-kbd) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-actions .btn-cred,
+.page-title .btn-cred { white-space: nowrap; }
+
+/* -------------------------------------------------------------
+   7. RESPONSIVE — collapse the rail into a floating drawer
+   ------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .app-main {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+  .app-sidebar {
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: 250px;
+    border-radius: 22px;
+  }
+  .app-header { margin: 10px 10px 0; padding: 0 16px; }
+  .content-wrapper { padding: 18px 20px 56px; }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    height: auto;
+    min-height: 62px;
+    padding: 12px 16px;
+    border-radius: 18px;
+    flex-wrap: wrap;
+  }
+  /* Ditch the long HUD status pill on phones — it eats the whole row.
+     Inline `display:flex` on the element, so `!important` is required. */
+  .page-title > div[style*="border-radius: 9999px"] { display: none !important; }
+  .page-title { flex-wrap: nowrap; gap: 10px; }
+  .rc-search-bar { flex: 1 1 auto; min-width: 0; }
+  .header-actions { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+  .content-wrapper { padding: 16px 16px 48px; }
+}
+
+@media (max-width: 480px) {
+  .app-header { margin: 8px 8px 0; border-radius: 16px; }
+  .app-sidebar { top: 8px; left: 8px; bottom: 8px; width: 240px; }
+  .content-wrapper { padding: 14px 12px 40px; }
+  .rc-search-bar { height: 36px; font-size: 12px; }
+  .header-actions { gap: 8px; }
+  /* Phones: drop the secondary bell so the actions fit on one row */
+  .header-actions button[title="Release Notifications"] { display: none !important; }
+}

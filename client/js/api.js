@@ -16,6 +16,29 @@ const API = {
     return await res.json();
   },
 
+  async updateProject(id, data) {
+    const res = await fetch(`${this.baseUrl}/admin/projects/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
+
+  async togglePinProject(id) {
+    const res = await fetch(`${this.baseUrl}/admin/projects/${id}/pin`, {
+      method: 'PATCH'
+    });
+    return await res.json();
+  },
+
+  async deleteProject(id) {
+    const res = await fetch(`${this.baseUrl}/admin/projects/${id}`, {
+      method: 'DELETE'
+    });
+    return await res.json();
+  },
+
   async getOverview(projectId = 'all') {
     const res = await fetch(`${this.baseUrl}/admin/overview?projectId=${projectId}`);
     return await res.json();
@@ -114,6 +137,15 @@ const API = {
     return await res.json();
   },
 
+  async getLocalSamples() {
+    try {
+      const res = await fetch(`${this.baseUrl}/admin/playstore-audit/local-samples`);
+      return await res.json();
+    } catch (e) {
+      return { status: 'error', data: { samples: [] } };
+    }
+  },
+
   async analyzePrivacyPolicy(policySource) {
     try {
       const res = await fetch(`${this.baseUrl}/admin/playstore-audit/analyze-policy`, {
@@ -184,5 +216,51 @@ const API = {
   async getPlayStoreAuditHistory() {
     const res = await fetch(`${this.baseUrl}/admin/playstore-audit/history`);
     return await res.json();
+  },
+
+  async getPlayStoreDeclarations(appId) {
+    try {
+      const res = await fetch(`${this.baseUrl}/admin/playstore-audit/declarations/${appId}`);
+      return await res.json();
+    } catch (e) {
+      return { status: 'error', message: e.message };
+    }
+  },
+
+  async savePlayStoreDeclarations(data) {
+    const res = await fetch(`${this.baseUrl}/admin/playstore-audit/declarations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
+
+  async validatePlayStoreQuestionnaire(data) {
+    const res = await fetch(`${this.baseUrl}/admin/playstore-audit/validate-questionnaire`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
+
+  async runRuntimeSmokeTest(appId = 'btgs') {
+    const res = await fetch(`${this.baseUrl}/admin/playstore-audit/run-smoke-test`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ appId })
+    });
+    return await res.json();
+  },
+
+  async registerSigningKey(appId, sha1, sha256 = null, packageName = null) {
+    const res = await fetch(`${this.baseUrl}/admin/playstore-audit/register-signing-key`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ appId, sha1, sha256, packageName })
+    });
+    return await res.json();
   }
 };
+
